@@ -1,0 +1,33 @@
+name: Apply DB Migrations
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  apply-migrations:
+    name: Apply migrations to Supabase/Postgres
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install psql client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-client
+
+      - name: Run migration SQL
+        env:
+          SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          set -euo pipefail
+          if [ -z "${SUPABASE_DB_URL:-}" ]; then
+            echo "ERROR: SUPABASE_DB_URL secret is not set"
+            exit 1
+          fi
+          echo "Applying migrations from backend/infra/migrations/0002_add_stock_tables.sql"
+          # fail-fast on SQL error
+          psql "$SUPABASE_DB_URL" -f backend/infra/migrations/0002_add_stock_tables.sql -v ON_ERROR_STOP=1
+
+      - name: Done
+        run: echo "Migrations applied (or failed with error). Check logs above."
