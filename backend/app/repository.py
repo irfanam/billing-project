@@ -1,19 +1,25 @@
 from typing import Optional, Dict, List
-from app.database import supabase
 import logging
+
+
+def _get_supabase():
+    # lazy import to avoid import errors in tests that don't have top-level `app` module
+    from app.database import supabase
+    return supabase
 
 
 def get_product(product_id: str) -> Optional[Dict]:
     """Return product row dict or None"""
+    supabase = _get_supabase()
     res = supabase.table('products').select('*').eq('id', product_id).single().execute()
     if getattr(res, 'error', None):
         logging.error('Supabase get_product error: %s', res.error)
         return None
-    # supabase client returns .data as the row when using single()
     return res.data
 
 
 def get_customer(customer_id: str) -> Optional[Dict]:
+    supabase = _get_supabase()
     res = supabase.table('customers').select('*').eq('id', customer_id).single().execute()
     if getattr(res, 'error', None):
         logging.error('Supabase get_customer error: %s', res.error)
@@ -27,6 +33,7 @@ def create_invoice(record: Dict) -> Optional[Dict]:
     record: dict matching invoices table columns (invoice_number, customer_id, subtotal, cgst_amount, sgst_amount, igst_amount, total_tax, total_amount, currency, issued_by)
     This function does a best-effort insert and returns the inserted row.
     """
+    supabase = _get_supabase()
     res = supabase.table('invoices').insert(record).execute()
     if getattr(res, 'error', None):
         logging.error('Supabase create_invoice error: %s', res.error)
@@ -42,6 +49,7 @@ def insert_invoice_items(invoice_id: str, items: List[Dict]) -> bool:
     """Insert multiple invoice items. items should be list of dicts with invoice_id included."""
     if not items:
         return True
+    supabase = _get_supabase()
     res = supabase.table('invoice_items').insert(items).execute()
     if getattr(res, 'error', None):
         logging.error('Supabase insert_invoice_items error: %s', res.error)
@@ -53,6 +61,7 @@ def decrement_product_stock(product_id: str, qty: int) -> bool:
     """Decrease product stock_qty by qty (best-effort)."""
     try:
         # Use rpc or update: fetch current, subtract, update
+        supabase = _get_supabase()
         current = supabase.table('products').select('stock_qty').eq('id', product_id).single().execute()
         if getattr(current, 'error', None) or not current.data:
             logging.warning('Could not fetch product stock for %s', product_id)
@@ -67,3 +76,27 @@ def decrement_product_stock(product_id: str, qty: int) -> bool:
     except Exception as exc:
         logging.exception('decrement_product_stock exception: %s', exc)
         return False
+
+
+def get_invoice(invoice_id: str) -> Optional[Dict]:
+    """Fetch invoice with items and customer info. Returns dict or None."""
+    try:
+        supabase = _get_supabase()
+        inv_res = supabase.table('invoices').select('*').eq('id', invoice_id).single().execute()
+        if getattr(inv_res, 'error', None) or not inv_res.data:
+            logging.warning('Invoice not found: %s', invoice_id)
+            return None
+        invoice = inv_res.data
+        items_res = supabase.table('invoice_items').select('*').eq('invoice_id', invoice_id).execute()
+        items = items_res.data if not getattr(items_res, 'error', None) else []
+        customer = None
+        if invoice.get('customer_id'):
+            cust_res = supabase.table('customers').select('*').eq('id', invoice.get('customer_id')).single().execute()
+            if not getattr(cust_res, 'error', None):
+                customer = cust_res.data
+        invoice['items'] = items
+        invoice['customer'] = customer
+        return invoice
+    except Exception as exc:
+        logging.exception('get_invoice exception: %s', exc)
+        return None

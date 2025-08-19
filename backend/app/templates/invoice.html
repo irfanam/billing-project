@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Invoice {{ invoice.invoice_number }}</title>
+    <style>
+      body{ font-family: Arial, sans-serif; margin: 20px }
+      .header{ display:flex; justify-content:space-between; align-items:center }
+      table{ width:100%; border-collapse: collapse; margin-top: 12px }
+      th, td{ border: 1px solid #ddd; padding: 8px }
+      th{ background:#f3f4f6; text-align:left }
+      .right{ text-align:right }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div>
+        <h2>Invoice</h2>
+        <div>Invoice #: {{ invoice.invoice_number }}</div>
+        <div>Date: {{ invoice.created_at or '' }}</div>
+      </div>
+      <div>
+        <strong>Customer</strong>
+        <div>{{ customer.name if customer else 'Walk-in' }}</div>
+        <div>{{ customer.state if customer else '' }}</div>
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Description</th>
+          <th class="right">Qty</th>
+          <th class="right">Unit</th>
+          <th class="right">Line Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for it in items %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ it.description or '' }}</td>
+          <td class="right">{{ it.qty }}</td>
+          <td class="right">{{ it.unit_price }}</td>
+          <td class="right">{{ it.line_total }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div style="margin-top:12px; width:100%; display:flex; justify-content:flex-end">
+      <table style="width:360px; border:none">
+        <tr><td>Subtotal</td><td class="right">{{ invoice.subtotal }}</td></tr>
+        <tr><td>CGST</td><td class="right">{{ invoice.cgst_amount }}</td></tr>
+        <tr><td>SGST</td><td class="right">{{ invoice.sgst_amount }}</td></tr>
+        <tr><td>IGST</td><td class="right">{{ invoice.igst_amount }}</td></tr>
+        <tr><th>Total</th><th class="right">{{ invoice.total_amount }}</th></tr>
+      </table>
+    </div>
+  </body>
+</html>

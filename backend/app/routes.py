@@ -1,27 +1,37 @@
 from fastapi import APIRouter, HTTPException
-from app.models import BillingRecord
-from app.database import supabase
+from typing import TYPE_CHECKING
 from starlette.concurrency import run_in_threadpool
 from backend.app import repository
 from backend.app import tax as tax_module
 from backend.app.schemas import InvoiceCreate
 import logging
 import uuid
+import os
+from fastapi.responses import Response, HTMLResponse
+from backend.app import pdf as pdf_module
+
+if TYPE_CHECKING:
+    # imported for type-checking only to avoid importing top-level `app` package during tests
+    from app.models import BillingRecord
 
 
 router = APIRouter(prefix="/billing", tags=["Billing"])
 
 
 def _insert_billing(record_dict: dict):
+    # import supabase lazily to avoid top-level dependency on the `app` package during tests
+    from app.database import supabase
     return supabase.table('billing').insert(record_dict).execute()
 
 
 def _select_billing(user_id: str):
+    from app.database import supabase
     return supabase.table('billing').select('*').eq('user_id', user_id).execute()
 
 
 @router.post("/")
-async def create_billing(record: BillingRecord):
+async def create_billing(record: 'BillingRecord'):
+    # billing creation uses the legacy app.supabase client; import inside to keep module import-safe
     res = await run_in_threadpool(_insert_billing, record.dict())
     if getattr(res, 'error', None):
         logging.error('Supabase insert error: %s', res.error)
@@ -58,8 +68,9 @@ async def create_invoice(payload: InvoiceCreate):
     if customer:
         customer_state = customer.get('state')
 
-    # NOTE: supplier_state could come from config; defaulting to customer_state for now
-    supplier_state = customer_state
+    # supplier_state should usually be the business's registered state.
+    # Use SUPPLIER_STATE env var if provided, otherwise default to 'Karnataka'.
+    supplier_state = os.getenv('SUPPLIER_STATE', 'Karnataka')
 
     taxes = tax_module.calculate_invoice_taxes(supplier_state, customer_state, items_for_tax)
 
@@ -103,3 +114,18 @@ async def create_invoice(payload: InvoiceCreate):
             await run_in_threadpool(repository.decrement_product_stock, it.product_id, it.qty)
 
     return {"status": "success", "data": created}
+
+
+@router.get('/invoices/{invoice_id}/pdf')
+async def invoice_pdf(invoice_id: str):
+    inv = await run_in_threadpool(repository.get_invoice, invoice_id)
+    if not inv:
+        raise HTTPException(status_code=404, detail='Invoice not found')
+
+    pdf_bytes = await run_in_threadpool(pdf_module.invoice_to_pdf_bytes, inv)
+    if pdf_bytes:
+        return Response(content=pdf_bytes, media_type='application/pdf')
+
+    # Fallback: return HTML rendering
+    html = await run_in_threadpool(pdf_module.render_invoice_html, inv)
+    return HTMLResponse(content=html)
