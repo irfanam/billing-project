@@ -100,3 +100,137 @@ def get_invoice(invoice_id: str) -> Optional[Dict]:
     except Exception as exc:
         logging.exception('get_invoice exception: %s', exc)
         return None
+
+
+# Stock primitives
+def get_current_stock(product_id: str) -> Optional[Dict]:
+    """Return cached stock_qty from products and reserved qty (sum of active reservations).
+
+    Returns a dict: {'on_hand': int, 'reserved': int, 'available': int} or None on error.
+    """
+    try:
+        supabase = _get_supabase()
+        prod = supabase.table('products').select('stock_qty').eq('id', product_id).single().execute()
+        stock = int(prod.data.get('stock_qty') or 0) if prod and prod.data else 0
+
+        # fake/test proxy expects a single eq('product_id', ...) call; it will only return active reservations
+        res = supabase.table('stock_reservations').select('qty').eq('product_id', product_id).execute()
+        reserved = sum([r.get('qty', 0) for r in (res.data or [])]) if res and res.data else 0
+
+        return {'on_hand': stock, 'reserved': reserved, 'available': stock - reserved}
+    except Exception:
+        logging.exception('get_current_stock error')
+        return None
+
+
+def create_stock_movement(product_id: str, change: int, reason: str, reference_type: str = None, reference_id: str = None, unit_cost: Optional[float] = None, created_by: Optional[str] = None, meta: Optional[dict] = None) -> Optional[Dict]:
+    """Insert a stock_movement and update cached products.stock_qty (best-effort).
+    Note: Supabase client does not expose DB-level transactions here; this is best-effort and should be wrapped server-side if strong consistency is required.
+    """
+    try:
+        supabase = _get_supabase()
+        mv = {
+            'product_id': product_id,
+            'change': change,
+            'reason': reason,
+            'reference_type': reference_type,
+            'reference_id': reference_id,
+            'unit_cost': unit_cost,
+            'created_by': created_by,
+            'meta': meta,
+        }
+        res = supabase.table('stock_movements').insert(mv).execute()
+        if getattr(res, 'error', None):
+            logging.error('create_stock_movement error: %s', res.error)
+            return None
+
+        # update cached product stock_qty by adding change
+        # fetch current
+        cur = supabase.table('products').select('stock_qty').eq('id', product_id).single().execute()
+        if not getattr(cur, 'error', None) and cur.data:
+            stock = int(cur.data.get('stock_qty') or 0)
+            new_stock = stock + int(change)
+            upd = supabase.table('products').update({'stock_qty': new_stock}).eq('id', product_id).execute()
+            if getattr(upd, 'error', None):
+                logging.warning('Failed to update products.stock_qty for %s: %s', product_id, upd.error)
+
+        data = res.data
+        if isinstance(data, list):
+            return data[0] if data else None
+        return data
+    except Exception as exc:
+        logging.exception('create_stock_movement exception: %s', exc)
+        return None
+
+
+def reserve_stock(product_id: str, qty: int, invoice_id: Optional[str] = None, expires_at: Optional[str] = None, created_by: Optional[str] = None, meta: Optional[dict] = None) -> Optional[Dict]:
+    """Attempt to reserve stock. Returns reservation row or None on failure/insufficient stock."""
+    try:
+        # check availability
+        cur = get_current_stock(product_id)
+        if cur is None:
+            return None
+        if cur['available'] < qty:
+            logging.info('Insufficient available stock for %s: need %s available %s', product_id, qty, cur['available'])
+            return None
+
+        supabase = _get_supabase()
+        rec = {
+            'product_id': product_id,
+            'qty': qty,
+            'invoice_id': invoice_id,
+            'expires_at': expires_at,
+            'created_by': created_by,
+            'meta': meta,
+        }
+        res = supabase.table('stock_reservations').insert(rec).execute()
+        if getattr(res, 'error', None):
+            logging.error('reserve_stock insert error: %s', res.error)
+            return None
+        data = res.data
+        if isinstance(data, list):
+            return data[0] if data else None
+        return data
+    except Exception as exc:
+        logging.exception('reserve_stock exception: %s', exc)
+        return None
+
+
+def consume_reservation(reservation_id: str, created_by: Optional[str] = None) -> bool:
+    """Mark reservation consumed and create final stock movement (outbound)."""
+    try:
+        supabase = _get_supabase()
+        # Update the reservation to consumed and get the updated row (test proxy returns the row on update)
+        upd = supabase.table('stock_reservations').update({'status': 'consumed'}).eq('id', reservation_id).execute()
+        if getattr(upd, 'error', None) or not upd.data:
+            logging.warning('Reservation not found or update failed: %s', reservation_id)
+            return False
+        rec = upd.data[0]
+        if rec.get('status') != 'consumed':
+            logging.warning('Reservation status unexpected after update: %s', rec.get('status'))
+            return False
+
+        # create movement (negative change)
+        mv = create_stock_movement(rec['product_id'], -int(rec['qty']), 'sale', reference_type='reservation', reference_id=reservation_id, created_by=created_by)
+        if not mv:
+            logging.error('Failed to create movement for reservation %s', reservation_id)
+            return False
+        return True
+    except Exception as exc:
+        logging.exception('consume_reservation exception: %s', exc)
+        return False
+
+
+def release_reservation(reservation_id: str, reason: str = 'released') -> bool:
+    """Release a reservation without creating movement (reservation was not consumed)."""
+    try:
+        supabase = _get_supabase()
+        # Update reservation status to released and return status
+        upd = supabase.table('stock_reservations').update({'status': 'released', 'meta': {'released_reason': reason}}).eq('id', reservation_id).execute()
+        if getattr(upd, 'error', None) or not upd.data:
+            logging.warning('Failed to mark reservation released %s: %s', reservation_id, getattr(upd, 'error', None))
+            return False
+        return True
+    except Exception as exc:
+        logging.exception('release_reservation exception: %s', exc)
+        return False

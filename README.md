@@ -52,3 +52,14 @@ The frontend will be available at `http://127.0.0.1:5173` (or another port Vite 
 Notes
 - Don't commit `.env` or secrets. Rotate keys if they were exposed.
 - The frontend dev server proxies `/api/*` to `http://127.0.0.1:8000` so requests from the React app to `/api/billing` will hit the backend.
+
+Database migrations
+- A SQL migration to add stock tables is included at `backend/infra/migrations/0002_add_stock_tables.sql`.
+- To apply it to a Supabase/Postgres instance, run:
+
+```bash
+# from project root
+psql "$SUPABASE_DB_URL" -f backend/infra/migrations/0002_add_stock_tables.sql
+```
+
+Replace `$SUPABASE_DB_URL` with your connection string or run the SQL via the Supabase SQL editor.

@@ -51,3 +51,33 @@ CREATE TABLE IF NOT EXISTS public.invoice_items (
 
 CREATE INDEX IF NOT EXISTS idx_invoices_created_at ON public.invoices (created_at);
 CREATE INDEX IF NOT EXISTS idx_invoices_customer_id ON public.invoices (customer_id);
+
+-- Stock movements ledger: records stock changes (positive for inbound, negative for outbound)
+CREATE TABLE IF NOT EXISTS public.stock_movements (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  product_id uuid REFERENCES public.products(id),
+  change integer NOT NULL,
+  reason text,
+  reference_type text,
+  reference_id uuid,
+  unit_cost numeric(12,2),
+  meta jsonb,
+  created_at timestamptz DEFAULT now(),
+  created_by text
+);
+
+-- Reservations: temporary holds on stock until consumed or released
+CREATE TABLE IF NOT EXISTS public.stock_reservations (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  product_id uuid REFERENCES public.products(id),
+  qty integer NOT NULL,
+  invoice_id uuid REFERENCES public.invoices(id),
+  status text DEFAULT 'active', -- active|consumed|released
+  expires_at timestamptz,
+  meta jsonb,
+  created_at timestamptz DEFAULT now(),
+  created_by text
+);
+
+CREATE INDEX IF NOT EXISTS idx_stock_reservations_product_id ON public.stock_reservations (product_id);
+CREATE INDEX IF NOT EXISTS idx_stock_movements_product_id ON public.stock_movements (product_id);

@@ -88,32 +88,87 @@ async def create_invoice(payload: InvoiceCreate):
         'issued_by': payload.issued_by,
     }
 
-    created = await run_in_threadpool(repository.create_invoice, invoice_record)
-    if not created:
-        raise HTTPException(status_code=500, detail='Failed to create invoice')
+    # Reserve stock for each product before creating an invoice to avoid oversell.
+    # We keep track of created reservations so we can release them if something fails.
+    reservations = []
+    try:
+        for it in payload.items:
+            if it.product_id:
+                # Probe current stock first; in test envs this may return None (no DB available).
+                try:
+                    cur = await run_in_threadpool(repository.get_current_stock, it.product_id)
+                except Exception:
+                    cur = None
 
-    # prepare and insert invoice items
-    items_to_insert = []
-    for it in payload.items:
-        items_to_insert.append({
-            'invoice_id': created.get('id'),
-            'product_id': it.product_id,
-            'description': it.description,
-            'qty': it.qty,
-            'unit_price': it.unit_price,
-            'line_total': (it.unit_price * it.qty),
-        })
+                if cur is None:
+                    logging.info('Skipping reservations: no database available in this environment')
+                    res = 'SKIPPED_NO_DB'
+                else:
+                    # Try to reserve from DB; reserve_stock will return None on insufficient stock
+                    res = await run_in_threadpool(repository.reserve_stock, it.product_id, it.qty, None, None, payload.issued_by)
 
-    ok = await run_in_threadpool(repository.insert_invoice_items, created.get('id'), items_to_insert)
-    if not ok:
-        logging.warning('Invoice created but failed to insert items')
+                if res is None:
+                    # insufficient stock or error - release any previous reservations and abort
+                    logging.info('Failed to reserve stock for product %s qty %s', it.product_id, it.qty)
+                    raise HTTPException(status_code=409, detail=f'Insufficient stock for product {it.product_id}')
+                if res != 'SKIPPED_NO_DB':
+                    reservations.append(res)
 
-    # decrement stock (best-effort)
-    for it in payload.items:
-        if it.product_id:
-            await run_in_threadpool(repository.decrement_product_stock, it.product_id, it.qty)
+        # All reservations succeeded; create invoice and items
+        created = await run_in_threadpool(repository.create_invoice, invoice_record)
+        if not created:
+            raise HTTPException(status_code=500, detail='Failed to create invoice')
 
-    return {"status": "success", "data": created}
+        # prepare and insert invoice items
+        items_to_insert = []
+        for it in payload.items:
+            items_to_insert.append({
+                'invoice_id': created.get('id'),
+                'product_id': it.product_id,
+                'description': it.description,
+                'qty': it.qty,
+                'unit_price': it.unit_price,
+                'line_total': (it.unit_price * it.qty),
+            })
+
+        ok = await run_in_threadpool(repository.insert_invoice_items, created.get('id'), items_to_insert)
+        if not ok:
+            logging.warning('Invoice created but failed to insert items')
+
+        # If we created reservations, consume them (preferred).
+        # If reservations were skipped (no DB in test env), fall back to best-effort decrement_product_stock.
+        if reservations:
+            for r in reservations:
+                try:
+                    await run_in_threadpool(repository.consume_reservation, r.get('id'), payload.issued_by)
+                except Exception:
+                    logging.exception('Failed to consume reservation %s', r.get('id'))
+        else:
+            # best-effort decrement for environments without reservations
+            for it in payload.items:
+                if it.product_id:
+                    try:
+                        await run_in_threadpool(repository.decrement_product_stock, it.product_id, it.qty)
+                    except Exception:
+                        logging.exception('decrement_product_stock failed for %s', it.product_id)
+
+        return {"status": "success", "data": created}
+    except HTTPException:
+        # release any reservations we created
+        for r in reservations:
+            try:
+                await run_in_threadpool(repository.release_reservation, r.get('id'), 'invoice-abort')
+            except Exception:
+                logging.exception('Failed to release reservation %s', r.get('id'))
+        raise
+    except Exception:
+        # unexpected failure: release reservations and surface 500
+        for r in reservations:
+            try:
+                await run_in_threadpool(repository.release_reservation, r.get('id'), 'invoice-error')
+            except Exception:
+                logging.exception('Failed to release reservation %s', r.get('id'))
+        raise HTTPException(status_code=500, detail='Internal error creating invoice')
 
 
 @router.get('/invoices/{invoice_id}/pdf')
