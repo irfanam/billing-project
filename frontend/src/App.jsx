@@ -38,13 +38,11 @@ function BillingForm({ onAdded }) {
       <button className="btn" type="submit">Create</button>
     </form>
   )
-// ...existing code...
-
 function BillingList({ userId }) {
   const [items, setItems] = useState([])
   useEffect(()=>{
     if(!userId) return
-  axios.get(`${API_BASE_URL}/api/billing/${userId}`).then(r=>setItems(r.data.data || []))
+    axios.get(`${API_BASE_URL}/api/billing/${userId}`).then(r=>setItems(r.data.data || []))
   },[userId])
 
   return (
@@ -60,6 +58,7 @@ function BillingList({ userId }) {
   )
 }
 
+function App() {
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
@@ -80,7 +79,7 @@ function BillingList({ userId }) {
         </div>
       </div>
     </Router>
-  )
+  );
 }
 
-// ...existing code...
+export default App;
