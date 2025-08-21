@@ -60,9 +60,6 @@ function BillingList({ userId }) {
   )
 }
 
-export default function App(){
-  const [selectedUser, setSelectedUser] = useState('')
-  const [refresh, setRefresh] = useState(0)
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
@@ -70,22 +67,15 @@ export default function App(){
         <div className="flex flex-1">
           <Sidebar />
           <main className="flex-1 p-6 bg-gray-50">
-            <div className="max-w-2xl mx-auto">
-              <div className="flex items-center justify-between mb-4">
-                <h1 className="text-2xl font-bold">Billing Dashboard</h1>
-                <ThemeToggle />
-              </div>
-
-              <div className="p-4 bg-white dark:bg-gray-800 rounded shadow">
-                <BillingForm onAdded={()=>setRefresh(r=>r+1)} />
-              </div>
-
-              <div className="mt-4 p-4 bg-white dark:bg-gray-800 rounded shadow">
-                <label className="block mb-2">Enter User ID to view records</label>
-                <input className="input mb-3" value={selectedUser} onChange={e=>setSelectedUser(e.target.value)} />
-                <BillingList userId={selectedUser} key={selectedUser+refresh} />
-              </div>
-            </div>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/invoices" element={<Invoices />} />
+              <Route path="/customers" element={<Customers />} />
+              <Route path="/products" element={<Products />} />
+              <Route path="/reports" element={<Reports />} />
+              {/* Add other routes as needed */}
+            </Routes>
           </main>
         </div>
       </div>
@@ -93,13 +83,4 @@ export default function App(){
   )
 }
 
-function ThemeToggle(){
-  const [dark, setDark] = useState(() => localStorage.getItem('theme') === 'dark')
-  useEffect(()=>{
-    document.documentElement.classList.toggle('dark', dark)
-    localStorage.setItem('theme', dark ? 'dark' : 'light')
-  },[dark])
-  return (
-    <button className="btn" onClick={()=>setDark(d=>!d)}>{dark ? 'Light' : 'Dark'}</button>
-  )
-}
+// ...existing code...
