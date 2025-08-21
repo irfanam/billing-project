@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios'
+
+const API_BASE_URL = 'https://billing-project-s0ql.onrender.com';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
@@ -21,7 +23,7 @@ function BillingForm({ onAdded }) {
   const submit = async (e) => {
     e.preventDefault()
     const payload = { user_id, amount: parseFloat(amount), description }
-    await axios.post('/api/billing/', payload)
+  await axios.post(`${API_BASE_URL}/api/billing/`, payload)
     setUserId('')
     setAmount('')
     setDescription('')
@@ -42,7 +44,7 @@ function BillingList({ userId }) {
   const [items, setItems] = useState([])
   useEffect(()=>{
     if(!userId) return
-    axios.get(`/api/billing/${userId}`).then(r=>setItems(r.data.data || []))
+  axios.get(`${API_BASE_URL}/api/billing/${userId}`).then(r=>setItems(r.data.data || []))
   },[userId])
 
   return (
