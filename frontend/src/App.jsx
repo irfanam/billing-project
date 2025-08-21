@@ -37,7 +37,8 @@ function BillingForm({ onAdded }) {
       <input className="input" placeholder="Description" value={description} onChange={e=>setDescription(e.target.value)} required />
       <button className="btn" type="submit">Create</button>
     </form>
-  )
+  );
+}
 function BillingList({ userId }) {
   const [items, setItems] = useState([])
   useEffect(()=>{
