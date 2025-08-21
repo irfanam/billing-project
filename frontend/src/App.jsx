@@ -1,5 +1,17 @@
 import React, { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from 'axios'
+import Navbar from './components/Navbar';
+import Sidebar from './components/Sidebar';
+import Dashboard from './pages/Dashboard';
+import Invoices from './pages/Invoices';
+import InvoiceDetail from './pages/InvoiceDetail';
+import InvoiceCreate from './pages/InvoiceCreate';
+import Customers from './pages/Customers';
+import CustomerDetail from './pages/CustomerDetail';
+import Products from './pages/Products';
+import ProductDetail from './pages/ProductDetail';
+import Reports from './pages/Reports';
 
 function BillingForm({ onAdded }) {
   const [user_id, setUserId] = useState('')
@@ -50,24 +62,32 @@ export default function App(){
   const [selectedUser, setSelectedUser] = useState('')
   const [refresh, setRefresh] = useState(0)
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 p-6">
-      <div className="max-w-2xl mx-auto">
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-2xl font-bold">Billing Dashboard</h1>
-          <ThemeToggle />
-        </div>
+    <Router>
+      <div className="flex flex-col min-h-screen">
+        <Navbar />
+        <div className="flex flex-1">
+          <Sidebar />
+          <main className="flex-1 p-6 bg-gray-50">
+            <div className="max-w-2xl mx-auto">
+              <div className="flex items-center justify-between mb-4">
+                <h1 className="text-2xl font-bold">Billing Dashboard</h1>
+                <ThemeToggle />
+              </div>
 
-        <div className="p-4 bg-white dark:bg-gray-800 rounded shadow">
-          <BillingForm onAdded={()=>setRefresh(r=>r+1)} />
-        </div>
+              <div className="p-4 bg-white dark:bg-gray-800 rounded shadow">
+                <BillingForm onAdded={()=>setRefresh(r=>r+1)} />
+              </div>
 
-        <div className="mt-4 p-4 bg-white dark:bg-gray-800 rounded shadow">
-          <label className="block mb-2">Enter User ID to view records</label>
-          <input className="input mb-3" value={selectedUser} onChange={e=>setSelectedUser(e.target.value)} />
-          <BillingList userId={selectedUser} key={selectedUser+refresh} />
+              <div className="mt-4 p-4 bg-white dark:bg-gray-800 rounded shadow">
+                <label className="block mb-2">Enter User ID to view records</label>
+                <input className="input mb-3" value={selectedUser} onChange={e=>setSelectedUser(e.target.value)} />
+                <BillingList userId={selectedUser} key={selectedUser+refresh} />
+              </div>
+            </div>
+          </main>
         </div>
       </div>
-    </div>
+    </Router>
   )
 }
 

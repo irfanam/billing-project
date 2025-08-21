@@ -1,14 +1,14 @@
 from fastapi import APIRouter, HTTPException
 from typing import TYPE_CHECKING
 from starlette.concurrency import run_in_threadpool
-from backend.app import repository
-from backend.app import tax as tax_module
-from backend.app.schemas import InvoiceCreate
+from . import repository
+from . import tax as tax_module
+from .schemas import InvoiceCreate
 import logging
 import uuid
 import os
 from fastapi.responses import Response, HTMLResponse
-from backend.app import pdf as pdf_module
+from . import pdf as pdf_module
 
 if TYPE_CHECKING:
     # imported for type-checking only to avoid importing top-level `app` package during tests
