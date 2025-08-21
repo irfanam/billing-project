@@ -1,4 +1,4 @@
-import React from 'react';
+// ...existing code...
 
 import React, { useEffect, useState } from 'react';
 // import Chart from 'chart.js/auto'; // Uncomment if you add Chart.js
