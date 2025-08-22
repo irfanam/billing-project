@@ -125,9 +125,9 @@ function ProductForm({ product, onClose, onSaved }) {
     sku: product?.sku || '',
     name: product?.name || '',
     description: product?.description || '',
-    price: product?.price || '',
-    tax_percent: product?.tax_percent || '',
-    stock_qty: product?.stock_qty || '',
+    price: product?.price !== undefined ? String(product.price) : '',
+    tax_percent: product?.tax_percent !== undefined ? String(product.tax_percent) : '',
+    stock_qty: product?.stock_qty !== undefined ? String(product.stock_qty) : '',
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -140,13 +140,22 @@ function ProductForm({ product, onClose, onSaved }) {
     e.preventDefault();
     setSaving(true);
     setError(null);
+    // Ensure correct types for backend
+    const payload = {
+      sku: form.sku,
+      name: form.name,
+      description: form.description,
+      price: form.price !== '' ? parseFloat(form.price) : undefined,
+      tax_percent: form.tax_percent !== '' ? parseFloat(form.tax_percent) : undefined,
+      stock_qty: form.stock_qty !== '' ? parseInt(form.stock_qty) : undefined,
+    };
     try {
       if (product && product.id) {
         // Edit
-        await axios.put(`${API_BASE_URL}/billing/products/${product.id}`, form);
+        await axios.put(`${API_BASE_URL}/billing/products/${product.id}`, payload);
       } else {
         // Add
-        await axios.post(`${API_BASE_URL}/billing/products`, form);
+        await axios.post(`${API_BASE_URL}/billing/products`, payload);
       }
       setSaving(false);
       onSaved && onSaved();
