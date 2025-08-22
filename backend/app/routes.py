@@ -20,7 +20,7 @@ router = APIRouter(prefix="/billing", tags=["Billing"])
 
 def _insert_billing(record_dict: dict):
     # import supabase lazily to avoid top-level dependency on the `app` package during tests
-    from app.database import supabase
+    from backend.app.database import supabase
     return supabase.table('billing').insert(record_dict).execute()
 
 
