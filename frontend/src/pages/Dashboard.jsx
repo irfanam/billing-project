@@ -1,11 +1,13 @@
 // ...existing code...
 
 import React, { useEffect, useState } from 'react';
+import { useSettings } from '../context/SettingsContext';
 // import Chart from 'chart.js/auto'; // Uncomment if you add Chart.js
 
 const API_BASE_URL = 'https://billing-project-s0ql.onrender.com';
 
 export default function Dashboard() {
+  const { theme } = useSettings();
   const [stats, setStats] = useState({ revenue: 0, invoices: 0, customers: 0, products: 0 });
   const [recentInvoices, setRecentInvoices] = useState([]);
 
@@ -21,7 +23,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <div className="p-6 bg-gray-50 min-h-screen">
+    <div className={`p-6 min-h-screen ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-gray-50'}`}>
       <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <StatsCard title="Revenue" value={`$${stats.revenue.toLocaleString()}`} icon="💰" />
@@ -31,7 +33,7 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className={`rounded-lg shadow p-6 ${theme === 'dark' ? 'bg-gray-800 text-gray-100' : 'bg-white'}`}>
           <h2 className="text-xl font-semibold mb-4">Recent Invoices</h2>
           <table className="w-full text-left">
             <thead>
@@ -57,7 +59,7 @@ export default function Dashboard() {
           </table>
         </div>
 
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className={`rounded-lg shadow p-6 ${theme === 'dark' ? 'bg-gray-800 text-gray-100' : 'bg-white'}`}>
           <h2 className="text-xl font-semibold mb-4">Revenue Overview</h2>
           {/* Chart.js or Recharts chart can go here */}
           <div className="h-48 flex items-center justify-center text-gray-400">[Revenue chart placeholder]</div>

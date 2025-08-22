@@ -14,6 +14,7 @@ import CustomerDetail from './pages/CustomerDetail';
 import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
 import Reports from './pages/Reports';
+import Settings from './pages/Settings';
 
 function BillingForm({ onAdded }) {
   const [user_id, setUserId] = useState('')
@@ -59,14 +60,17 @@ function BillingList({ userId }) {
   )
 }
 
+import { useSettings } from './context/SettingsContext';
+
 function App() {
+  const { theme } = useSettings();
   return (
     <Router>
-      <div className="flex flex-col min-h-screen">
+      <div className={`flex flex-col min-h-screen ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : ''}`}>
         <Navbar />
         <div className="flex flex-1">
           <Sidebar />
-          <main className="flex-1 p-6 bg-gray-50">
+          <main className={`flex-1 p-6 ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-gray-50'}`}> 
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/dashboard" element={<Dashboard />} />
@@ -74,7 +78,7 @@ function App() {
               <Route path="/customers" element={<Customers />} />
               <Route path="/products" element={<Products />} />
               <Route path="/reports" element={<Reports />} />
-              {/* Add other routes as needed */}
+              <Route path="/settings" element={<Settings />} />
             </Routes>
           </main>
         </div>
