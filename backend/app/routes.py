@@ -100,6 +100,51 @@ async def create_supplier(request: Request):
         raise HTTPException(status_code=500, detail='Internal error')
 
 
+
+@router.get('/product-variables/{vtype}')
+async def get_product_variables(vtype: str):
+    res = await run_in_threadpool(repository.list_product_variables, vtype)
+    if res is None:
+        raise HTTPException(status_code=500, detail='Failed to fetch variables')
+    return {'status': 'success', 'data': res}
+
+
+@router.post('/product-variables/{vtype}')
+async def add_product_variable(vtype: str, request: Request):
+    try:
+        body = await request.json()
+        value = body.get('value')
+        if not value:
+            raise HTTPException(status_code=400, detail='Missing value')
+        created = await run_in_threadpool(repository.upsert_product_variable, vtype, value)
+        if not created:
+            raise HTTPException(status_code=500, detail='Failed to add variable')
+        return {'status': 'success', 'data': created}
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logging.exception('add_product_variable exception: %s', exc)
+        raise HTTPException(status_code=500, detail='Internal error')
+
+
+@router.delete('/product-variables/{vtype}')
+async def remove_product_variable(vtype: str, request: Request):
+    try:
+        body = await request.json()
+        value = body.get('value')
+        if not value:
+            raise HTTPException(status_code=400, detail='Missing value')
+        ok = await run_in_threadpool(repository.delete_product_variable, vtype, value)
+        if not ok:
+            raise HTTPException(status_code=500, detail='Failed to delete variable')
+        return {'status': 'success'}
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logging.exception('remove_product_variable exception: %s', exc)
+        raise HTTPException(status_code=500, detail='Internal error')
+
+
 @router.post('/purchases')
 async def create_purchase(payload: PurchaseCreate):
     # payload contains supplier_id and items

@@ -138,30 +138,59 @@ export default function Products() {
                 <th className="px-2 py-1 text-left">Product ID</th>
                 <th className="px-2 py-1 text-left">SKU</th>
                 <th className="px-2 py-1 text-left">Name</th>
-                {supportsMeta && <th className="px-2 py-1 text-left">Company</th>}
-                <th className="px-2 py-1 text-left">Price</th>
-                <th className="px-2 py-1 text-left">Tax %</th>
-                <th className="px-2 py-1 text-left">Stock</th>
+                <th className="px-2 py-1 text-left">Variant</th>
+                <th className="px-2 py-1 text-left">Amount</th>
+                <th className="px-2 py-1 text-left">GST</th>
+                <th className="px-2 py-1 text-left">Total Price</th>
                 <th className="px-2 py-1 text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
               {paginated.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="text-center py-4 text-gray-500">No products found.</td>
+                  <td colSpan={8} className="text-center py-4 text-gray-500">No products found.</td>
                 </tr>
               ) : (
                 paginated.map(prod => (
                   <tr key={prod.id} className="border-b">
                     <td className="px-2 py-1">{prod.product_code || prod.id}</td>
                     <td className="px-2 py-1">{prod.sku}</td>
-                    <td className="px-2 py-1">{prod.name}</td>
-                    {supportsMeta && (
-                      <td className="px-2 py-1">{prod.meta?.company || '—'}</td>
-                    )}
+                    <td className="px-2 py-1">{(() => {
+                      // Display name without any appended variant. If meta.company exists, prefix it.
+                      let base = typeof prod.name === 'string' ? prod.name : ''
+                      if (base.includes(' — ')) {
+                        base = base.split(' — ')[0].trim()
+                      }
+                      if (prod.meta && prod.meta.company) {
+                        return `${prod.meta.company} - ${base}`
+                      }
+                      return base
+                    })()}</td>
+                    <td className="px-2 py-1">{(() => {
+                      // prefer structured meta
+                      if (prod.meta && prod.meta.variant) return prod.meta.variant
+                      // fallback: if name was stored as "... — Variant", parse trailing part
+                      if (typeof prod.name === 'string' && prod.name.includes(' — ')) {
+                        const parts = prod.name.split(' — ')
+                        return parts[parts.length - 1].trim()
+                      }
+                      // older fallback: variant may be in description as '| Variant: X'
+                      if (prod.description && prod.description.includes('| Variant:')) {
+                        const m = prod.description.match(/\| Variant:\s*([^|]+)/)
+                        if (m && m[1]) return m[1].trim()
+                      }
+                      return '—'
+                    })()}</td>
                     <td className="px-2 py-1">${prod.price}</td>
-                    <td className="px-2 py-1">{prod.tax_percent}%</td>
-                    <td className="px-2 py-1">{prod.stock_qty}</td>
+                    <td className="px-2 py-1">{prod.tax_percent ? `${prod.tax_percent}%` : '—'}</td>
+                    <td className="px-2 py-1">
+                      ${(() => {
+                        const price = Number(prod.price) || 0
+                        const tax = Number(prod.tax_percent) || 0
+                        const total = price + (price * (tax / 100))
+                        return total.toFixed(2)
+                      })()}
+                    </td>
                     <td className="px-2 py-1 text-center">
                       <button className="text-blue-600 hover:underline mr-2" onClick={() => navigate(`/products/${prod.id}`, { state: { product: prod } })}>View</button>
                       <button className="text-green-600 hover:underline mr-2" onClick={() => { setEditProduct(prod); setShowForm(true); }}>Edit</button>
@@ -179,9 +208,9 @@ export default function Products() {
           <div className="bg-white shadow rounded p-4">
             <h2 className="text-lg font-semibold mb-2">Product Settings</h2>
             <p className="text-sm text-gray-600 mb-4">Manage variables that can be selected when adding a product.</p>
-            <SimpleListEditor title="Companies" storageKey="product_companies" items={companies} setItems={setCompanies} placeholder="Add company" />
-            <SimpleListEditor title="Variants (Size)" storageKey="product_variants" items={variants} setItems={setVariants} placeholder="Add variant (e.g. Small)" />
-            <SimpleListEditor title="GST Rates" storageKey="product_gst_rates" items={gstRates} setItems={setGstRates} placeholder="Add GST rate (e.g. 18)" numeric />
+            <SimpleListEditor title="Companies" storageKey="product_companies" items={companies} setItems={setCompanies} placeholder="Add company" apiVtype="company" />
+            <SimpleListEditor title="Variants (Size)" storageKey="product_variants" items={variants} setItems={setVariants} placeholder="Add variant (e.g. Small)" apiVtype="variant" />
+            <SimpleListEditor title="GST Rates" storageKey="product_gst_rates" items={gstRates} setItems={setGstRates} placeholder="Add GST rate (e.g. 18)" numeric apiVtype="gst" />
           </div>
         )}
       {/* Pagination */}
@@ -205,15 +234,38 @@ export default function Products() {
 function ProductForm({ product, onClose, onSaved, companies = [], variants = [], gstRates = [], supportsMeta = false }) {
   const skuRef = React.useRef()
   React.useEffect(()=>{ if(skuRef.current) skuRef.current.focus() }, [])
-  const [form, setForm] = useState({
-    sku: product?.sku || '',
-    name: product?.name || '',
-    description: product?.description || '',
-    price: product?.price !== undefined ? String(product.price) : '',
-    tax_percent: product?.tax_percent !== undefined ? String(product.tax_percent) : '',
-    stock_qty: product?.stock_qty !== undefined ? String(product.stock_qty) : '',
-    company: product?.meta?.company || (companies[0] || ''),
-    variant: product?.meta?.variant || (variants[0] || ''),
+  const [form, setForm] = useState(() => {
+    // derive base name: remove company prefix "Company - " and trailing " — Variant"
+    const rawName = product?.name || ''
+    let baseName = rawName
+    try {
+      // remove any company prefix that matches an entry in the companies list
+      if (Array.isArray(companies) && companies.length && typeof rawName === 'string') {
+        for (const c of companies) {
+          if (!c) continue
+          const prefix = `${c} - `
+          if (rawName.toLowerCase().startsWith(prefix.toLowerCase())) {
+            baseName = rawName.slice(prefix.length)
+            break
+          }
+        }
+      } else if (product && product.meta && product.meta.company && typeof rawName === 'string') {
+        const prefix = `${product.meta.company} - `
+        if (rawName.startsWith(prefix)) baseName = rawName.slice(prefix.length)
+      }
+      if (typeof baseName === 'string' && baseName.includes(' — ')) {
+        baseName = baseName.split(' — ')[0].trim()
+      }
+    } catch (e) { /* ignore and fallback to rawName */ }
+    return {
+      sku: product?.sku || '',
+      name: baseName || '',
+      description: product?.description || '',
+      price: product?.price !== undefined ? String(product.price) : '',
+      tax_percent: product?.tax_percent !== undefined ? String(product.tax_percent) : '',
+      company: product?.meta?.company || (companies[0] || ''),
+      variant: product?.meta?.variant || (variants[0] || ''),
+    }
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
@@ -239,7 +291,6 @@ function ProductForm({ product, onClose, onSaved, companies = [], variants = [],
       description: form.description || undefined,
       price: form.price !== '' ? parseFloat(form.price) : undefined,
       tax_percent: form.tax_percent !== '' ? parseFloat(form.tax_percent) : undefined,
-      stock_qty: form.stock_qty !== '' ? parseInt(form.stock_qty) : undefined,
     };
     if (supportsMeta) {
       payload.meta = {
@@ -248,7 +299,12 @@ function ProductForm({ product, onClose, onSaved, companies = [], variants = [],
       }
     } else {
       if (form.company || form.variant) {
-        payload.description = `${payload.description || ''} ${form.company ? `| Company: ${form.company}`: ''} ${form.variant ? `| Variant: ${form.variant}`: ''}`.trim()
+        // when meta is not supported, prefix the product name with the company and append variant inline
+        let prefix = ''
+        if (form.company) prefix += `${form.company} - `
+        let newName = `${prefix}${form.name}`.trim()
+        if (form.variant) newName = `${newName} — ${form.variant}`
+        payload.name = newName
       }
     }
     try {
@@ -261,7 +317,7 @@ function ProductForm({ product, onClose, onSaved, companies = [], variants = [],
       }
       setSaving(false);
       // reset form for next use
-      setForm({ sku: '', name: '', description: '', price: '', tax_percent: '', stock_qty: '', company: companies[0] || '', variant: variants[0] || '' })
+  setForm({ sku: '', name: '', description: '', price: '', tax_percent: '', company: companies[0] || '', variant: variants[0] || '' })
       onSaved && onSaved();
     } catch (err) {
       setError('Failed to save product');
@@ -294,36 +350,33 @@ function ProductForm({ product, onClose, onSaved, companies = [], variants = [],
             </select>
           </div>
         )}
-        {variants && variants.length>0 && (
-          <div className="mb-2">
-            <label className="block font-semibold">Variant (Size)</label>
+        <div className="mb-2">
+          <label className="block font-semibold">Variant</label>
+          {variants && variants.length>0 ? (
             <select name="variant" value={form.variant} onChange={handleChange} className="input">
               <option value="">-- select variant --</option>
               {variants.map((v,idx)=> <option key={idx} value={v}>{v}</option>)}
             </select>
-          </div>
-        )}
-        {gstRates && gstRates.length>0 && (
-          <div className="mb-2">
-            <label className="block font-semibold">GST Rate</label>
+          ) : (
+            <input name="variant" value={form.variant} onChange={handleChange} className="input" placeholder="Variant (optional)" />
+          )}
+        </div>
+        <div className="mb-2">
+          <label className="block font-semibold">GST</label>
+          {gstRates && gstRates.length>0 ? (
             <select name="gst_select" value={form.tax_percent} onChange={handleGstSelect} className="input">
               <option value="">-- select GST % --</option>
               {gstRates.map((g,idx)=> <option key={idx} value={g}>{g}%</option>)}
             </select>
-          </div>
-        )}
+          ) : (
+            <input name="tax_percent" value={form.tax_percent} onChange={handleChange} className="input" type="number" step="0.01" placeholder="GST %" />
+          )}
+        </div>
         <div className="mb-2">
           <label className="block font-semibold">Price</label>
           <input name="price" value={form.price} onChange={handleChange} className="input" type="number" step="0.01" required />
         </div>
-        <div className="mb-2">
-          <label className="block font-semibold">Tax %</label>
-          <input name="tax_percent" value={form.tax_percent} onChange={handleChange} className="input" type="number" step="0.01" />
-        </div>
-        <div className="mb-2">
-          <label className="block font-semibold">Stock Qty</label>
-          <input name="stock_qty" value={form.stock_qty} onChange={handleChange} className="input" type="number" required />
-        </div>
+  {/* Tax % and Stock Qty removed. GST is selected via GST Rate and stock is managed via purchases/sales. */}
         {error && <div className="text-red-500 mb-2">{error}</div>}
         <div className="flex gap-2 mt-4">
           <button type="submit" className="btn" disabled={saving}>{saving ? 'Saving...' : 'Save'}</button>
@@ -334,29 +387,77 @@ function ProductForm({ product, onClose, onSaved, companies = [], variants = [],
   );
 }
 
-function SimpleListEditor({ title, storageKey, items, setItems, placeholder, numeric }){
+function SimpleListEditor({ title, storageKey, items, setItems, placeholder, numeric, apiVtype }){
   const [val, setVal] = useState('')
-  const save = ()=>{
+  const [loadingVars, setLoadingVars] = useState(false)
+
+  // Try to load from API when apiVtype is provided. Fallback to localStorage is preserved.
+  useEffect(()=>{
+    if(!apiVtype) return;
+    setLoadingVars(true)
+    axios.get(`${API_BASE_URL}/billing/product-variables/${apiVtype}`)
+      .then(res => {
+        const data = (res.data && res.data.data) ? res.data.data : []
+        // API returns array of values; update state and localStorage for offline fallback
+        setItems(data)
+        try{ localStorage.setItem(storageKey, JSON.stringify(data)) }catch(e){}
+      })
+      .catch(()=>{
+        // ignore: we'll just use whatever is in localStorage / existing state
+      })
+      .finally(()=> setLoadingVars(false))
+  }, [apiVtype])
+
+  const save = async ()=>{
     if(!val) return
     if(numeric){
       // validate numeric
       const n = parseFloat(val)
       if(Number.isNaN(n)) return alert('Please enter a numeric value for this list')
     }
-    const next = [...items, numeric ? String(val) : val]
+    const newValue = numeric ? String(val) : val
+    if(apiVtype){
+      try{
+        const res = await axios.post(`${API_BASE_URL}/billing/product-variables/${apiVtype}`, { value: newValue })
+        // optimistic: append value if not already present
+        if(!items.includes(newValue)){
+          const next = [...items, newValue]
+          setItems(next)
+          try{ localStorage.setItem(storageKey, JSON.stringify(next)) }catch(e){}
+        }
+        setVal('')
+      }catch(err){
+        alert('Failed to save to server. Try again or use local settings.')
+      }
+      return
+    }
+    // fallback: localStorage
+    const next = [...items, newValue]
     setItems(next)
-    localStorage.setItem(storageKey, JSON.stringify(next))
+    try{ localStorage.setItem(storageKey, JSON.stringify(next)) }catch(e){}
     setVal('')
   }
-  const removeAt = idx => {
+  const removeAt = async idx => {
     if(!confirm('Remove this item?')) return
+    const value = items[idx]
+    if(apiVtype){
+      try{
+        await axios.delete(`${API_BASE_URL}/billing/product-variables/${apiVtype}`, { data: { value } })
+        const next = items.filter((_,i)=>i!==idx)
+        setItems(next)
+        try{ localStorage.setItem(storageKey, JSON.stringify(next)) }catch(e){}
+      }catch(err){
+        alert('Failed to remove from server. Try again.')
+      }
+      return
+    }
     const next = items.filter((_,i)=>i!==idx)
     setItems(next)
-    localStorage.setItem(storageKey, JSON.stringify(next))
+    try{ localStorage.setItem(storageKey, JSON.stringify(next)) }catch(e){}
   }
   return (
     <div className="mb-4">
-      <h3 className="font-semibold">{title}</h3>
+      <h3 className="font-semibold">{title}{loadingVars ? ' (loading...)' : ''}</h3>
       <div className="flex gap-2 my-2">
         <input value={val} onChange={e=>setVal(e.target.value)} placeholder={placeholder} className="input" />
         <button className="btn" onClick={save}>Add</button>

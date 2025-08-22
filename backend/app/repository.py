@@ -433,6 +433,91 @@ def apply_sale(customer_id: Optional[str], items: List[Dict], issued_by: Optiona
         return None
 
 
+def list_product_variables(vtype: str) -> Optional[List[str]]:
+    try:
+        supabase = _get_supabase()
+        # Some versions of the supabase client have different .order() signatures.
+        # To be robust, fetch relevant columns and sort in Python.
+        res = supabase.table('product_variables').select('value, sort_order, created_at').eq('vtype', vtype).execute()
+        if getattr(res, 'error', None):
+            logging.error('list_product_variables error: %s', res.error)
+            return None
+        rows = res.data or []
+        # sort by sort_order then created_at
+        try:
+            rows_sorted = sorted(rows, key=lambda r: (r.get('sort_order') or 0, r.get('created_at') or ''))
+        except Exception:
+            rows_sorted = rows
+        if vtype == 'gst':
+            out = []
+            for r in rows_sorted:
+                # prefer value_num if present, otherwise try to parse value
+                vn = r.get('value_num')
+                if vn is not None:
+                    out.append(float(vn))
+                    continue
+                try:
+                    out.append(float(r.get('value')))
+                except Exception:
+                    out.append(r.get('value'))
+            return out
+        return [r.get('value') for r in rows_sorted]
+    except Exception:
+        logging.exception('list_product_variables exception')
+        return None
+
+
+def upsert_product_variable(vtype: str, value: str) -> Optional[Dict]:
+    try:
+        supabase = _get_supabase()
+        # best-effort: insert and ignore duplicates
+        payload = {'vtype': vtype, 'value': value}
+        if vtype == 'gst':
+            # normalize numeric GST values into value_num for easier querying
+            try:
+                payload['value_num'] = float(value)
+            except Exception:
+                # leave value_num null if parsing fails
+                pass
+        try:
+            res = supabase.table('product_variables').insert(payload).execute()
+        except Exception as exc:
+            msg = str(exc)
+            # fallback: some Supabase/PostgREST instances may not have value_num column yet.
+            if 'value_num' in msg or "Could not find the 'value_num'" in msg:
+                try:
+                    # remove value_num and retry
+                    payload.pop('value_num', None)
+                    res = supabase.table('product_variables').insert(payload).execute()
+                except Exception:
+                    raise
+            else:
+                raise
+        if getattr(res, 'error', None):
+            logging.error('upsert_product_variable error: %s', res.error)
+            return None
+        data = res.data
+        if isinstance(data, list):
+            return data[0] if data else None
+        return data
+    except Exception:
+        logging.exception('upsert_product_variable exception')
+        return None
+
+
+def delete_product_variable(vtype: str, value: str) -> bool:
+    try:
+        supabase = _get_supabase()
+        res = supabase.table('product_variables').delete().eq('vtype', vtype).eq('value', value).execute()
+        if getattr(res, 'error', None):
+            logging.error('delete_product_variable error: %s', res.error)
+            return False
+        return True
+    except Exception:
+        logging.exception('delete_product_variable exception')
+        return False
+
+
 def update_customer(customer_id: str, changes: Dict) -> Optional[Dict]:
     """Perform partial update on customer record and return updated row or None."""
     try:

@@ -11,6 +11,7 @@ class ProductCreate(BaseModel):
     price: Decimal
     tax_percent: Optional[Decimal] = Decimal('0.00')
     stock_qty: int = 0
+    meta: Optional[dict] = None
 
 class Product(ProductCreate):
     id: str
@@ -23,6 +24,7 @@ class ProductUpdate(BaseModel):
     price: Optional[Decimal] = None
     tax_percent: Optional[Decimal] = None
     stock_qty: Optional[int] = None
+    meta: Optional[dict] = None
 
 
 class Customer(BaseModel):
