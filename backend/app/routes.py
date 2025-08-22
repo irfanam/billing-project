@@ -16,6 +16,8 @@ if TYPE_CHECKING:
 
 
 router = APIRouter(prefix="/billing", tags=["Billing"])
+from fastapi import Body
+from .schemas import Product
 
 
 def _insert_billing(record_dict: dict):
@@ -49,6 +51,31 @@ async def get_billing(user_id: str):
 
 
 # New invoice creation route
+@router.get('/products')
+async def list_products():
+    from app.database import supabase
+    res = supabase.table('products').select('*').execute()
+    if getattr(res, 'error', None):
+        raise HTTPException(status_code=500, detail=str(res.error))
+    return {"status": "success", "data": res.data}
+
+@router.post('/products')
+async def create_product(product: Product = Body(...)):
+    from app.database import supabase
+    rec = product.dict(exclude_unset=True)
+    res = supabase.table('products').insert(rec).execute()
+    if getattr(res, 'error', None):
+        raise HTTPException(status_code=500, detail=str(res.error))
+    return {"status": "success", "data": res.data}
+
+@router.put('/products/{product_id}')
+async def update_product(product_id: str, product: Product = Body(...)):
+    from app.database import supabase
+    rec = product.dict(exclude_unset=True)
+    res = supabase.table('products').update(rec).eq('id', product_id).execute()
+    if getattr(res, 'error', None):
+        raise HTTPException(status_code=500, detail=str(res.error))
+    return {"status": "success", "data": res.data}
 @router.post('/invoices/')
 async def create_invoice(payload: InvoiceCreate):
     # Resolve product tax_percent when not provided per-line
