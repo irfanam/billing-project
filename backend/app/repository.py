@@ -10,6 +10,51 @@ def _get_supabase():
     return supabase
 
 
+def _next_sequential_id(table: str, prefix: str, width: int = 6) -> str:
+    """Compute next sequential id for a table with given prefix.
+
+    This fetches existing ids from the table and finds the max numeric suffix for ids
+    that start with the prefix, then returns prefix + zero-padded next number.
+    This is a best-effort approach and may race under concurrent writers.
+    """
+    try:
+        supabase = _get_supabase()
+        # fetch the code column if present, otherwise fall back to id
+        code_col = 'id'
+        if table == 'customers':
+            code_col = 'customer_code'
+        elif table == 'products':
+            code_col = 'product_code'
+        try:
+            res = supabase.table(table).select(code_col).execute()
+        except Exception:
+            # the code column may not exist yet (migration not applied). Fall back to id selection.
+            logging.warning('Code column %s not found in table %s; falling back to id for sequence detection. Apply backend/migrations/0001_add_codes.sql to persist codes.', code_col, table)
+            res = supabase.table(table).select('id').execute()
+        if getattr(res, 'error', None) or not res.data:
+            # no rows => start at 1
+            return f"{prefix}{1:0{width}d}"
+        max_n = 0
+        for row in (res.data or []):
+            val = row.get(code_col)
+            if not val or not isinstance(val, str):
+                continue
+            if val.startswith(prefix):
+                num_part = val[len(prefix):]
+                try:
+                    n = int(num_part)
+                    if n > max_n:
+                        max_n = n
+                except Exception:
+                    continue
+        next_n = max_n + 1
+        return f"{prefix}{next_n:0{width}d}"
+    except Exception:
+        logging.exception('Failed to compute next sequential id for %s', table)
+        # fallback to uuid-like id with prefix
+        return prefix + str(uuid.uuid4())
+
+
 def get_product(product_id: str) -> Optional[Dict]:
     """Return product row dict or None"""
     supabase = _get_supabase()
@@ -182,17 +227,59 @@ def create_customer(record: Dict) -> Optional[Dict]:
     try:
         supabase = _get_supabase()
         rec = record.copy()
-        # ensure id exists
+        # ensure id exists as UUID for DB integrity
         if not rec.get('id'):
             rec['id'] = str(uuid.uuid4())
-        res = supabase.table('customers').insert(rec).execute()
-        if getattr(res, 'error', None):
-            logging.error('Supabase create_customer error: %s', res.error)
-            return None
-        data = res.data
-        if isinstance(data, list):
-            return data[0] if data else None
-        return data
+
+        # Retry loop: compute next code and try to insert with code; on unique conflict, retry a few times
+        max_attempts = 5
+        for attempt in range(max_attempts):
+            code = _next_sequential_id('customers', 'CID')
+            rec_with_code = rec.copy()
+            rec_with_code['customer_code'] = code
+            try:
+                res = supabase.table('customers').insert(rec_with_code).execute()
+            except Exception as exc:
+                # If the DB/PostgREST reports that the column does not exist, fall back to inserting without the code
+                msg = str(exc)
+                logging.exception('Supabase create_customer exception on insert: %s', exc)
+                if 'customer_code' in msg or 'column customers.customer_code does not exist' in msg or 'Could not find the' in msg:
+                    logging.warning('customers.customer_code column not present; inserting without code and returning computed code in response. Apply migration to persist codes.')
+                    try:
+                        res2 = supabase.table('customers').insert(rec).execute()
+                    except Exception:
+                        logging.exception('Fallback insert without customer_code also failed')
+                        return None
+                    if getattr(res2, 'error', None):
+                        logging.error('Fallback create_customer insert error: %s', res2.error)
+                        return None
+                    data = res2.data
+                    if isinstance(data, list):
+                        out = data[0] if data else None
+                    else:
+                        out = data
+                    if out is not None and isinstance(out, dict):
+                        out['customer_code'] = code
+                    return out
+                return None
+            if getattr(res, 'error', None):
+                # detect unique constraint on customer_code and retry
+                err = res.error
+                logging.error('Supabase create_customer error (attempt %s): %s', attempt + 1, err)
+                if isinstance(err, dict) and 'message' in err and 'duplicate' in err['message'].lower():
+                    # conflict on code, retry
+                    continue
+                return None
+            data = res.data
+            if isinstance(data, list):
+                out = data[0] if data else None
+            else:
+                out = data
+            if out is not None and isinstance(out, dict):
+                out['customer_code'] = code
+            return out
+        logging.error('Failed to create customer after %s attempts due to code conflicts', max_attempts)
+        return None
     except Exception as exc:
         logging.exception('Supabase create_customer exception: %s', exc)
         return None
@@ -219,6 +306,66 @@ def update_customer(customer_id: str, changes: Dict) -> Optional[Dict]:
         return data
     except Exception as exc:
         logging.exception('update_customer exception: %s', exc)
+        return None
+
+
+def create_product(record: Dict) -> Optional[Dict]:
+    """Insert a product record and return the created row or None on error. Uses UID... ids."""
+    try:
+        supabase = _get_supabase()
+        rec = record.copy()
+        if not rec.get('id'):
+            rec['id'] = str(uuid.uuid4())
+        # sanitize Decimal fields
+        for k, v in list(rec.items()):
+            if isinstance(v, Decimal):
+                rec[k] = float(v)
+
+        max_attempts = 5
+        for attempt in range(max_attempts):
+            code = _next_sequential_id('products', 'UID')
+            rec_with_code = rec.copy()
+            rec_with_code['product_code'] = code
+            try:
+                res = supabase.table('products').insert(rec_with_code).execute()
+            except Exception as exc:
+                msg = str(exc)
+                logging.exception('Supabase create_product exception on insert: %s', exc)
+                if 'product_code' in msg or 'column products.product_code does not exist' in msg or 'Could not find the' in msg:
+                    logging.warning('products.product_code column not present; inserting without code and returning computed code in response. Apply migration to persist codes.')
+                    try:
+                        res2 = supabase.table('products').insert(rec).execute()
+                    except Exception:
+                        logging.exception('Fallback insert without product_code also failed')
+                        return None
+                    if getattr(res2, 'error', None):
+                        logging.error('Fallback create_product insert error: %s', res2.error)
+                        return None
+                    data = res2.data
+                    if isinstance(data, list):
+                        out = data[0] if data else None
+                    else:
+                        out = data
+                    if out is not None and isinstance(out, dict):
+                        out['product_code'] = code
+                    return out
+                logging.error('Supabase create_product error (attempt %s): %s', attempt + 1, res.error)
+                err = res.error
+                if isinstance(err, dict) and 'message' in err and 'duplicate' in err['message'].lower():
+                    continue
+                return None
+            data = res.data
+            if isinstance(data, list):
+                out = data[0] if data else None
+            else:
+                out = data
+            if out is not None and isinstance(out, dict):
+                out['product_code'] = code
+            return out
+        logging.error('Failed to create product after %s attempts due to code conflicts', max_attempts)
+        return None
+    except Exception as exc:
+        logging.exception('Supabase create_product exception: %s', exc)
         return None
 
 
