@@ -18,6 +18,7 @@ if TYPE_CHECKING:
 router = APIRouter(prefix="/billing", tags=["Billing"])
 from fastapi import Body
 from .schemas import Product, ProductCreate
+from decimal import Decimal
 
 
 def _insert_billing(record_dict: dict):
@@ -74,6 +75,10 @@ async def create_product(request: Request):
         product_id = str(uuid.uuid4())
         rec = product_data.dict(exclude_unset=True)
         rec['id'] = product_id
+        # Convert Decimal fields to float for JSON serialization
+        for k, v in rec.items():
+            if isinstance(v, Decimal):
+                rec[k] = float(v)
         res = supabase.table('products').insert(rec).execute()
         if getattr(res, 'error', None):
             raise HTTPException(status_code=500, detail=str(res.error))
