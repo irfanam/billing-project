@@ -76,7 +76,9 @@ function App() {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/invoices" element={<Invoices />} />
               <Route path="/customers" element={<Customers />} />
+              <Route path="/customers/:id" element={<CustomerDetail />} />
               <Route path="/products" element={<Products />} />
+              <Route path="/products/:id" element={<ProductDetail />} />
               <Route path="/reports" element={<Reports />} />
               <Route path="/settings" element={<Settings />} />
             </Routes>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
 
@@ -27,11 +28,12 @@ export default function Customers() {
         setLoading(false);
       });
   }, []);
+  const navigate = useNavigate();
 
   // Filter and search logic
   const filtered = customers.filter(cust =>
     cust.name?.toLowerCase().includes(search.toLowerCase()) ||
-    cust.id?.toLowerCase().includes(search.toLowerCase())
+    (cust.customer_code || cust.id || '').toLowerCase().includes(search.toLowerCase())
   );
   const totalPages = Math.ceil(filtered.length / pageSize);
   const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
@@ -111,7 +113,7 @@ export default function Customers() {
               ) : (
                 paginated.map(cust => (
                   <tr key={cust.id} className="border-b">
-                    <td className="px-2 py-1">{cust.id}</td>
+                    <td className="px-2 py-1">{cust.customer_code || cust.id}</td>
                     <td className="px-2 py-1">{cust.name}</td>
                     <td className="px-2 py-1">{cust.state}</td>
                     <td className="px-2 py-1">{cust.gstin}</td>
@@ -119,12 +121,7 @@ export default function Customers() {
                     <td className="px-2 py-1 text-center">
                       <button
                         className="text-blue-600 hover:underline mr-2"
-                        onClick={() => {
-                          setForm({ name: cust.name || '', state: cust.state || '', gstin: cust.gstin || '', email: cust.email || '' });
-                          setEditingId(cust.id || null);
-                          setReadOnly(true);
-                          setShowForm(true);
-                        }}
+                        onClick={() => navigate(`/customers/${cust.id}`, { state: { customer: cust } })}
                       >View</button>
                       <button
                         className="text-green-600 hover:underline mr-2"

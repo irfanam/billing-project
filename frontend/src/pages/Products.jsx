@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
 
@@ -29,12 +30,13 @@ export default function Products() {
   useEffect(() => {
     fetchProducts();
   }, []);
+  const navigate = useNavigate();
 
   // Filter and search logic
   const filtered = products.filter(prod =>
     prod.name?.toLowerCase().includes(search.toLowerCase()) ||
     prod.sku?.toLowerCase().includes(search.toLowerCase()) ||
-    prod.id?.toLowerCase().includes(search.toLowerCase())
+    (prod.product_code || prod.id || '').toLowerCase().includes(search.toLowerCase())
   );
   const totalPages = Math.ceil(filtered.length / pageSize);
   const paginated = filtered.slice((page - 1) * pageSize, page * pageSize);
@@ -85,14 +87,14 @@ export default function Products() {
               ) : (
                 paginated.map(prod => (
                   <tr key={prod.id} className="border-b">
-                    <td className="px-2 py-1">{prod.id}</td>
+                    <td className="px-2 py-1">{prod.product_code || prod.id}</td>
                     <td className="px-2 py-1">{prod.sku}</td>
                     <td className="px-2 py-1">{prod.name}</td>
                     <td className="px-2 py-1">${prod.price}</td>
                     <td className="px-2 py-1">{prod.tax_percent}%</td>
                     <td className="px-2 py-1">{prod.stock_qty}</td>
                     <td className="px-2 py-1 text-center">
-                      <button className="text-blue-600 hover:underline mr-2">View</button>
+                      <button className="text-blue-600 hover:underline mr-2" onClick={() => navigate(`/products/${prod.id}`, { state: { product: prod } })}>View</button>
                       <button className="text-green-600 hover:underline mr-2" onClick={() => { setEditProduct(prod); setShowForm(true); }}>Edit</button>
                     </td>
                   </tr>
