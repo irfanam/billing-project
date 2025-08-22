@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from typing import TYPE_CHECKING
 from starlette.concurrency import run_in_threadpool
 from . import repository
@@ -60,16 +60,23 @@ async def list_products():
     return {"status": "success", "data": res.data}
 
 @router.post('/products')
-async def create_product(product: Product = Body(...)):
-    from app.database import supabase
+from fastapi import Request
+
+@router.post('/products')
+async def create_product(request: Request):
+    import logging
     try:
+        body = await request.json()
+        logging.info(f"Raw product POST body: {body}")
+        # Validate using Product schema
+        product = Product(**body)
+        from app.database import supabase
         rec = product.dict(exclude_unset=True)
         res = supabase.table('products').insert(rec).execute()
         if getattr(res, 'error', None):
             raise HTTPException(status_code=500, detail=str(res.error))
         return {"status": "success", "data": res.data}
     except Exception as exc:
-        import logging
         logging.exception('Product validation error: %s', exc)
         raise
 
