@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING
 from starlette.concurrency import run_in_threadpool
 from . import repository
 from . import tax as tax_module
-from .schemas import InvoiceCreate, Product, ProductCreate, ProductUpdate
+from .schemas import InvoiceCreate, Product, ProductCreate, ProductUpdate, CustomerUpdate
 from fastapi.responses import Response, HTMLResponse
 from . import pdf as pdf_module
 
@@ -49,6 +49,18 @@ async def create_customer(request: Request):
     except Exception as exc:
         logging.exception('create_customer route exception: %s', exc)
         raise HTTPException(status_code=500, detail='Internal error')
+
+
+@router.put('/customers/{customer_id}')
+async def update_customer(customer_id: str, changes: 'CustomerUpdate' = Body(...)):
+    # allow partial updates
+    rec = changes.dict(exclude_unset=True)
+    if not rec:
+        raise HTTPException(status_code=400, detail='No changes provided')
+    updated = await run_in_threadpool(repository.update_customer, customer_id, rec)
+    if not updated:
+        raise HTTPException(status_code=500, detail='Failed to update customer')
+    return {"status": "success", "data": updated}
 
 
 @router.get('/products')

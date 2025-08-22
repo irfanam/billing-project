@@ -198,6 +198,30 @@ def create_customer(record: Dict) -> Optional[Dict]:
         return None
 
 
+def update_customer(customer_id: str, changes: Dict) -> Optional[Dict]:
+    """Perform partial update on customer record and return updated row or None."""
+    try:
+        supabase = _get_supabase()
+        # sanitize if Decimal present (unlikely for customer)
+        rec = {}
+        for k, v in changes.items():
+            if isinstance(v, Decimal):
+                rec[k] = float(v)
+            else:
+                rec[k] = v
+        res = supabase.table('customers').update(rec).eq('id', customer_id).execute()
+        if getattr(res, 'error', None):
+            logging.error('Supabase update_customer error: %s', res.error)
+            return None
+        data = res.data
+        if isinstance(data, list):
+            return data[0] if data else None
+        return data
+    except Exception as exc:
+        logging.exception('update_customer exception: %s', exc)
+        return None
+
+
 # Stock primitives
 def get_current_stock(product_id: str) -> Optional[Dict]:
     """Return cached stock_qty from products and reserved qty (sum of active reservations).

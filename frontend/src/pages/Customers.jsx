@@ -9,6 +9,8 @@ export default function Customers() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const pageSize = 10;
+  const [editingId, setEditingId] = useState(null);
+  const [readOnly, setReadOnly] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ name: '', state: '', gstin: '', email: '' });
 
@@ -47,31 +49,40 @@ export default function Customers() {
         />
         <button
           className="bg-blue-600 text-white px-4 py-2 rounded shadow ml-auto"
-          onClick={() => setShowForm(true)}
+          onClick={() => { setShowForm(true); setEditingId(null); setReadOnly(false); }}
         >Add Customer</button>
       </div>
       {showForm && (
         <div className="bg-white p-4 rounded shadow mb-4">
-          <h2 className="text-lg font-semibold mb-2">Add Customer</h2>
+          <h2 className="text-lg font-semibold mb-2">{readOnly ? 'View Customer' : (editingId ? 'Edit Customer' : 'Add Customer')}</h2>
           <div className="grid grid-cols-2 gap-2">
-            <input placeholder="Name" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} className="border p-2" />
-            <input placeholder="State" value={form.state} onChange={e=>setForm({...form,state:e.target.value})} className="border p-2" />
-            <input placeholder="GSTIN" value={form.gstin} onChange={e=>setForm({...form,gstin:e.target.value})} className="border p-2" />
-            <input placeholder="Email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} className="border p-2" />
+            <input placeholder="Name" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} className="border p-2" disabled={readOnly} />
+            <input placeholder="State" value={form.state} onChange={e=>setForm({...form,state:e.target.value})} className="border p-2" disabled={readOnly} />
+            <input placeholder="GSTIN" value={form.gstin} onChange={e=>setForm({...form,gstin:e.target.value})} className="border p-2" disabled={readOnly} />
+            <input placeholder="Email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} className="border p-2" disabled={readOnly} />
           </div>
           <div className="flex justify-end gap-2 mt-2">
-            <button className="px-3 py-1 border rounded" onClick={()=>setShowForm(false)}>Cancel</button>
-            <button className="px-3 py-1 bg-blue-600 text-white rounded" onClick={async ()=>{
-              try{
-                const res = await axios.post(`${API_BASE_URL}/billing/customers`, form)
-                const newCust = res.data.data
-                setCustomers([newCust, ...customers])
-                setShowForm(false)
-                setForm({name:'',state:'',gstin:'',email:''})
-              }catch(err){
-                alert('Failed to add customer')
-              }
-            }}>Save</button>
+            <button className="px-3 py-1 border rounded" onClick={()=>{ setShowForm(false); setReadOnly(false); setEditingId(null); setForm({name:'',state:'',gstin:'',email:''}); }}>Cancel</button>
+            {!readOnly && (
+              <button className="px-3 py-1 bg-blue-600 text-white rounded" onClick={async ()=>{
+                try{
+                  if(editingId){
+                    const res = await axios.put(`${API_BASE_URL}/billing/customers/${editingId}`, form)
+                    const updated = res.data.data
+                    setCustomers(customers.map(c => c.id === updated.id ? updated : c))
+                  } else {
+                    const res = await axios.post(`${API_BASE_URL}/billing/customers`, form)
+                    const newCust = res.data.data
+                    setCustomers([newCust, ...customers])
+                  }
+                  setShowForm(false)
+                  setForm({name:'',state:'',gstin:'',email:''})
+                  setEditingId(null)
+                }catch(err){
+                  alert('Failed to save customer')
+                }
+              }}>Save</button>
+            )}
           </div>
         </div>
       )}
@@ -106,8 +117,24 @@ export default function Customers() {
                     <td className="px-2 py-1">{cust.gstin}</td>
                     <td className="px-2 py-1">{cust.email}</td>
                     <td className="px-2 py-1 text-center">
-                      <button className="text-blue-600 hover:underline mr-2">View</button>
-                      <button className="text-green-600 hover:underline mr-2">Edit</button>
+                      <button
+                        className="text-blue-600 hover:underline mr-2"
+                        onClick={() => {
+                          setForm({ name: cust.name || '', state: cust.state || '', gstin: cust.gstin || '', email: cust.email || '' });
+                          setEditingId(cust.id || null);
+                          setReadOnly(true);
+                          setShowForm(true);
+                        }}
+                      >View</button>
+                      <button
+                        className="text-green-600 hover:underline mr-2"
+                        onClick={() => {
+                          setForm({ name: cust.name || '', state: cust.state || '', gstin: cust.gstin || '', email: cust.email || '' });
+                          setEditingId(cust.id || null);
+                          setReadOnly(false);
+                          setShowForm(true);
+                        }}
+                      >Edit</button>
                     </td>
                   </tr>
                 ))

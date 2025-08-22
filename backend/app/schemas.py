@@ -35,6 +35,15 @@ class Customer(BaseModel):
     email: Optional[str] = None
 
 
+class CustomerUpdate(BaseModel):
+    name: Optional[str] = None
+    gstin: Optional[str] = None
+    state: Optional[str] = None
+    address: Optional[str] = None
+    phone: Optional[str] = None
+    email: Optional[str] = None
+
+
 class InvoiceItem(BaseModel):
     product_id: Optional[str]
     description: Optional[str] = None
