@@ -544,6 +544,9 @@ def create_stock_movement(product_id: str, change: int, reason: str, reference_t
     """
     try:
         supabase = _get_supabase()
+        # sanitize unit_cost if Decimal
+        if isinstance(unit_cost, Decimal):
+            unit_cost = float(unit_cost)
         mv = {
             'product_id': product_id,
             'change': change,
