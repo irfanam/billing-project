@@ -60,7 +60,6 @@ async def list_products():
     return {"status": "success", "data": res.data}
 
 @router.post('/products')
-from fastapi import Request
 
 @router.post('/products')
 async def create_product(request: Request):
