@@ -14,8 +14,8 @@ export default function Dashboard() {
   useEffect(() => {
     // Fetch stats and recent invoices from backend
     Promise.all([
-      fetch(`${API_BASE_URL}/api/stats`).then(r => r.json()),
-      fetch(`${API_BASE_URL}/api/invoices?limit=5`).then(r => r.json())
+      fetch(`${API_BASE_URL}/billing/stats`).then(r => r.json()),
+      fetch(`${API_BASE_URL}/billing/invoices?limit=5`).then(r => r.json())
     ]).then(([statsData, invoicesData]) => {
       setStats(statsData);
       setRecentInvoices(invoicesData.data || []);

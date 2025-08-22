@@ -24,7 +24,7 @@ function BillingForm({ onAdded }) {
   const submit = async (e) => {
     e.preventDefault()
     const payload = { user_id, amount: parseFloat(amount), description }
-  await axios.post(`${API_BASE_URL}/api/billing/`, payload)
+  await axios.post(`${API_BASE_URL}/billing/`, payload)
     setUserId('')
     setAmount('')
     setDescription('')
@@ -44,7 +44,7 @@ function BillingList({ userId }) {
   const [items, setItems] = useState([])
   useEffect(()=>{
     if(!userId) return
-    axios.get(`${API_BASE_URL}/api/billing/${userId}`).then(r=>setItems(r.data.data || []))
+  axios.get(`${API_BASE_URL}/billing/${userId}`).then(r=>setItems(r.data.data || []))
   },[userId])
 
   return (
