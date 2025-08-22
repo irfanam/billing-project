@@ -257,11 +257,20 @@ function ProductForm({ product, onClose, onSaved, companies = [], variants = [],
         baseName = baseName.split(' — ')[0].trim()
       }
     } catch (e) { /* ignore and fallback to rawName */ }
+    // compute total price if backend provided it or derive from price & tax
+    let initPrice = product?.price !== undefined ? Number(product.price) : ''
+    let initTax = product?.tax_percent !== undefined ? Number(product.tax_percent) : 0
+    let initTotal = product?.total_price !== undefined ? Number(product.total_price) : (
+      initPrice !== '' && !isNaN(initPrice) ? +(initPrice + (initPrice * (initTax / 100))).toFixed(2) : ''
+    )
     return {
       sku: product?.sku || '',
       name: baseName || '',
       description: product?.description || '',
-      price: product?.price !== undefined ? String(product.price) : '',
+      // price is the amount before tax
+      price: initPrice !== '' ? String(initPrice) : '',
+      // total_price is amount including tax
+      total_price: initTotal !== '' ? String(initTotal) : '',
       tax_percent: product?.tax_percent !== undefined ? String(product.tax_percent) : '',
       company: product?.meta?.company || (companies[0] || ''),
       variant: product?.meta?.variant || (variants[0] || ''),
@@ -269,15 +278,69 @@ function ProductForm({ product, onClose, onSaved, companies = [], variants = [],
   });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
+  const [lastEdited, setLastEdited] = useState('amount') // 'amount' or 'total'
 
   const handleChange = e => {
     const { name, value } = e.target
     setForm(f => ({ ...f, [name]: value }))
   };
 
+  const handleAmountChange = e => {
+    const v = e.target.value
+    setLastEdited('amount')
+    // keep raw string for input but compute total
+    setForm(f => {
+      const price = v === '' ? '' : Number(v)
+      const tax = Number(f.tax_percent) || 0
+      let total = ''
+      if (price !== '' && !isNaN(price)) {
+        total = (price + (price * (tax / 100)))
+        total = total === 0 ? '0.00' : total.toFixed(2)
+      }
+      return { ...f, price: v, total_price: total }
+    })
+  }
+
+  const handleTotalChange = e => {
+    const v = e.target.value
+    setLastEdited('total')
+    setForm(f => {
+      const total = v === '' ? '' : Number(v)
+      const tax = Number(f.tax_percent) || 0
+      let price = ''
+      if (total !== '' && !isNaN(total)) {
+        // amount = total / (1 + tax/100)
+        const denom = 1 + (tax / 100)
+        if (denom !== 0) {
+          price = (total / denom)
+          price = price === 0 ? '0.00' : price.toFixed(2)
+        }
+      }
+      return { ...f, total_price: v, price: price }
+    })
+  }
+
   const handleGstSelect = e => {
     const v = e.target.value
-    setForm(f => ({ ...f, tax_percent: v }))
+    // update tax and recalc other field based on last edited
+    setForm(f => {
+      const newTax = v === '' ? '' : v
+      const taxNum = Number(newTax) || 0
+      if (lastEdited === 'amount') {
+        const p = f.price === '' ? '' : Number(f.price)
+        let total = ''
+        if (p !== '' && !isNaN(p)) total = (p + (p * (taxNum / 100))).toFixed(2)
+        return { ...f, tax_percent: newTax, total_price: total }
+      } else {
+        const t = f.total_price === '' ? '' : Number(f.total_price)
+        let price = ''
+        if (t !== '' && !isNaN(t)) {
+          const denom = 1 + (taxNum / 100)
+          if (denom !== 0) price = (t / denom).toFixed(2)
+        }
+        return { ...f, tax_percent: newTax, price: price }
+      }
+    })
   }
 
   const handleSubmit = async e => {
@@ -373,8 +436,12 @@ function ProductForm({ product, onClose, onSaved, companies = [], variants = [],
           )}
         </div>
         <div className="mb-2">
-          <label className="block font-semibold">Price</label>
-          <input name="price" value={form.price} onChange={handleChange} className="input" type="number" step="0.01" required />
+          <label className="block font-semibold">Amount (pre-tax)</label>
+          <input name="price" value={form.price} onChange={handleAmountChange} className="input" type="number" step="0.01" required />
+        </div>
+        <div className="mb-2">
+          <label className="block font-semibold">Total Price (including GST)</label>
+          <input name="total_price" value={form.total_price} onChange={handleTotalChange} className="input" type="number" step="0.01" />
         </div>
   {/* Tax % and Stock Qty removed. GST is selected via GST Rate and stock is managed via purchases/sales. */}
         {error && <div className="text-red-500 mb-2">{error}</div>}
