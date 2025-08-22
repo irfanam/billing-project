@@ -13,6 +13,10 @@ import Customers from './pages/Customers';
 import CustomerDetail from './pages/CustomerDetail';
 import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
+import Suppliers from './pages/Suppliers';
+import Purchases from './pages/Purchases';
+import Sales from './pages/Sales';
+import SupplierDetail from './pages/SupplierDetail';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 
@@ -80,6 +84,10 @@ function App() {
               <Route path="/products" element={<Products />} />
               <Route path="/products/:id" element={<ProductDetail />} />
               <Route path="/reports" element={<Reports />} />
+              <Route path="/suppliers" element={<Suppliers />} />
+              <Route path="/suppliers/:id" element={<SupplierDetail />} />
+              <Route path="/purchases" element={<Purchases />} />
+              <Route path="/sales" element={<Sales />} />
               <Route path="/settings" element={<Settings />} />
             </Routes>
           </main>
