@@ -177,6 +177,27 @@ def list_invoices(limit: Optional[int] = None) -> Optional[List[Dict]]:
         return None
 
 
+def create_customer(record: Dict) -> Optional[Dict]:
+    """Insert a customer record and return the created row or None on error."""
+    try:
+        supabase = _get_supabase()
+        rec = record.copy()
+        # ensure id exists
+        if not rec.get('id'):
+            rec['id'] = str(uuid.uuid4())
+        res = supabase.table('customers').insert(rec).execute()
+        if getattr(res, 'error', None):
+            logging.error('Supabase create_customer error: %s', res.error)
+            return None
+        data = res.data
+        if isinstance(data, list):
+            return data[0] if data else None
+        return data
+    except Exception as exc:
+        logging.exception('Supabase create_customer exception: %s', exc)
+        return None
+
+
 # Stock primitives
 def get_current_stock(product_id: str) -> Optional[Dict]:
     """Return cached stock_qty from products and reserved qty (sum of active reservations).

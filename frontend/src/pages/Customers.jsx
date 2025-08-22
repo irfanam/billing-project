@@ -9,6 +9,8 @@ export default function Customers() {
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const pageSize = 10;
+  const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState({ name: '', state: '', gstin: '', email: '' });
 
   useEffect(() => {
     setLoading(true);
@@ -43,8 +45,36 @@ export default function Customers() {
           onChange={e => { setSearch(e.target.value); setPage(1); }}
           className="border rounded px-2 py-1"
         />
-        <button className="bg-blue-600 text-white px-4 py-2 rounded shadow ml-auto">Add Customer</button>
+        <button
+          className="bg-blue-600 text-white px-4 py-2 rounded shadow ml-auto"
+          onClick={() => setShowForm(true)}
+        >Add Customer</button>
       </div>
+      {showForm && (
+        <div className="bg-white p-4 rounded shadow mb-4">
+          <h2 className="text-lg font-semibold mb-2">Add Customer</h2>
+          <div className="grid grid-cols-2 gap-2">
+            <input placeholder="Name" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} className="border p-2" />
+            <input placeholder="State" value={form.state} onChange={e=>setForm({...form,state:e.target.value})} className="border p-2" />
+            <input placeholder="GSTIN" value={form.gstin} onChange={e=>setForm({...form,gstin:e.target.value})} className="border p-2" />
+            <input placeholder="Email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} className="border p-2" />
+          </div>
+          <div className="flex justify-end gap-2 mt-2">
+            <button className="px-3 py-1 border rounded" onClick={()=>setShowForm(false)}>Cancel</button>
+            <button className="px-3 py-1 bg-blue-600 text-white rounded" onClick={async ()=>{
+              try{
+                const res = await axios.post(`${API_BASE_URL}/billing/customers`, form)
+                const newCust = res.data.data
+                setCustomers([newCust, ...customers])
+                setShowForm(false)
+                setForm({name:'',state:'',gstin:'',email:''})
+              }catch(err){
+                alert('Failed to add customer')
+              }
+            }}>Save</button>
+          </div>
+        </div>
+      )}
       <div className="bg-white shadow rounded p-4 overflow-x-auto">
         {loading ? (
           <div className="text-center py-8 text-gray-400">Loading customers...</div>

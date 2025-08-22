@@ -32,6 +32,25 @@ async def list_customers():
     return {"status": "success", "data": res.data}
 
 
+@router.post('/customers')
+async def create_customer(request: Request):
+    try:
+        body = await request.json()
+        # basic validation: require name
+        if not body.get('name'):
+            raise HTTPException(status_code=400, detail='Missing customer name')
+        # insert via repository
+        created = await run_in_threadpool(repository.create_customer, body)
+        if not created:
+            raise HTTPException(status_code=500, detail='Failed to create customer')
+        return {"status": "success", "data": created}
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logging.exception('create_customer route exception: %s', exc)
+        raise HTTPException(status_code=500, detail='Internal error')
+
+
 @router.get('/products')
 async def list_products():
     from app.database import supabase
