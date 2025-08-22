@@ -66,12 +66,10 @@ async def update_customer(customer_id: str, changes: 'CustomerUpdate' = Body(...
 
 @router.get('/products')
 async def list_products():
-    from app.database import supabase
-    res = supabase.table('products').select('*').execute()
-    logging.info(f"Fetched products: {res.data}")
-    if getattr(res, 'error', None):
-        raise HTTPException(status_code=500, detail=str(res.error))
-    return {"status": "success", "data": res.data}
+    res = await run_in_threadpool(repository.list_products)
+    if res is None:
+        raise HTTPException(status_code=500, detail='Failed to fetch products')
+    return {"status": "success", "data": res}
 
 
 
@@ -182,17 +180,12 @@ async def create_product(request: Request):
 
 @router.put('/products/{product_id}')
 async def update_product(product_id: str, product: 'ProductUpdate' = Body(...)):
-    from app.database import supabase
     # allow partial updates from the frontend
     rec = product.dict(exclude_unset=True)
-    # sanitize Decimal fields
-    for k, v in list(rec.items()):
-        if isinstance(v, Decimal):
-            rec[k] = float(v)
-    res = supabase.table('products').update(rec).eq('id', product_id).execute()
-    if getattr(res, 'error', None):
-        raise HTTPException(status_code=500, detail=str(res.error))
-    return {"status": "success", "data": res.data}
+    updated = await run_in_threadpool(repository.update_product, product_id, rec)
+    if not updated:
+        raise HTTPException(status_code=500, detail='Failed to update product')
+    return {"status": "success", "data": updated}
 
 
 # Legacy billing handlers removed. Use repository functions / new endpoints instead.
