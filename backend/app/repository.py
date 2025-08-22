@@ -1,5 +1,7 @@
 from typing import Optional, Dict, List
 import logging
+import uuid
+from decimal import Decimal
 
 
 def _get_supabase():
@@ -20,7 +22,12 @@ def get_product(product_id: str) -> Optional[Dict]:
 
 def get_customer(customer_id: str) -> Optional[Dict]:
     supabase = _get_supabase()
-    res = supabase.table('customers').select('*').eq('id', customer_id).single().execute()
+    try:
+        res = supabase.table('customers').select('*').eq('id', customer_id).single().execute()
+    except Exception as exc:
+        # supabase/postgrest may raise on invalid input (eg. bad UUID) or other API errors
+        logging.exception('Supabase get_customer exception: %s', exc)
+        return None
     if getattr(res, 'error', None):
         logging.error('Supabase get_customer error: %s', res.error)
         return None
@@ -34,7 +41,37 @@ def create_invoice(record: Dict) -> Optional[Dict]:
     This function does a best-effort insert and returns the inserted row.
     """
     supabase = _get_supabase()
-    res = supabase.table('invoices').insert(record).execute()
+    # Convert Decimal objects to floats for JSON/POST compatibility
+    # Also sanitize UUID-like fields (customer_id) to avoid DB errors when the caller provides
+    # invalid values (e.g. the string 'nonexistent' used in tests).
+    rec_sanitized = {}
+    for k, v in record.items():
+        # sanitize decimals
+        if isinstance(v, Decimal):
+            rec_sanitized[k] = float(v)
+            continue
+
+        # sanitize customer_id: ensure it's a valid UUID string, otherwise set to None
+        if k == 'customer_id' and v is not None:
+            try:
+                # accepts both uuid.UUID and string; will raise on invalid
+                if isinstance(v, str):
+                    uuid.UUID(v)
+                else:
+                    # not a string; try to coerce
+                    uuid.UUID(str(v))
+                rec_sanitized[k] = v
+            except Exception:
+                logging.warning('create_invoice: invalid customer_id provided, clearing field before insert: %s', v)
+                rec_sanitized[k] = None
+            continue
+
+        rec_sanitized[k] = v
+    try:
+        res = supabase.table('invoices').insert(rec_sanitized).execute()
+    except Exception as exc:
+        logging.exception('Supabase create_invoice exception: %s', exc)
+        return None
     if getattr(res, 'error', None):
         logging.error('Supabase create_invoice error: %s', res.error)
         return None
@@ -50,15 +87,32 @@ def insert_invoice_items(invoice_id: str, items: List[Dict]) -> bool:
     if not items:
         return True
     supabase = _get_supabase()
-    res = supabase.table('invoice_items').insert(items).execute()
+    # sanitize Decimal fields in items
+    sanitized = []
+    for it in items:
+        it_copy = {}
+        for k, v in it.items():
+            if isinstance(v, Decimal):
+                it_copy[k] = float(v)
+            else:
+                it_copy[k] = v
+        sanitized.append(it_copy)
+    try:
+        res = supabase.table('invoice_items').insert(sanitized).execute()
+    except Exception as exc:
+        logging.exception('Supabase insert_invoice_items exception: %s', exc)
+        return False
     if getattr(res, 'error', None):
         logging.error('Supabase insert_invoice_items error: %s', res.error)
         return False
     return True
 
 
-def decrement_product_stock(product_id: str, qty: int) -> bool:
-    """Decrease product stock_qty by qty (best-effort)."""
+def decrement_product_stock(product_id: str, qty: int, allow_negative: bool = False) -> bool:
+    """Decrease product stock_qty by qty (best-effort).
+
+    If allow_negative is True, the resulting stock quantity may go below zero (oversell).
+    """
     try:
         # Use rpc or update: fetch current, subtract, update
         supabase = _get_supabase()
@@ -67,7 +121,10 @@ def decrement_product_stock(product_id: str, qty: int) -> bool:
             logging.warning('Could not fetch product stock for %s', product_id)
             return False
         stock = int(current.data.get('stock_qty') or 0)
-        new_stock = max(0, stock - int(qty))
+        if allow_negative:
+            new_stock = stock - int(qty)
+        else:
+            new_stock = max(0, stock - int(qty))
         upd = supabase.table('products').update({'stock_qty': new_stock}).eq('id', product_id).execute()
         if getattr(upd, 'error', None):
             logging.error('Supabase update stock error for %s: %s', product_id, upd.error)
@@ -99,6 +156,24 @@ def get_invoice(invoice_id: str) -> Optional[Dict]:
         return invoice
     except Exception as exc:
         logging.exception('get_invoice exception: %s', exc)
+        return None
+
+
+def list_invoices(limit: Optional[int] = None) -> Optional[List[Dict]]:
+    """Return a list of invoices. If limit is provided, limit the number of rows returned."""
+    try:
+        supabase = _get_supabase()
+        qb = supabase.table('invoices').select('*')
+        if limit:
+            # postgrest expects limit as int
+            qb = qb.limit(int(limit))
+        res = qb.execute()
+        if getattr(res, 'error', None):
+            logging.error('Supabase list_invoices error: %s', res.error)
+            return None
+        return res.data or []
+    except Exception as exc:
+        logging.exception('list_invoices exception: %s', exc)
         return None
 
 

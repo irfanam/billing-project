@@ -16,6 +16,15 @@ class Product(ProductCreate):
     id: str
 
 
+class ProductUpdate(BaseModel):
+    sku: Optional[str] = None
+    name: Optional[str] = None
+    description: Optional[str] = None
+    price: Optional[Decimal] = None
+    tax_percent: Optional[Decimal] = None
+    stock_qty: Optional[int] = None
+
+
 class Customer(BaseModel):
     id: Optional[str]
     name: str
@@ -28,7 +37,7 @@ class Customer(BaseModel):
 
 class InvoiceItem(BaseModel):
     product_id: Optional[str]
-    description: Optional[str]
+    description: Optional[str] = None
     qty: int = Field(..., gt=0)
     unit_price: Decimal
     tax_percent: Optional[Decimal] = None

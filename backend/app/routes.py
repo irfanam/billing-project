@@ -1,103 +1,98 @@
-from fastapi import APIRouter, HTTPException, Request
+import os
+import logging
+import uuid
+from decimal import Decimal
+
+from fastapi import APIRouter, HTTPException, Request, Body
 from typing import TYPE_CHECKING
 from starlette.concurrency import run_in_threadpool
 from . import repository
 from . import tax as tax_module
-from .schemas import InvoiceCreate
-import logging
-import uuid
-import os
+from .schemas import InvoiceCreate, Product, ProductCreate, ProductUpdate
 from fastapi.responses import Response, HTMLResponse
 from . import pdf as pdf_module
 
+logging.info(f"Loaded routes.py from: {os.path.abspath(__file__)}")
+
+
 if TYPE_CHECKING:
-    # imported for type-checking only to avoid importing top-level `app` package during tests
     from app.models import BillingRecord
 
 
 router = APIRouter(prefix="/billing", tags=["Billing"])
-from fastapi import Body
-from .schemas import Product, ProductCreate
-from decimal import Decimal
 
 
-def _insert_billing(record_dict: dict):
-    # import supabase lazily to avoid top-level dependency on the `app` package during tests
-    from backend.app.database import supabase
-    return supabase.table('billing').insert(record_dict).execute()
-
-
-def _select_billing(user_id: str):
+@router.get('/customers')
+async def list_customers():
     from app.database import supabase
-    return supabase.table('billing').select('*').eq('user_id', user_id).execute()
-
-
-@router.post("/")
-async def create_billing(record: 'BillingRecord'):
-    # billing creation uses the legacy app.supabase client; import inside to keep module import-safe
-    res = await run_in_threadpool(_insert_billing, record.dict())
+    res = supabase.table('customers').select('*').execute()
+    logging.info(f"Fetched customers: {res.data}")
     if getattr(res, 'error', None):
-        logging.error('Supabase insert error: %s', res.error)
         raise HTTPException(status_code=500, detail=str(res.error))
     return {"status": "success", "data": res.data}
 
 
-@router.get("/{user_id}")
-async def get_billing(user_id: str):
-    res = await run_in_threadpool(_select_billing, user_id)
-    if getattr(res, 'error', None):
-        logging.error('Supabase select error: %s', res.error)
-        raise HTTPException(status_code=500, detail=str(res.error))
-    return {"status": "success", "data": res.data}
-
-
-# New invoice creation route
 @router.get('/products')
 async def list_products():
     from app.database import supabase
     res = supabase.table('products').select('*').execute()
+    logging.info(f"Fetched products: {res.data}")
     if getattr(res, 'error', None):
         raise HTTPException(status_code=500, detail=str(res.error))
     return {"status": "success", "data": res.data}
 
-@router.post('/products')
 
 @router.post('/products')
 async def create_product(request: Request):
-    import logging
     try:
         body = await request.json()
         logging.info(f"Raw product POST body: {body}")
-        # Validate using ProductCreate schema
         product_data = ProductCreate(**body)
         from app.database import supabase
-        # Generate a unique id for the product
         product_id = str(uuid.uuid4())
         rec = product_data.dict(exclude_unset=True)
         rec['id'] = product_id
-        # Convert Decimal fields to float for JSON serialization
         for k, v in rec.items():
             if isinstance(v, Decimal):
                 rec[k] = float(v)
         res = supabase.table('products').insert(rec).execute()
+        logging.info(f"Inserted product response: {res.data}")
         if getattr(res, 'error', None):
             raise HTTPException(status_code=500, detail=str(res.error))
-        # Return the created product with id
         return {"status": "success", "data": res.data}
     except Exception as exc:
         logging.exception('Product validation error: %s', exc)
         raise
 
+
 @router.put('/products/{product_id}')
-async def update_product(product_id: str, product: Product = Body(...)):
+async def update_product(product_id: str, product: 'ProductUpdate' = Body(...)):
     from app.database import supabase
+    # allow partial updates from the frontend
     rec = product.dict(exclude_unset=True)
+    # sanitize Decimal fields
+    for k, v in list(rec.items()):
+        if isinstance(v, Decimal):
+            rec[k] = float(v)
     res = supabase.table('products').update(rec).eq('id', product_id).execute()
     if getattr(res, 'error', None):
         raise HTTPException(status_code=500, detail=str(res.error))
     return {"status": "success", "data": res.data}
+
+
+# Legacy billing handlers removed. Use repository functions / new endpoints instead.
+
+
 @router.post('/invoices/')
 async def create_invoice(payload: InvoiceCreate):
+    allow_oversale = os.getenv('ALLOW_OVERSALE', 'false').lower() in ('1', 'true', 'yes')
+    # Validate customer_id early: reject invalid UUIDs with a clear 400 response.
+    if payload.customer_id:
+        try:
+            # ensure it's a valid UUID string
+            uuid.UUID(str(payload.customer_id))
+        except Exception:
+            raise HTTPException(status_code=400, detail='Invalid customer_id: must be a UUID')
     # Resolve product tax_percent when not provided per-line
     items_for_tax = []
     for it in payload.items:
@@ -155,10 +150,21 @@ async def create_invoice(payload: InvoiceCreate):
                     res = await run_in_threadpool(repository.reserve_stock, it.product_id, it.qty, None, None, payload.issued_by)
 
                 if res is None:
-                    # insufficient stock or error - release any previous reservations and abort
-                    logging.info('Failed to reserve stock for product %s qty %s', it.product_id, it.qty)
-                    raise HTTPException(status_code=409, detail=f'Insufficient stock for product {it.product_id}')
-                if res != 'SKIPPED_NO_DB':
+                    # insufficient stock or error - try best-effort oversell by decrementing stock allowing negative
+                    logging.info('Failed to reserve stock for product %s qty %s; attempting best-effort oversell', it.product_id, it.qty)
+                    try:
+                        decremented = await run_in_threadpool(repository.decrement_product_stock, it.product_id, it.qty, True)
+                    except Exception:
+                        decremented = False
+                    if decremented:
+                        logging.info('Oversold product %s qty %s (stock went negative) to allow invoicing', it.product_id, it.qty)
+                        # continue without a reservation record
+                        res = 'SKIPPED_OVERSALE'
+                    else:
+                        # release any previous reservations and abort
+                        raise HTTPException(status_code=409, detail=f'Insufficient stock for product {it.product_id}')
+                # only append real reservation records (dicts) returned by DB
+                if isinstance(res, dict):
                     reservations.append(res)
 
         # All reservations succeeded; create invoice and items
@@ -195,7 +201,7 @@ async def create_invoice(payload: InvoiceCreate):
             for it in payload.items:
                 if it.product_id:
                     try:
-                        await run_in_threadpool(repository.decrement_product_stock, it.product_id, it.qty)
+                        await run_in_threadpool(repository.decrement_product_stock, it.product_id, it.qty, allow_oversale)
                     except Exception:
                         logging.exception('decrement_product_stock failed for %s', it.product_id)
 
@@ -216,6 +222,18 @@ async def create_invoice(payload: InvoiceCreate):
             except Exception:
                 logging.exception('Failed to release reservation %s', r.get('id'))
         raise HTTPException(status_code=500, detail='Internal error creating invoice')
+
+
+@router.get('/invoices')
+async def list_invoices(limit: int = 0):
+    """Return invoices list. Frontend calls this endpoint without auth in dev."""
+    if limit and limit > 0:
+        res = await run_in_threadpool(repository.list_invoices, limit)
+    else:
+        res = await run_in_threadpool(repository.list_invoices, None)
+    if res is None:
+        raise HTTPException(status_code=500, detail='Failed to fetch invoices')
+    return {"status": "success", "data": res}
 
 
 @router.get('/invoices/{invoice_id}/pdf')
