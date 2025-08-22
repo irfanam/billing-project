@@ -285,6 +285,130 @@ def create_customer(record: Dict) -> Optional[Dict]:
         return None
 
 
+def list_suppliers() -> Optional[List[Dict]]:
+    try:
+        supabase = _get_supabase()
+        res = supabase.table('suppliers').select('*').execute()
+        if getattr(res, 'error', None):
+            logging.error('Supabase list_suppliers error: %s', res.error)
+            return None
+        return res.data or []
+    except Exception:
+        logging.exception('list_suppliers exception')
+        return None
+
+
+def create_supplier(record: Dict) -> Optional[Dict]:
+    try:
+        supabase = _get_supabase()
+        rec = record.copy()
+        if not rec.get('id'):
+            rec['id'] = str(uuid.uuid4())
+
+        max_attempts = 5
+        for attempt in range(max_attempts):
+            code = _next_sequential_id('suppliers', 'SID')
+            rec_with_code = rec.copy()
+            rec_with_code['supplier_code'] = code
+            try:
+                res = supabase.table('suppliers').insert(rec_with_code).execute()
+            except Exception as exc:
+                msg = str(exc)
+                logging.exception('Supabase create_supplier exception on insert: %s', exc)
+                if 'supplier_code' in msg or 'column suppliers.supplier_code does not exist' in msg or 'Could not find the' in msg:
+                    logging.warning('suppliers.supplier_code column not present; inserting without code and returning computed code in response. Apply migration to persist codes.')
+                    try:
+                        res2 = supabase.table('suppliers').insert(rec).execute()
+                    except Exception:
+                        logging.exception('Fallback insert without supplier_code also failed')
+                        return None
+                    if getattr(res2, 'error', None):
+                        logging.error('Fallback create_supplier insert error: %s', res2.error)
+                        return None
+                    data = res2.data
+                    if isinstance(data, list):
+                        out = data[0] if data else None
+                    else:
+                        out = data
+                    if out is not None and isinstance(out, dict):
+                        out['supplier_code'] = code
+                    return out
+                return None
+            if getattr(res, 'error', None):
+                err = res.error
+                logging.error('Supabase create_supplier error (attempt %s): %s', attempt + 1, err)
+                if isinstance(err, dict) and 'message' in err and 'duplicate' in err['message'].lower():
+                    continue
+                return None
+            data = res.data
+            if isinstance(data, list):
+                out = data[0] if data else None
+            else:
+                out = data
+            if out is not None and isinstance(out, dict):
+                out['supplier_code'] = code
+            return out
+        logging.error('Failed to create supplier after %s attempts due to code conflicts', max_attempts)
+        return None
+    except Exception as exc:
+        logging.exception('Supabase create_supplier exception: %s', exc)
+        return None
+
+
+def apply_purchase(supplier_id: str, items: List[Dict], received_by: Optional[str] = None) -> Optional[Dict]:
+    """Record a purchase and increase product stock. Returns movement record or None on error."""
+    try:
+        supabase = _get_supabase()
+        # insert a purchase record in purchases table if exists (best-effort); otherwise just update stock
+        for it in items:
+            pid = it.get('product_id')
+            qty = int(it.get('qty', 0))
+            # create stock movement (positive change)
+            mv = create_stock_movement(pid, int(qty), 'purchase', reference_type='supplier', reference_id=supplier_id, unit_cost=it.get('unit_cost'), created_by=received_by)
+            if not mv:
+                logging.error('Failed to create stock movement for purchase of %s qty %s', pid, qty)
+                return None
+        return {'status': 'ok'}
+    except Exception as exc:
+        logging.exception('apply_purchase exception: %s', exc)
+        return None
+
+
+def apply_sale(customer_id: Optional[str], items: List[Dict], issued_by: Optional[str] = None, allow_oversale: bool = False) -> Optional[Dict]:
+    """Record a sale: create invoice-like movement and decrement stock. Returns summary or None."""
+    try:
+        # Similar to invoice creation: reserve/consume or decrement
+        reservations = []
+        for it in items:
+            pid = it.get('product_id')
+            qty = int(it.get('qty', 0))
+            # attempt reservation
+            res = reserve_stock(pid, qty, None, None, issued_by)
+            if res is None:
+                # try oversell decrement
+                decremented = decrement_product_stock(pid, qty, allow_negative=allow_oversale)
+                if not decremented:
+                    # rollback any previous reservations
+                    for r in reservations:
+                        try:
+                            release_reservation(r.get('id'), 'sale-abort')
+                        except Exception:
+                            logging.exception('Failed to release reservation')
+                    logging.error('Insufficient stock for product %s', pid)
+                    return None
+            else:
+                reservations.append(res)
+
+        # consume reservations
+        for r in reservations:
+            consume_reservation(r.get('id'), issued_by)
+
+        return {'status': 'ok'}
+    except Exception as exc:
+        logging.exception('apply_sale exception: %s', exc)
+        return None
+
+
 def update_customer(customer_id: str, changes: Dict) -> Optional[Dict]:
     """Perform partial update on customer record and return updated row or None."""
     try:

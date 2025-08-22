@@ -70,3 +70,44 @@ class InvoiceResponse(BaseModel):
     total_amount: Decimal
     currency: str = 'INR'
     created_at: Optional[str] = None
+
+
+class Supplier(BaseModel):
+    id: Optional[str]
+    name: str
+    contact: Optional[str] = None
+    address: Optional[str] = None
+    phone: Optional[str] = None
+    email: Optional[str] = None
+
+
+class SupplierCreate(BaseModel):
+    name: str
+    contact: Optional[str] = None
+    address: Optional[str] = None
+    phone: Optional[str] = None
+    email: Optional[str] = None
+
+
+class PurchaseItem(BaseModel):
+    product_id: str
+    qty: int = Field(..., gt=0)
+    unit_cost: Decimal
+
+
+class PurchaseCreate(BaseModel):
+    supplier_id: Optional[str]
+    items: List[PurchaseItem]
+    received_by: Optional[str] = None
+
+
+class SaleItem(BaseModel):
+    product_id: str
+    qty: int = Field(..., gt=0)
+    unit_price: Decimal
+
+
+class SaleCreate(BaseModel):
+    customer_id: Optional[str]
+    items: List[SaleItem]
+    issued_by: Optional[str] = None

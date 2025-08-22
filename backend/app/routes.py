@@ -9,6 +9,7 @@ from starlette.concurrency import run_in_threadpool
 from . import repository
 from . import tax as tax_module
 from .schemas import InvoiceCreate, Product, ProductCreate, ProductUpdate, CustomerUpdate
+from .schemas import SupplierCreate, PurchaseCreate, PurchaseItem, SaleCreate
 from fastapi.responses import Response, HTMLResponse
 from . import pdf as pdf_module
 
@@ -73,24 +74,62 @@ async def list_products():
     return {"status": "success", "data": res.data}
 
 
+
+@router.get('/suppliers')
+async def list_suppliers():
+    res = await run_in_threadpool(repository.list_suppliers)
+    if res is None:
+        raise HTTPException(status_code=500, detail='Failed to fetch suppliers')
+    return {"status": "success", "data": res}
+
+
+@router.post('/suppliers')
+async def create_supplier(request: Request):
+    try:
+        body = await request.json()
+        if not body.get('name'):
+            raise HTTPException(status_code=400, detail='Missing supplier name')
+        created = await run_in_threadpool(repository.create_supplier, body)
+        if not created:
+            raise HTTPException(status_code=500, detail='Failed to create supplier')
+        return {"status": "success", "data": created}
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logging.exception('create_supplier route exception: %s', exc)
+        raise HTTPException(status_code=500, detail='Internal error')
+
+
+@router.post('/purchases')
+async def create_purchase(payload: PurchaseCreate):
+    # payload contains supplier_id and items
+    created = await run_in_threadpool(repository.apply_purchase, payload.supplier_id, [it.dict() for it in payload.items], payload.received_by)
+    if not created:
+        raise HTTPException(status_code=500, detail='Failed to record purchase')
+    return {"status": "success", "data": created}
+
+
+@router.post('/sales')
+async def create_sale(payload: SaleCreate):
+    allow_oversale = os.getenv('ALLOW_OVERSALE', 'false').lower() in ('1', 'true', 'yes')
+    created = await run_in_threadpool(repository.apply_sale, payload.customer_id, [it.dict() for it in payload.items], payload.issued_by, allow_oversale)
+    if not created:
+        raise HTTPException(status_code=409, detail='Insufficient stock or failed to record sale')
+    return {"status": "success", "data": created}
+
+
 @router.post('/products')
 async def create_product(request: Request):
     try:
         body = await request.json()
         logging.info(f"Raw product POST body: {body}")
         product_data = ProductCreate(**body)
-        from app.database import supabase
-        product_id = str(uuid.uuid4())
         rec = product_data.dict(exclude_unset=True)
-        rec['id'] = product_id
-        for k, v in rec.items():
-            if isinstance(v, Decimal):
-                rec[k] = float(v)
-        res = supabase.table('products').insert(rec).execute()
-        logging.info(f"Inserted product response: {res.data}")
-        if getattr(res, 'error', None):
-            raise HTTPException(status_code=500, detail=str(res.error))
-        return {"status": "success", "data": res.data}
+        # delegate creation to repository so it can assign UID... ids
+        created = await run_in_threadpool(repository.create_product, rec)
+        if not created:
+            raise HTTPException(status_code=500, detail='Failed to create product')
+        return {"status": "success", "data": created}
     except Exception as exc:
         logging.exception('Product validation error: %s', exc)
         raise
