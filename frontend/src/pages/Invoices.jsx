@@ -15,7 +15,7 @@ export default function Invoices() {
   useEffect(() => {
     setLoading(true);
     setError(null);
-  axios.get(`${API_BASE_URL}/api/billing/invoices`)
+  axios.get(`${API_BASE_URL}/billing/invoices`)
       .then(res => {
         setInvoices(res.data.data || []);
         setLoading(false);
