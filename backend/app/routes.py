@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 
 router = APIRouter(prefix="/billing", tags=["Billing"])
 from fastapi import Body
-from .schemas import Product
+from .schemas import Product, ProductCreate
 
 
 def _insert_billing(record_dict: dict):
@@ -67,13 +67,17 @@ async def create_product(request: Request):
     try:
         body = await request.json()
         logging.info(f"Raw product POST body: {body}")
-        # Validate using Product schema
-        product = Product(**body)
+        # Validate using ProductCreate schema
+        product_data = ProductCreate(**body)
         from app.database import supabase
-        rec = product.dict(exclude_unset=True)
+        # Generate a unique id for the product
+        product_id = str(uuid.uuid4())
+        rec = product_data.dict(exclude_unset=True)
+        rec['id'] = product_id
         res = supabase.table('products').insert(rec).execute()
         if getattr(res, 'error', None):
             raise HTTPException(status_code=500, detail=str(res.error))
+        # Return the created product with id
         return {"status": "success", "data": res.data}
     except Exception as exc:
         logging.exception('Product validation error: %s', exc)

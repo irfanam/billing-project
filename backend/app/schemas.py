@@ -3,14 +3,17 @@ from typing import List, Optional
 from decimal import Decimal
 
 
-class Product(BaseModel):
-    id: Optional[str]
+
+class ProductCreate(BaseModel):
     sku: Optional[str]
     name: str
     description: Optional[str] = None
     price: Decimal
     tax_percent: Optional[Decimal] = Decimal('0.00')
     stock_qty: int = 0
+
+class Product(ProductCreate):
+    id: str
 
 
 class Customer(BaseModel):
