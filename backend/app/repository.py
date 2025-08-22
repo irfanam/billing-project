@@ -19,20 +19,44 @@ def _next_sequential_id(table: str, prefix: str, width: int = 6) -> str:
     """
     try:
         supabase = _get_supabase()
-        # fetch the code column if present, otherwise fall back to id
+        # Prefer atomic increment using a counters table if available
+        counter_name = None
+        if table == 'customers':
+            counter_name = 'customer_code'
+        elif table == 'products':
+            counter_name = 'product_code'
+        elif table == 'suppliers':
+            counter_name = 'supplier_code'
+
+        if counter_name:
+            try:
+                # Use PostgREST update returning: increment and return new value
+                qb = supabase.table('counters').update({'value': 'value + 1'}, returning='representation').eq('name', counter_name)
+                # Note: postgrest python client does not allow arbitrary SQL in update; as a fallback use rpc if available
+                res = supabase.rpc('increment_counter', { 'p_name': counter_name }).execute()
+                if not getattr(res, 'error', None) and res.data:
+                    val = res.data[0].get('value') if isinstance(res.data, list) else res.data.get('value')
+                    if isinstance(val, int) or (isinstance(val, str) and val.isdigit()):
+                        n = int(val)
+                        return f"{prefix}{n:0{width}d}"
+            except Exception:
+                # counters not available or rpc not installed; fall back to scanning
+                logging.info('Counters RPC not available; falling back to scan-based seq for %s', table)
+
+        # Fallback: scan existing rows like before
         code_col = 'id'
         if table == 'customers':
             code_col = 'customer_code'
         elif table == 'products':
             code_col = 'product_code'
+        elif table == 'suppliers':
+            code_col = 'supplier_code'
         try:
             res = supabase.table(table).select(code_col).execute()
         except Exception:
-            # the code column may not exist yet (migration not applied). Fall back to id selection.
-            logging.warning('Code column %s not found in table %s; falling back to id for sequence detection. Apply backend/migrations/0001_add_codes.sql to persist codes.', code_col, table)
+            logging.warning('Code column %s not found in table %s; falling back to id for sequence detection. Apply migrations to persist codes.', code_col, table)
             res = supabase.table(table).select('id').execute()
         if getattr(res, 'error', None) or not res.data:
-            # no rows => start at 1
             return f"{prefix}{1:0{width}d}"
         max_n = 0
         for row in (res.data or []):
