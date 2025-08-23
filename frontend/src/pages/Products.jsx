@@ -196,8 +196,8 @@ export default function Products() {
                       })()}
                     </td>
                     <td className="px-2 py-1 text-center">
-                      <button className="text-blue-600 hover:underline mr-2" onClick={() => navigate(`/products/${prod.id}`, { state: { product: prod } })}>View</button>
-                      <button className="text-green-600 hover:underline mr-2" onClick={() => { setEditProduct(prod); setShowForm(true); }}>Edit</button>
+                      <button className="px-2 py-1 bg-gray-200 text-gray-800 rounded mr-2" onClick={() => navigate(`/products/${prod.id}`, { state: { product: prod } })}>View</button>
+                      <button className="px-2 py-1 bg-green-100 text-green-800 rounded mr-2" onClick={() => { setEditProduct(prod); setShowForm(true); }}>Edit</button>
                     </td>
                   </tr>
                 ))

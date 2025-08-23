@@ -170,11 +170,11 @@ export default function Customers() {
                     <td className="px-2 py-1">{cust.email}</td>
                     <td className="px-2 py-1 text-center">
                       <button
-                        className="text-blue-600 hover:underline mr-2"
+                        className="px-2 py-1 bg-gray-200 text-gray-800 rounded mr-2"
                         onClick={() => navigate(`/customers/${cust.id}`, { state: { customer: cust } })}
                       >View</button>
                       <button
-                        className="text-green-600 hover:underline mr-2"
+                        className="px-2 py-1 bg-green-100 text-green-800 rounded mr-2"
                         onClick={() => {
                           // try to split existing address into lines and pincode
                           let addr1 = ''
@@ -194,7 +194,7 @@ export default function Customers() {
                         }}
                       >Edit</button>
                       <button
-                        className="text-red-600 hover:underline"
+                        className="px-2 py-1 bg-red-100 text-red-800 rounded"
                         onClick={async () => {
                           if(!confirm(`Delete customer ${cust.name || cust.id}? This cannot be undone.`)) return;
                           try{
