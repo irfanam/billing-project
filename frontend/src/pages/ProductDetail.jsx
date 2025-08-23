@@ -1,10 +1,11 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import formatCurrency from '../utils/formatCurrency';
+import { useSettings } from '../context/SettingsContext';
 
 export default function ProductDetail() {
   const { state } = useLocation();
   const product = state?.product || {};
+  const { formatCurrency } = useSettings();
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Product Detail</h1>

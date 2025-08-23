@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import formatCurrency from '../utils/formatCurrency';
+import { useSettings } from '../context/SettingsContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
 
 export default function Products() {
+  const { formatCurrency } = useSettings();
   const [activeTab, setActiveTab] = useState('list')
   const [companies, setCompanies] = useState([])
   const [variants, setVariants] = useState([])
@@ -24,12 +25,16 @@ export default function Products() {
   const [products, setProducts] = useState([]);
   const [supportsMeta, setSupportsMeta] = useState(false);
   const [topSuccessMessage, setTopSuccessMessage] = useState('')
+  const [topToast, setTopToast] = useState('')
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [showForm, setShowForm] = useState(false);
   const [editProduct, setEditProduct] = useState(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState(null)
+  const [archivedProducts, setArchivedProducts] = useState([])
   const pageSize = 10;
 
   const fetchProducts = () => {
@@ -52,6 +57,17 @@ export default function Products() {
         setLoading(false);
       });
   };
+
+  const fetchArchivedProducts = () => {
+    axios.get(`${API_BASE_URL}/billing/products/archived`)
+      .then(res => {
+        const data = (res.data && res.data.data) ? res.data.data : []
+        setArchivedProducts(data)
+      })
+      .catch(()=>{
+        setArchivedProducts([])
+      })
+  }
 
   useEffect(() => {
     fetchProducts();
@@ -84,8 +100,14 @@ export default function Products() {
       {topSuccessMessage && (
         <div className="mb-3 p-2 bg-green-100 text-green-800 rounded">{topSuccessMessage}</div>
       )}
+      {topToast && (
+        <div className="mb-3 p-2 bg-yellow-100 text-yellow-800 rounded">{topToast}</div>
+      )}
+
+      
       <div className="flex gap-2 mb-4">
         <button className={`px-3 py-1 rounded ${activeTab==='list'?'bg-blue-600 text-white':'bg-gray-100'}`} onClick={()=>setActiveTab('list')}>List</button>
+        <button className={`px-3 py-1 rounded ${activeTab==='archived'?'bg-blue-600 text-white':'bg-gray-100'}`} onClick={()=>{ setActiveTab('archived'); fetchArchivedProducts()}}>Archived</button>
         <button className={`px-3 py-1 rounded ${activeTab==='settings'?'bg-blue-600 text-white':'bg-gray-100'}`} onClick={()=>setActiveTab('settings')}>Settings</button>
       </div>
       {activeTab !== 'settings' && (
@@ -116,7 +138,9 @@ export default function Products() {
             {gstRates.map((g,idx)=> <option key={idx} value={g}>{g}%</option>)}
           </select>
         )}
-        <button className="bg-blue-600 text-white px-4 py-2 rounded shadow ml-auto" onClick={() => { setEditProduct(null); setShowForm(true); }}>Add Product</button>
+        {activeTab === 'list' && (
+          <button className="bg-blue-600 text-white px-4 py-2 rounded shadow ml-auto" onClick={() => { setEditProduct(null); setShowForm(true); }}>Add Product</button>
+        )}
       </div>
       )}
     {showForm && (
@@ -130,8 +154,8 @@ export default function Products() {
       supportsMeta={supportsMeta}
         />
       )}
-    {activeTab === 'list' && (
-    <div className="bg-white shadow rounded p-4 overflow-x-auto">
+  {activeTab === 'list' && (
+  <div className="bg-white shadow rounded p-4 overflow-x-auto">
         {loading ? (
           <div className="text-center py-8 text-gray-400">Loading products...</div>
         ) : error ? (
@@ -199,6 +223,7 @@ export default function Products() {
                     <td className="px-2 py-1 text-center">
                       <button className="px-2 py-1 bg-gray-200 text-gray-800 rounded mr-2" onClick={() => navigate(`/products/${prod.id}`, { state: { product: prod } })}>View</button>
                       <button className="px-2 py-1 bg-green-100 text-green-800 rounded mr-2" onClick={() => { setEditProduct(prod); setShowForm(true); }}>Edit</button>
+                      <button className="px-2 py-1 bg-red-100 text-red-800 rounded" onClick={() => { setDeleteTarget(prod); setShowDeleteConfirm(true); }}>Delete</button>
                     </td>
                   </tr>
                 ))
@@ -208,6 +233,92 @@ export default function Products() {
         )}
       </div>
         )}
+
+      {activeTab === 'archived' && (
+        <div className="bg-white shadow rounded p-4 overflow-x-auto">
+          {archivedProducts.length === 0 ? (
+            <div className="text-center py-8 text-gray-500">No archived products.</div>
+          ) : (
+            <table className="min-w-full">
+              <thead>
+                <tr className="bg-gray-100">
+                  <th className="px-2 py-1 text-left">Product ID</th>
+                  <th className="px-2 py-1 text-left">SKU</th>
+                  <th className="px-2 py-1 text-left">Name</th>
+                  <th className="px-2 py-1 text-left">Variant</th>
+                  <th className="px-2 py-1 text-left">Amount</th>
+                  <th className="px-2 py-1 text-left">GST</th>
+                  <th className="px-2 py-1 text-left">Total Price</th>
+                  <th className="px-2 py-1 text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {archivedProducts.map(prod => (
+                  <tr key={prod.id} className="border-b">
+                    <td className="px-2 py-1">{prod.product_code || prod.id}</td>
+                    <td className="px-2 py-1">{prod.sku}</td>
+                    <td className="px-2 py-1">{(() => {
+                      let base = typeof prod.name === 'string' ? prod.name : ''
+                      if (base.includes(' — ')) base = base.split(' — ')[0].trim()
+                      if (prod.meta && prod.meta.company) return `${prod.meta.company} - ${base}`
+                      return base
+                    })()}</td>
+                    <td className="px-2 py-1">{prod.meta && prod.meta.variant ? prod.meta.variant : '—'}</td>
+                    <td className="px-2 py-1">{prod.price ? formatCurrency(prod.price) : '—'}</td>
+                    <td className="px-2 py-1">{prod.tax_percent ? `${prod.tax_percent}%` : '—'}</td>
+                    <td className="px-2 py-1">{(() => { const price = Number(prod.price) || 0; const tax = Number(prod.tax_percent) || 0; return formatCurrency(price + (price * (tax/100))) })()}</td>
+                    <td className="px-2 py-1 text-center">
+                      <button className="px-2 py-1 bg-green-100 text-green-800 rounded" onClick={async ()=>{
+                        if(!confirm('Restore this product from archive?')) return
+                        try{
+                          await axios.post(`${API_BASE_URL}/billing/products/${prod.id}/undelete`)
+                          fetchArchivedProducts()
+                          fetchProducts()
+                          setTopToast('Product restored')
+                          setTimeout(()=>setTopToast(''), 3000)
+                        }catch(err){
+                          let msg = 'Failed to restore product'
+                          try{ if(err.response && err.response.data && err.response.data.detail) msg = err.response.data.detail }catch(e){}
+                          alert(msg)
+                        }
+                      }}>Undelete</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      )}
+
+      {showDeleteConfirm && deleteTarget && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <div className="bg-white rounded shadow p-6 w-full max-w-sm">
+            <h3 className="text-lg font-semibold mb-3">Confirm delete</h3>
+            <p className="mb-4">Are you sure you want to delete <strong>{deleteTarget.name || deleteTarget.id}</strong>? This action cannot be undone.</p>
+            <div className="flex justify-end gap-2">
+              <button className="px-3 py-1 border rounded" onClick={()=>{ setShowDeleteConfirm(false); setDeleteTarget(null) }}>Cancel</button>
+              <button className="px-3 py-1 bg-red-600 text-white rounded" onClick={async ()=>{
+                try{
+                  const resp = await axios.delete(`${API_BASE_URL}/billing/products/${deleteTarget.id}`)
+                  const data = resp.data || {}
+                  if(data.deleted === 'soft'){
+                    setTopToast("Product archived (couldn't delete due to existing invoices)")
+                    setTimeout(()=>setTopToast(''), 4000)
+                  }
+                  setProducts(products.filter(p => p.id !== deleteTarget.id))
+                }catch(err){
+                  let msg = 'Failed to delete product'
+                  try{ if(err.response && err.response.data && err.response.data.detail) msg = err.response.data.detail }catch(e){}
+                  alert(msg)
+                } finally {
+                  setShowDeleteConfirm(false); setDeleteTarget(null)
+                }
+              }}>Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
 
         {activeTab === 'settings' && (
           <div className="bg-white shadow rounded p-4">

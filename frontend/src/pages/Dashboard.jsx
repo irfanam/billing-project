@@ -2,13 +2,12 @@
 
 import React, { useEffect, useState } from 'react';
 import { useSettings } from '../context/SettingsContext';
-import formatCurrency from '../utils/formatCurrency';
 // import Chart from 'chart.js/auto'; // Uncomment if you add Chart.js
 
 const API_BASE_URL = 'https://billing-project-s0ql.onrender.com';
 
 export default function Dashboard() {
-  const { theme } = useSettings();
+  const { theme, formatCurrency } = useSettings();
   const [stats, setStats] = useState({ revenue: 0, invoices: 0, customers: 0, products: 0 });
   const [recentInvoices, setRecentInvoices] = useState([]);
 

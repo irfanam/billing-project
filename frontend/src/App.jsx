@@ -6,7 +6,7 @@ const API_BASE_URL = 'https://billing-project-s0ql.onrender.com';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
-import formatCurrency from './utils/formatCurrency';
+// formatCurrency is provided by SettingsContext
 import Invoices from './pages/Invoices';
 import InvoiceDetail from './pages/InvoiceDetail';
 import InvoiceCreate from './pages/InvoiceCreate';
@@ -47,6 +47,7 @@ function BillingForm({ onAdded }) {
 }
 function BillingList({ userId }) {
   const [items, setItems] = useState([])
+  const { formatCurrency } = useSettings()
   useEffect(()=>{
     if(!userId) return
     axios.get(`${API_BASE_URL}/billing/${userId}`).then(r=>setItems(r.data.data || []))

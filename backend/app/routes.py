@@ -197,6 +197,50 @@ async def update_product(product_id: str, product: 'ProductUpdate' = Body(...)):
     return {"status": "success", "data": updated}
 
 
+
+@router.delete('/products/{product_id}')
+async def remove_product(product_id: str):
+    # repository.delete_product may perform hard delete or soft-delete/anonymize.
+    # Return a result dict with a hint so frontend can show an appropriate toast.
+    res = await run_in_threadpool(repository.delete_product, product_id)
+    if res is None or res is False:
+        raise HTTPException(status_code=500, detail='Failed to delete product')
+    # repository.delete_product returns True on success; to indicate soft-delete we rely on repository to set an attribute
+    # For simplicity, call repository.get_product to inspect archived/name marker
+    prod = await run_in_threadpool(repository.get_product, product_id)
+    if not prod:
+        # Hard-deleted
+        return {"status": "success", "deleted": "hard"}
+    # If archived flag present or name marker, report soft-delete
+    if prod.get('archived') is True or (isinstance(prod.get('name'), str) and prod.get('name').endswith(' [deleted]')):
+        return {"status": "success", "deleted": "soft"}
+    return {"status": "success", "deleted": "unknown"}
+
+
+@router.get('/products/archived')
+async def list_archived_products():
+    # Return products that are archived or anonymized (name endswith ' [deleted]')
+    try:
+        res = await run_in_threadpool(repository.list_archived_products)
+        if res is None:
+            raise HTTPException(status_code=500, detail='Failed to fetch archived products')
+        return {"status": "success", "data": res}
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logging.exception('list_archived_products exception: %s', exc)
+        raise HTTPException(status_code=500, detail='Internal error')
+
+
+@router.post('/products/{product_id}/undelete')
+async def undelete_product(product_id: str):
+    # Attempt to restore an anonymized/archived product
+    ok = await run_in_threadpool(repository.undelete_product, product_id)
+    if not ok:
+        raise HTTPException(status_code=500, detail='Failed to undelete product')
+    return {"status": "success"}
+
+
 # Legacy billing handlers removed. Use repository functions / new endpoints instead.
 
 

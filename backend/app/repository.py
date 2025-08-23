@@ -82,7 +82,12 @@ def _next_sequential_id(table: str, prefix: str, width: int = 6) -> str:
 def get_product(product_id: str) -> Optional[Dict]:
     """Return product row dict or None"""
     supabase = _get_supabase()
-    res = supabase.table('products').select('*').eq('id', product_id).single().execute()
+    try:
+        res = supabase.table('products').select('*').eq('id', product_id).single().execute()
+    except Exception as exc:
+        # Postgrest may raise when zero rows are returned or on other API errors; treat as not found
+        logging.debug('Supabase get_product exception (treated as not found): %s', exc)
+        return None
     if getattr(res, 'error', None):
         logging.error('Supabase get_product error: %s', res.error)
         return None
@@ -149,6 +154,60 @@ def create_invoice(record: Dict) -> Optional[Dict]:
     if isinstance(data, list):
         return data[0] if data else None
     return data
+
+
+def delete_product(product_id: str) -> bool:
+    """Delete a product row by id. Returns True on success, False otherwise."""
+    supabase = _get_supabase()
+    # Attempt to delete the product row; handle APIError which may be raised on FK constraint
+    try:
+        res = supabase.table('products').delete().eq('id', product_id).execute()
+        if getattr(res, 'error', None):
+            logging.error('Supabase delete_product error: %s', res.error)
+            # fall through to attempt soft-delete
+        else:
+            return True
+    except Exception as exc:
+        # Postgrest raises APIError with DB error details; try to detect FK violation code
+        msg = str(exc)
+        logging.exception('Supabase delete_product exception: %s', exc)
+        # If it's a foreign key violation, attempt soft-delete
+        if '23503' in msg or 'foreign key constraint' in msg or 'is still referenced' in msg:
+            logging.info('Detected FK constraint preventing product deletion; attempting soft-delete for %s', product_id)
+        else:
+            return False
+
+    # Soft-delete fallback: try archived flag first; if schema lacks it, perform a safe anonymize update
+    try:
+        upd = supabase.table('products').update({'archived': True}).eq('id', product_id).execute()
+        if getattr(upd, 'error', None):
+            logging.error('Failed to soft-delete product %s via archived flag: %s', product_id, upd.error)
+            # fall through to anonymize
+        else:
+            return True
+    except Exception as exc:
+        # archived column may not exist in schema cache
+        logging.warning('archived column not available or soft-delete update failed: %s', exc)
+
+    # Last-resort: perform a non-destructive anonymize update so product remains referenced but is inert and hidden.
+    try:
+        # fetch current product to craft a new sku/name
+        cur = supabase.table('products').select('sku', 'name').eq('id', product_id).single().execute()
+        sku = None
+        name = None
+        if cur and cur.data:
+            sku = cur.data.get('sku')
+            name = cur.data.get('name')
+        new_sku = (sku or 'DELETED') + '-DELETED-' + product_id.split('-')[0]
+        new_name = (name or 'Deleted Product') + ' [deleted]'
+        upd2 = supabase.table('products').update({'sku': new_sku, 'name': new_name, 'price': 0.0, 'stock_qty': 0}).eq('id', product_id).execute()
+        if getattr(upd2, 'error', None):
+            logging.error('Failed to anonymize product %s during delete fallback: %s', product_id, upd2.error)
+            return False
+        return True
+    except Exception as exc:
+        logging.exception('Anonymize fallback failed for product %s: %s', product_id, exc)
+        return False
 
 
 def insert_invoice_items(invoice_id: str, items: List[Dict]) -> bool:
@@ -654,7 +713,13 @@ def list_products() -> Optional[List[Dict]]:
     """Return products list and compute server-side total_price (price + gst)."""
     try:
         supabase = _get_supabase()
-        res = supabase.table('products').select('*').execute()
+        # Prefer to exclude archived products if the column exists
+        try:
+            res = supabase.table('products').select('*').neq('archived', True).execute()
+        except Exception:
+            # If the archived column does not exist, fall back to selecting all and filter anonymized deletions
+            logging.debug('products.archived column not present; returning non-deleted products by name marker.')
+            res = supabase.table('products').select('*').execute()
         if getattr(res, 'error', None):
             logging.error('Supabase list_products error: %s', res.error)
             return None
@@ -662,6 +727,10 @@ def list_products() -> Optional[List[Dict]]:
         out = []
         for r in rows:
             prod = r.copy() if isinstance(r, dict) else dict(r)
+            # Skip anonymized deleted products (name marker)
+            nm = prod.get('name')
+            if isinstance(nm, str) and nm.endswith(' [deleted]'):
+                continue
             price = prod.get('price')
             tax = prod.get('tax_percent')
             try:
@@ -679,6 +748,68 @@ def list_products() -> Optional[List[Dict]]:
     except Exception:
         logging.exception('list_products exception')
         return None
+
+
+def list_archived_products() -> Optional[List[Dict]]:
+    """Return products that are archived or anonymized (name ends with ' [deleted]')."""
+    try:
+        supabase = _get_supabase()
+        try:
+            res = supabase.table('products').select('*').eq('archived', True).execute()
+        except Exception:
+            # archived column missing: select all and filter name markers
+            res = supabase.table('products').select('*').execute()
+        if getattr(res, 'error', None):
+            logging.error('Supabase list_archived_products error: %s', res.error)
+            return None
+        rows = res.data or []
+        out = []
+        for r in rows:
+            prod = r.copy() if isinstance(r, dict) else dict(r)
+            nm = prod.get('name')
+            if prod.get('archived') is True or (isinstance(nm, str) and nm.endswith(' [deleted]')):
+                out.append(prod)
+        return out
+    except Exception:
+        logging.exception('list_archived_products exception')
+        return None
+
+
+def undelete_product(product_id: str) -> bool:
+    """Attempt to reverse anonymize/archived markers on a product. Returns True on success."""
+    try:
+        supabase = _get_supabase()
+        # If archived column exists, simply set it to False
+        try:
+            upd = supabase.table('products').update({'archived': False}).eq('id', product_id).execute()
+            if not getattr(upd, 'error', None) and upd.data:
+                return True
+        except Exception:
+            # archived column may not exist; fall back to try to revert anonymize pattern in name/sku
+            pass
+
+        # Fetch current product to try to restore name/sku where possible. Note: we can't know original values reliably
+        cur = supabase.table('products').select('sku', 'name').eq('id', product_id).single().execute()
+        if getattr(cur, 'error', None) or not cur.data:
+            logging.warning('undelete_product: product not found %s', product_id)
+            return False
+        sku = cur.data.get('sku')
+        name = cur.data.get('name')
+        # Attempt best-effort revert: remove ' [deleted]' suffix from name and strip '-DELETED-<idprefix>' from sku
+        new_name = name
+        if isinstance(name, str) and name.endswith(' [deleted]'):
+            new_name = name[:-10]
+        new_sku = sku
+        if isinstance(sku, str) and '-DELETED-' in sku:
+            new_sku = sku.split('-DELETED-')[0]
+        upd2 = supabase.table('products').update({'sku': new_sku, 'name': new_name}).eq('id', product_id).execute()
+        if getattr(upd2, 'error', None):
+            logging.error('undelete_product failed update: %s', upd2.error)
+            return False
+        return True
+    except Exception as exc:
+        logging.exception('undelete_product exception: %s', exc)
+        return False
 
 
 def update_product(product_id: str, changes: Dict) -> Optional[Dict]:

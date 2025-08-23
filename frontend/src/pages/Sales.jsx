@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import formatCurrency from '../utils/formatCurrency';
+import { useSettings } from '../context/SettingsContext';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
 
 export default function Sales(){
+  const { formatCurrency } = useSettings();
   const [customers,setCustomers] = useState([])
   const [products,setProducts] = useState([])
   const [items,setItems] = useState([{product_id:'',qty:1,unit_price:0}])
