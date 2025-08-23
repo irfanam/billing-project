@@ -1,0 +1,5 @@
+INFO:     Will watch for changes in these directories: ['/home/irfanam/billing-project']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [42214] using StatReload
+ERROR:    Error loading ASGI app. Could not import module "app.main".
+INFO:     Stopping reloader process [42214]

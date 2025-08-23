@@ -497,7 +497,13 @@ def list_product_variables(vtype: str) -> Optional[List[str]]:
         supabase = _get_supabase()
         # Some versions of the supabase client have different .order() signatures.
         # To be robust, fetch relevant columns and sort in Python.
-        res = supabase.table('product_variables').select('value, sort_order, created_at').eq('vtype', vtype).execute()
+        # Try to include the `enabled` column and filter enabled entries when possible.
+        try:
+            # attempt to filter by enabled true (newer schema)
+            res = supabase.table('product_variables').select('value, value_num, sort_order, created_at, enabled').eq('vtype', vtype).eq('enabled', True).execute()
+        except Exception:
+            # fallback: schema may not have `enabled`, select without filter
+            res = supabase.table('product_variables').select('value, value_num, sort_order, created_at, enabled').eq('vtype', vtype).execute()
         if getattr(res, 'error', None):
             logging.error('list_product_variables error: %s', res.error)
             return None
@@ -507,20 +513,18 @@ def list_product_variables(vtype: str) -> Optional[List[str]]:
             rows_sorted = sorted(rows, key=lambda r: (r.get('sort_order') or 0, r.get('created_at') or ''))
         except Exception:
             rows_sorted = rows
-        if vtype == 'gst':
-            out = []
-            for r in rows_sorted:
-                # prefer value_num if present, otherwise try to parse value
-                vn = r.get('value_num')
-                if vn is not None:
-                    out.append(float(vn))
-                    continue
-                try:
-                    out.append(float(r.get('value')))
-                except Exception:
-                    out.append(r.get('value'))
-            return out
-        return [r.get('value') for r in rows_sorted]
+        # Return rows (as dicts) so callers can inspect enabled/value_num etc.
+        # Also attach the vtype-enabled flag (if present) so callers can know if the whole type is enabled.
+        try:
+            tv = supabase.table('product_variable_types').select('enabled').eq('vtype', vtype).single().execute()
+            vtype_enabled = True
+            if getattr(tv, 'error', None) or not tv.data:
+                vtype_enabled = True
+            else:
+                vtype_enabled = bool(tv.data.get('enabled'))
+        except Exception:
+            vtype_enabled = True
+        return {'vtype_enabled': vtype_enabled, 'rows': rows_sorted}
     except Exception:
         logging.exception('list_product_variables exception')
         return None
@@ -530,7 +534,7 @@ def upsert_product_variable(vtype: str, value: str) -> Optional[Dict]:
     try:
         supabase = _get_supabase()
         # best-effort: insert and ignore duplicates
-        payload = {'vtype': vtype, 'value': value}
+        payload = {'vtype': vtype, 'value': value, 'enabled': True}
         if vtype == 'gst':
             # normalize numeric GST values into value_num for easier querying
             try:
@@ -575,6 +579,77 @@ def delete_product_variable(vtype: str, value: str) -> bool:
     except Exception:
         logging.exception('delete_product_variable exception')
         return False
+
+
+def update_product_variable_enabled(vtype: str, value: str, enabled: bool) -> bool:
+    """Set the enabled flag on a product variable row identified by vtype+value."""
+    try:
+        supabase = _get_supabase()
+        res = supabase.table('product_variables').update({'enabled': bool(enabled)}).eq('vtype', vtype).eq('value', value).execute()
+        if getattr(res, 'error', None):
+            logging.error('update_product_variable_enabled error: %s', res.error)
+            return False
+        return True
+    except Exception:
+        logging.exception('update_product_variable_enabled exception')
+        return False
+
+
+def set_product_variable_type_enabled(vtype: str, enabled: bool) -> bool:
+    """Enable or disable an entire variable type (e.g., company, variant, gst)."""
+    try:
+        supabase = _get_supabase()
+        # Upsert into product_variable_types
+        try:
+            res = supabase.table('product_variable_types').upsert({'vtype': vtype, 'enabled': bool(enabled)}).execute()
+        except Exception:
+            # Fallback: try update then insert
+            try:
+                res = supabase.table('product_variable_types').update({'enabled': bool(enabled)}).eq('vtype', vtype).execute()
+                if getattr(res, 'error', None):
+                    # insert if update did not find a row
+                    res2 = supabase.table('product_variable_types').insert({'vtype': vtype, 'enabled': bool(enabled)}).execute()
+            except Exception:
+                logging.exception('set_product_variable_type_enabled upsert fallback failed')
+                return False
+        return True
+    except Exception:
+        logging.exception('set_product_variable_type_enabled exception')
+        return False
+
+
+def list_product_variable_types_all() -> Dict[str, bool]:
+    """Return a mapping of vtype -> enabled (bool) for all known variable types.
+
+    If the `product_variable_types` table is not available, return defaults (all enabled).
+    """
+    defaults = { 'company': True, 'variant': True, 'gst': True, 'type': True, 'product_code': True }
+    try:
+        supabase = _get_supabase()
+        try:
+            res = supabase.table('product_variable_types').select('vtype, enabled').execute()
+        except Exception:
+            # table may not exist on older DB; return defaults
+            return defaults
+        if getattr(res, 'error', None):
+            logging.error('list_product_variable_types_all error: %s', res.error)
+            return defaults
+        rows = res.data or []
+        out = {}
+        for r in rows:
+            if not r or not isinstance(r, dict):
+                continue
+            vt = r.get('vtype')
+            en = r.get('enabled')
+            if vt:
+                out[vt] = bool(en) if en is not None else True
+        # ensure known defaults present
+        for k, v in defaults.items():
+            out.setdefault(k, v)
+        return out
+    except Exception:
+        logging.exception('list_product_variable_types_all exception')
+        return defaults
 
 
 def update_customer(customer_id: str, changes: Dict) -> Optional[Dict]:

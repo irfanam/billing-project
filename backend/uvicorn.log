@@ -1,0 +1,1267 @@
+INFO:     Will watch for changes in these directories: ['/home/irfanam/billing-project/backend']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [2324] using StatReload
+INFO:root:Loaded routes.py from: /home/irfanam/billing-project/backend/app/routes.py
+INFO:     Started server process [2326]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:41230 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41230 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:root:SUPABASE_URL: https://fipgqsqxowskunugtexa.supabase.co
+INFO:root:SUPABASE_KEY: eyJhbGci... (truncated)
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:52432 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:52432 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:52432 - "GET /billing/products/archived HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:52452 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52432 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:52462 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52440 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:52470 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52462 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52432 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52452 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52440 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:52476 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:46464 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46482 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46474 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46484 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46470 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:46464 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:46482 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:46474 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:46470 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46484 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:49958 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:49958 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:51180 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:51170 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:51128 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51144 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51156 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51180 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:51156 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:51144 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51170 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51182 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'app/repository.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2326]
+INFO:root:Loaded routes.py from: /home/irfanam/billing-project/backend/app/routes.py
+INFO:     Started server process [3648]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'app/routes.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3648]
+INFO:root:Loaded routes.py from: /home/irfanam/billing-project/backend/app/routes.py
+INFO:     Started server process [3685]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:root:SUPABASE_URL: https://fipgqsqxowskunugtexa.supabase.co
+INFO:root:SUPABASE_KEY: eyJhbGci... (truncated)
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:54456 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 404 Not Found"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 404 Not Found"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 404 Not Found"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:54456 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 404 Not Found"
+INFO:     127.0.0.1:54446 - "GET /billing/product-variable-types/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 404 Not Found"
+INFO:     127.0.0.1:54468 - "GET /billing/product-variable-types/gst HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54480 - "GET /billing/product-variable-types/type HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54454 - "GET /billing/product-variable-types/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54488 - "GET /billing/product-variable-types/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:54480 - "GET /billing/product-variable-types/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 404 Not Found"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 404 Not Found"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 404 Not Found"
+INFO:     127.0.0.1:54454 - "GET /billing/product-variable-types/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54446 - "GET /billing/product-variable-types/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54456 - "GET /billing/product-variable-types/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 404 Not Found"
+INFO:     127.0.0.1:54468 - "GET /billing/product-variable-types/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:52342 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:     127.0.0.1:52404 - "GET /billing/product-variable-types/product_code HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52378 - "GET /billing/product-variable-types/gst HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52358 - "GET /billing/product-variable-types/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:     127.0.0.1:52392 - "GET /billing/product-variable-types/type HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52368 - "GET /billing/product-variable-types/variant HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:54846 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:     127.0.0.1:54856 - "GET /billing/product-variable-types/variant HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:     127.0.0.1:54850 - "GET /billing/product-variable-types/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54864 - "GET /billing/product-variable-types/product_code HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54852 - "GET /billing/product-variable-types/gst HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54862 - "GET /billing/product-variable-types/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:36850 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:     127.0.0.1:36882 - "GET /billing/product-variable-types/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:     127.0.0.1:36878 - "GET /billing/product-variable-types/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:     127.0.0.1:36850 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36860 - "GET /billing/product-variable-types/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:36876 - "GET /billing/product-variable-types/variant HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:36890 - "GET /billing/product-variable-types/product_code HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36860 - "GET /billing/product-variable-types/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36882 - "GET /billing/product-variable-types/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:     127.0.0.1:36878 - "GET /billing/product-variable-types/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:36876 - "GET /billing/product-variable-types/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36860 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36882 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:36850 - "GET /billing/product-variable-types/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:     127.0.0.1:36878 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:36890 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:36860 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36876 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:     127.0.0.1:36882 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:36890 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36850 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:     127.0.0.1:36878 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49286 - "OPTIONS /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:49286 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:49286 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:49300 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'app/repository.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3685]
+INFO:root:Loaded routes.py from: /home/irfanam/billing-project/backend/app/routes.py
+INFO:     Started server process [8979]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'app/routes.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [8979]
+INFO:root:Loaded routes.py from: /home/irfanam/billing-project/backend/app/routes.py
+INFO:     Started server process [9014]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:root:SUPABASE_URL: https://fipgqsqxowskunugtexa.supabase.co
+INFO:root:SUPABASE_KEY: eyJhbGci... (truncated)
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:51282 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:     127.0.0.1:51240 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:     127.0.0.1:51210 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:     127.0.0.1:51268 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:     127.0.0.1:51226 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51254 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51282 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:52746 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:     127.0.0.1:52706 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:     127.0.0.1:52724 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52736 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:52710 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52746 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52704 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:42314 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:42314 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42288 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42298 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42278 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:     127.0.0.1:42296 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42310 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:59286 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59296 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:59296 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59286 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:59286 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:     127.0.0.1:59316 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:     127.0.0.1:59310 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59296 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59300 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:59328 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:     127.0.0.1:59316 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:     127.0.0.1:59296 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:     127.0.0.1:59300 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59310 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:59310 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58828 - "OPTIONS /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:58828 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:50090 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:     127.0.0.1:50058 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:50078 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50064 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:     127.0.0.1:50090 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50050 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58830 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:51978 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:     127.0.0.1:51960 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:     127.0.0.1:51918 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51946 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51932 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:     127.0.0.1:51978 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51974 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:34292 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:34304 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34292 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:34312 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:     127.0.0.1:34312 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34328 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34304 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:     127.0.0.1:34292 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:34336 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:     127.0.0.1:34328 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:     127.0.0.1:34292 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34312 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34304 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:     127.0.0.1:34336 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:45398 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:45398 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:45398 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:45398 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:45398 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:45398 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:45398 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:45398 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45398 - "OPTIONS /billing/product-variable-types/company/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:45398 - "POST /billing/product-variable-types/company/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:45398 - "POST /billing/product-variable-types/company/toggle HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45398 - "OPTIONS /billing/product-variable-types/variant/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:43148 - "POST /billing/product-variable-types/variant/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:43148 - "POST /billing/product-variable-types/variant/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:43148 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:43148 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:43148 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:43148 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43148 - "OPTIONS /billing/product-variable-types/product_code/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:43148 - "POST /billing/product-variable-types/product_code/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:43148 - "POST /billing/product-variable-types/product_code/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:43148 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:43148 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:53430 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:     127.0.0.1:36722 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:     127.0.0.1:36732 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:36746 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:36736 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36762 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:     127.0.0.1:36722 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:     127.0.0.1:36732 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36746 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:     127.0.0.1:36736 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:     127.0.0.1:36762 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:55314 - "GET /billing/products/archived HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:     127.0.0.1:55326 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:     127.0.0.1:55336 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:     127.0.0.1:55320 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55340 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55314 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:55326 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:     127.0.0.1:55340 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:     127.0.0.1:55320 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:     127.0.0.1:55336 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55314 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:39640 - "GET /billing/products/archived HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:39640 - "GET /billing/products/archived HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:     127.0.0.1:48586 - "GET /billing/products/archived HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48560 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48574 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48580 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:39640 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:48570 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:     127.0.0.1:48580 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:48574 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:48560 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48580 - "GET /billing/products/archived HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:     127.0.0.1:48570 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:48560 - "GET /billing/products/archived HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48586 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:48586 - "GET /billing/products/archived HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:     127.0.0.1:48560 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48570 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48586 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48580 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:48574 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:     127.0.0.1:48570 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:     127.0.0.1:48580 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48560 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:     127.0.0.1:48586 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48574 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/invoices?select=%2A "HTTP/2 200 OK"
+INFO:     127.0.0.1:45654 - "GET /billing/invoices HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/invoices?select=%2A "HTTP/2 200 OK"
+INFO:     127.0.0.1:45654 - "GET /billing/invoices HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/customers?select=%2A "HTTP/2 200 OK"
+INFO:root:Fetched customers: [{'id': 'a8e0eeb4-3a51-4db1-88ea-e870df19d7a2', 'name': 'Alamgir Sardar', 'gstin': None, 'state': 'West Bengal', 'address': 'Sangrampur, Basirhat\nPincode: 743422', 'phone': '9563604449', 'email': 'sardaralamgir69@gmail.com', 'created_at': '2025-08-23T05:09:11.14521+00:00', 'customer_code': 'CID000001'}]
+INFO:     127.0.0.1:45654 - "GET /billing/customers HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/customers?select=%2A "HTTP/2 200 OK"
+INFO:root:Fetched customers: [{'id': 'a8e0eeb4-3a51-4db1-88ea-e870df19d7a2', 'name': 'Alamgir Sardar', 'gstin': None, 'state': 'West Bengal', 'address': 'Sangrampur, Basirhat\nPincode: 743422', 'phone': '9563604449', 'email': 'sardaralamgir69@gmail.com', 'created_at': '2025-08-23T05:09:11.14521+00:00', 'customer_code': 'CID000001'}]
+INFO:     127.0.0.1:45654 - "GET /billing/customers HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/invoices?select=%2A "HTTP/2 200 OK"
+INFO:     127.0.0.1:35344 - "GET /billing/invoices HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/invoices?select=%2A "HTTP/2 200 OK"
+INFO:     127.0.0.1:35344 - "GET /billing/invoices HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/customers?select=%2A "HTTP/2 200 OK"
+INFO:root:Fetched customers: [{'id': 'a8e0eeb4-3a51-4db1-88ea-e870df19d7a2', 'name': 'Alamgir Sardar', 'gstin': None, 'state': 'West Bengal', 'address': 'Sangrampur, Basirhat\nPincode: 743422', 'phone': '9563604449', 'email': 'sardaralamgir69@gmail.com', 'created_at': '2025-08-23T05:09:11.14521+00:00', 'customer_code': 'CID000001'}]
+INFO:     127.0.0.1:35344 - "GET /billing/customers HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/customers?select=%2A "HTTP/2 200 OK"
+INFO:root:Fetched customers: [{'id': 'a8e0eeb4-3a51-4db1-88ea-e870df19d7a2', 'name': 'Alamgir Sardar', 'gstin': None, 'state': 'West Bengal', 'address': 'Sangrampur, Basirhat\nPincode: 743422', 'phone': '9563604449', 'email': 'sardaralamgir69@gmail.com', 'created_at': '2025-08-23T05:09:11.14521+00:00', 'customer_code': 'CID000001'}]
+INFO:     127.0.0.1:35344 - "GET /billing/customers HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:47932 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47924 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:47924 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47942 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:47950 - "GET /billing/products/archived HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:     127.0.0.1:33204 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33210 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33198 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47950 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33214 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:33214 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:     127.0.0.1:33210 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:     127.0.0.1:47950 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:     127.0.0.1:33198 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33204 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:50072 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:     127.0.0.1:50068 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:50046 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50044 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50070 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50072 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50056 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:49026 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49018 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:49018 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:49026 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:49052 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:     127.0.0.1:49062 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:     127.0.0.1:49028 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:49036 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49018 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:49052 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49062 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:     127.0.0.1:49028 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49036 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49026 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49036 - "OPTIONS /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:49028 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:49028 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:49028 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:49028 - "POST /billing/product-variable-types/type/toggle HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49028 - "OPTIONS /billing/product-variable-types/product_code/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:49036 - "POST /billing/product-variable-types/product_code/toggle HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types "HTTP/2 200 OK"
+INFO:     127.0.0.1:49036 - "POST /billing/product-variable-types/product_code/toggle HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41378 - "OPTIONS /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: DELETE https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?vtype=eq.product_code&value=eq.BW22 "HTTP/2 200 OK"
+INFO:     127.0.0.1:41378 - "DELETE /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:58464 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58474 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:37404 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37420 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:41284 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41278 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:43520 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43528 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:50194 - "GET /billing/products/archived HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:50194 - "GET /billing/products/archived HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:46688 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46694 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:46688 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46694 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:46688 - "GET /billing/products/archived HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52858 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A "HTTP/2 200 OK"
+INFO:     127.0.0.1:52842 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:52764 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52768 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:40546 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40562 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:40562 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40546 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:40546 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40562 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40562 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A "HTTP/2 200 OK"
+INFO:     127.0.0.1:40546 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:40546 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40562 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:40562 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40546 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:40562 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40546 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:40562 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40546 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:40562 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40546 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:40562 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40546 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:40546 - "GET /billing/products/archived HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:33558 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33560 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:33560 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33558 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:56972 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56988 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:38442 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38452 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:38442 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38452 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:52644 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:55268 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41746 - "OPTIONS /billing/products HTTP/1.1" 200 OK
+INFO:root:Raw product POST body: {'sku': '547567567', 'name': 'Nerolac - escel — 1L', 'price': 555, 'tax_percent': 12}
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/rpc/increment_counter "HTTP/2 400 Bad Request"
+INFO:root:Counters RPC not available; falling back to scan-based seq for products
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=product_code "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products "HTTP/2 201 Created"
+INFO:     127.0.0.1:41746 - "POST /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:41746 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:33334 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33350 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:53208 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53224 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:53208 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53224 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:53208 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53224 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:53224 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53208 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:53224 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53208 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:53208 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53224 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:53224 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53208 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:53208 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53224 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55822 - "OPTIONS /billing/products/578bcafd-2aea-4ada-ab67-1952978ab34f HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: PATCH https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?id=eq.578bcafd-2aea-4ada-ab67-1952978ab34f "HTTP/2 200 OK"
+INFO:     127.0.0.1:55822 - "PUT /billing/products/578bcafd-2aea-4ada-ab67-1952978ab34f HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:55822 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:55822 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55834 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:55834 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55822 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:55834 - "GET /billing/products/archived HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:34280 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:34274 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34280 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:34284 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:57066 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57070 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:57066 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57070 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57070 - "OPTIONS /billing/products/79cabb7f-4ed0-495e-907f-55d9f56822a2 HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: PATCH https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?id=eq.79cabb7f-4ed0-495e-907f-55d9f56822a2 "HTTP/2 200 OK"
+INFO:     127.0.0.1:57070 - "PUT /billing/products/79cabb7f-4ed0-495e-907f-55d9f56822a2 HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:57070 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54080 - "OPTIONS /billing/products HTTP/1.1" 200 OK
+INFO:root:Raw product POST body: {'sku': '3456435', 'name': 'AsianPaints - hdh — 1L', 'price': 555, 'tax_percent': 18}
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/rpc/increment_counter "HTTP/2 400 Bad Request"
+INFO:root:Counters RPC not available; falling back to scan-based seq for products
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=product_code "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: POST https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products "HTTP/2 201 Created"
+INFO:     127.0.0.1:54080 - "POST /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:54080 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:53050 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:     127.0.0.1:53036 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:     127.0.0.1:54094 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:     127.0.0.1:54080 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53060 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:53050 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.product_code&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:53036 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:     127.0.0.1:53062 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.product_code "HTTP/2 200 OK"
+INFO:     127.0.0.1:53060 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54080 - "GET /billing/product-variables/product_code HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:53094 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:53090 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:34728 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34730 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:46722 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46730 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:43572 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43562 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:43562 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43572 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:37310 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37322 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:59986 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59992 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:59992 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59986 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:42946 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42956 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:49358 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49364 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:56038 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:56046 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56038 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:56062 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56778 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A "HTTP/2 200 OK"
+INFO:     127.0.0.1:56762 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:56792 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56782 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36204 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A "HTTP/2 200 OK"
+INFO:     127.0.0.1:36200 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:52638 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52642 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:52638 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52642 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:52642 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52638 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:52638 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52642 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:52642 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52638 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:52642 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52638 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:52638 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52642 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:52642 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52638 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:48270 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48278 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:59240 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59236 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:47054 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47066 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:47066 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47076 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:47066 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47076 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:47076 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47054 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47054 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:47054 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47076 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:47076 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:47076 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47054 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:47054 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:47066 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:47054 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47066 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:47054 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47066 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:47066 - "GET /billing/products/archived HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:35558 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35556 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:35556 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35558 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:35556 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35558 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:35558 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35556 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:59268 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59284 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:59284 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:59268 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:59268 - "GET /billing/products/archived HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:     127.0.0.1:59284 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59306 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:59268 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:59294 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:     127.0.0.1:59284 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:     127.0.0.1:59268 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:     127.0.0.1:59294 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59306 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'app/repository.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [9014]
+INFO:root:Loaded routes.py from: /home/irfanam/billing-project/backend/app/routes.py
+INFO:     Started server process [26426]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:root:SUPABASE_URL: https://fipgqsqxowskunugtexa.supabase.co
+INFO:root:SUPABASE_KEY: eyJhbGci... (truncated)
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:60088 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:60086 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60088 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:60086 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:47632 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47634 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:52592 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52596 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'app/repository.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [26426]
+INFO:root:Loaded routes.py from: /home/irfanam/billing-project/backend/app/routes.py
+INFO:     Started server process [27845]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:root:SUPABASE_URL: https://fipgqsqxowskunugtexa.supabase.co
+INFO:root:SUPABASE_KEY: eyJhbGci... (truncated)
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:35252 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:35262 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35252 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:35264 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:56840 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56856 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45864 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A "HTTP/2 200 OK"
+INFO:     127.0.0.1:45848 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:33346 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33358 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:34226 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34212 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:34242 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34212 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:34212 - "GET /billing/products/archived HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:     127.0.0.1:34242 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34212 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39842 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:     127.0.0.1:34226 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.gst&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.company&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.type&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variables?select=value%2Cvalue_num%2Csort_order%2Ccreated_at%2Cenabled&vtype=eq.variant&enabled=eq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.gst "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.type "HTTP/2 200 OK"
+INFO:     127.0.0.1:39842 - "GET /billing/product-variables/type HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.company "HTTP/2 200 OK"
+INFO:     127.0.0.1:34226 - "GET /billing/product-variables/gst HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=enabled&vtype=eq.variant "HTTP/2 200 OK"
+INFO:     127.0.0.1:34212 - "GET /billing/product-variables/company HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34242 - "GET /billing/product-variables/variant HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:53114 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53124 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:53124 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:53114 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57556 - "OPTIONS /billing/products/291ec368-cfac-45b0-b7a3-ad9f8c49a52b HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: DELETE https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?id=eq.291ec368-cfac-45b0-b7a3-ad9f8c49a52b "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&id=eq.291ec368-cfac-45b0-b7a3-ad9f8c49a52b "HTTP/2 406 Not Acceptable"
+INFO:     127.0.0.1:57556 - "DELETE /billing/products/291ec368-cfac-45b0-b7a3-ad9f8c49a52b HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:49354 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49368 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=neq.True "HTTP/2 200 OK"
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/product_variable_types?select=vtype%2Cenabled "HTTP/2 200 OK"
+INFO:     127.0.0.1:49368 - "GET /billing/product-variable-types HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49354 - "GET /billing/products HTTP/1.1" 200 OK
+INFO:httpx:HTTP Request: GET https://fipgqsqxowskunugtexa.supabase.co/rest/v1/products?select=%2A&archived=eq.True "HTTP/2 200 OK"
+INFO:     127.0.0.1:49738 - "GET /billing/products/archived HTTP/1.1" 200 OK

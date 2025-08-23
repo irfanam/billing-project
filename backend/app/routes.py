@@ -113,6 +113,7 @@ async def get_product_variables(vtype: str):
     res = await run_in_threadpool(repository.list_product_variables, vtype)
     if res is None:
         raise HTTPException(status_code=500, detail='Failed to fetch variables')
+    # repository.list_product_variables now returns { vtype_enabled, rows }
     return {'status': 'success', 'data': res}
 
 
@@ -149,6 +150,73 @@ async def remove_product_variable(vtype: str, request: Request):
         raise
     except Exception as exc:
         logging.exception('remove_product_variable exception: %s', exc)
+        raise HTTPException(status_code=500, detail='Internal error')
+
+
+@router.post('/product-variables/{vtype}/toggle')
+async def toggle_product_variable(vtype: str, request: Request):
+    try:
+        body = await request.json()
+        value = body.get('value')
+        enabled = body.get('enabled')
+        if value is None or enabled is None:
+            raise HTTPException(status_code=400, detail='Missing value or enabled')
+        ok = await run_in_threadpool(repository.update_product_variable_enabled, vtype, value, bool(enabled))
+        if not ok:
+            raise HTTPException(status_code=500, detail='Failed to update variable')
+        return {'status': 'success'}
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logging.exception('toggle_product_variable exception: %s', exc)
+        raise HTTPException(status_code=500, detail='Internal error')
+
+
+@router.get('/product-variable-types/{vtype}')
+async def get_product_variable_type(vtype: str):
+    try:
+        # return whether the type is enabled
+        res = await run_in_threadpool(repository.list_product_variables, vtype)
+        if res is None:
+            raise HTTPException(status_code=500, detail='Failed to fetch variable type')
+        # res has vtype_enabled
+        return {'status': 'success', 'data': {'vtype': vtype, 'enabled': bool(res.get('vtype_enabled', True))}}
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logging.exception('get_product_variable_type exception: %s', exc)
+        raise HTTPException(status_code=500, detail='Internal error')
+
+
+@router.post('/product-variable-types/{vtype}/toggle')
+async def set_product_variable_type(vtype: str, request: Request):
+    try:
+        body = await request.json()
+        enabled = body.get('enabled')
+        if enabled is None:
+            raise HTTPException(status_code=400, detail='Missing enabled')
+        ok = await run_in_threadpool(repository.set_product_variable_type_enabled, vtype, bool(enabled))
+        if not ok:
+            raise HTTPException(status_code=500, detail='Failed to update variable type')
+        return {'status': 'success'}
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logging.exception('set_product_variable_type exception: %s', exc)
+        raise HTTPException(status_code=500, detail='Internal error')
+
+
+@router.get('/product-variable-types')
+async def list_product_variable_types():
+    try:
+        res = await run_in_threadpool(repository.list_product_variable_types_all)
+        if res is None:
+            raise HTTPException(status_code=500, detail='Failed to fetch variable types')
+        return {'status': 'success', 'data': res}
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logging.exception('list_product_variable_types exception: %s', exc)
         raise HTTPException(status_code=500, detail='Internal error')
 
 
