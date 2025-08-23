@@ -22,6 +22,7 @@ export default function Products() {
   },[])
   const [products, setProducts] = useState([]);
   const [supportsMeta, setSupportsMeta] = useState(false);
+  const [topSuccessMessage, setTopSuccessMessage] = useState('')
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [search, setSearch] = useState('');
@@ -79,6 +80,9 @@ export default function Products() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Products</h1>
+      {topSuccessMessage && (
+        <div className="mb-3 p-2 bg-green-100 text-green-800 rounded">{topSuccessMessage}</div>
+      )}
       <div className="flex gap-2 mb-4">
         <button className={`px-3 py-1 rounded ${activeTab==='list'?'bg-blue-600 text-white':'bg-gray-100'}`} onClick={()=>setActiveTab('list')}>List</button>
         <button className={`px-3 py-1 rounded ${activeTab==='settings'?'bg-blue-600 text-white':'bg-gray-100'}`} onClick={()=>setActiveTab('settings')}>Settings</button>
@@ -118,7 +122,7 @@ export default function Products() {
         <ProductForm
           product={editProduct}
       onClose={() => { setShowForm(false); setEditProduct(null); }}
-      onSaved={() => { setShowForm(false); setEditProduct(null); fetchProducts(); }}
+      onSaved={(payload) => { setShowForm(false); setEditProduct(null); fetchProducts(); if (payload && payload.message) { setTopSuccessMessage(payload.message); setTimeout(()=>setTopSuccessMessage(''),3000) } }}
       companies={companies}
       variants={variants}
       gstRates={gstRates}
@@ -279,6 +283,9 @@ function ProductForm({ product, onClose, onSaved, companies = [], variants = [],
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState(null);
   const [lastEdited, setLastEdited] = useState('amount') // 'amount' or 'total'
+  const [successMessage, setSuccessMessage] = useState('')
+  const successTimerRef = React.useRef(null)
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleChange = e => {
     const { name, value } = e.target
@@ -379,11 +386,29 @@ function ProductForm({ product, onClose, onSaved, companies = [], variants = [],
         await axios.post(`${API_BASE_URL}/billing/products`, payload);
       }
       setSaving(false);
-      // reset form for next use
-  setForm({ sku: '', name: '', description: '', price: '', tax_percent: '', company: companies[0] || '', variant: variants[0] || '' })
-      onSaved && onSaved();
+      // show confirmation when added or updated
+      const verb = product && product.id ? 'updated' : 'added'
+      setSuccessMessage(`Product ${verb} successfully`)
+      setErrorMessage('')
+      if (successTimerRef.current) clearTimeout(successTimerRef.current)
+      successTimerRef.current = setTimeout(() => setSuccessMessage(''), 3000)
+  // reset form for next use
+  setForm({ sku: '', name: '', description: '', price: '', total_price: '', tax_percent: '', company: companies[0] || '', variant: variants[0] || '' })
+  const message = `Product ${verb} successfully`
+  onSaved && onSaved({ message });
     } catch (err) {
-      setError('Failed to save product');
+      // extract server error if available
+      let detail = ''
+      try {
+        if (err.response && err.response.data) {
+          detail = err.response.data.detail || JSON.stringify(err.response.data)
+        } else {
+          detail = err.message || String(err)
+        }
+      } catch (e) { detail = String(err) }
+      setError('Failed to save product')
+      setErrorMessage(detail)
+      setSuccessMessage('')
       setSaving(false);
     }
   };
@@ -392,6 +417,12 @@ function ProductForm({ product, onClose, onSaved, companies = [], variants = [],
     <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
       <form className="bg-white rounded shadow p-6 w-full max-w-md" onSubmit={handleSubmit}>
         <h2 className="text-xl font-bold mb-4">{product ? 'Edit Product' : 'Add Product'}</h2>
+        {successMessage && (
+          <div className="mb-3 p-2 bg-green-100 text-green-800 rounded">{successMessage}</div>
+        )}
+        {errorMessage && (
+          <div className="mb-3 p-2 bg-red-100 text-red-800 rounded">{errorMessage}</div>
+        )}
         <div className="mb-2">
           <label className="block font-semibold">SKU</label>
           <input ref={skuRef} name="sku" value={form.sku} onChange={handleChange} className="input" required />

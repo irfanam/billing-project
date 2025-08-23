@@ -542,6 +542,20 @@ def update_customer(customer_id: str, changes: Dict) -> Optional[Dict]:
         return None
 
 
+def delete_customer(customer_id: str) -> bool:
+    """Delete a customer by id. Returns True on success, False otherwise."""
+    try:
+        supabase = _get_supabase()
+        res = supabase.table('customers').delete().eq('id', customer_id).execute()
+        if getattr(res, 'error', None):
+            logging.error('Supabase delete_customer error: %s', res.error)
+            return False
+        return True
+    except Exception:
+        logging.exception('delete_customer exception')
+        return False
+
+
 def create_product(record: Dict) -> Optional[Dict]:
     """Insert a product record and return the created row or None on error. Uses UID... ids."""
     try:

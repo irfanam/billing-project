@@ -64,6 +64,15 @@ async def update_customer(customer_id: str, changes: 'CustomerUpdate' = Body(...
     return {"status": "success", "data": updated}
 
 
+
+@router.delete('/customers/{customer_id}')
+async def remove_customer(customer_id: str):
+    ok = await run_in_threadpool(repository.delete_customer, customer_id)
+    if not ok:
+        raise HTTPException(status_code=500, detail='Failed to delete customer')
+    return {"status": "success"}
+
+
 @router.get('/products')
 async def list_products():
     res = await run_in_threadpool(repository.list_products)

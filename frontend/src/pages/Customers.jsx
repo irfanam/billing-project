@@ -13,7 +13,7 @@ export default function Customers() {
   const [editingId, setEditingId] = useState(null);
   const [readOnly, setReadOnly] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState({ name: '', state: '', gstin: '', email: '' });
+  const [form, setForm] = useState({ name: '', phone: '', email: '', address1: '', address2: '', state: 'West Bengal', pincode: '', country: 'India', gstin: '' });
 
   useEffect(() => {
     setLoading(true);
@@ -41,7 +41,7 @@ export default function Customers() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Customers</h1>
-      <div className="flex flex-wrap gap-2 mb-4">
+  <div className="flex flex-wrap gap-2 mb-4">
         <input
           type="text"
           placeholder="Search by name or ID"
@@ -51,41 +51,91 @@ export default function Customers() {
         />
         <button
           className="bg-blue-600 text-white px-4 py-2 rounded shadow ml-auto"
-          onClick={() => { setShowForm(true); setEditingId(null); setReadOnly(false); }}
+          onClick={() => { setShowForm(true); setEditingId(null); setReadOnly(false); setForm({ name: '', phone: '', email: '', address1: '', address2: '', state: 'West Bengal', pincode: '', country: 'India', gstin: '' }); }}
         >Add Customer</button>
       </div>
       {showForm && (
-        <div className="bg-white p-4 rounded shadow mb-4">
-          <h2 className="text-lg font-semibold mb-2">{readOnly ? 'View Customer' : (editingId ? 'Edit Customer' : 'Add Customer')}</h2>
-          <div className="grid grid-cols-2 gap-2">
-            <input placeholder="Name" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} className="border p-2" disabled={readOnly} />
-            <input placeholder="State" value={form.state} onChange={e=>setForm({...form,state:e.target.value})} className="border p-2" disabled={readOnly} />
-            <input placeholder="GSTIN" value={form.gstin} onChange={e=>setForm({...form,gstin:e.target.value})} className="border p-2" disabled={readOnly} />
-            <input placeholder="Email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} className="border p-2" disabled={readOnly} />
-          </div>
-          <div className="flex justify-end gap-2 mt-2">
-            <button className="px-3 py-1 border rounded" onClick={()=>{ setShowForm(false); setReadOnly(false); setEditingId(null); setForm({name:'',state:'',gstin:'',email:''}); }}>Cancel</button>
-            {!readOnly && (
-              <button className="px-3 py-1 bg-blue-600 text-white rounded" onClick={async ()=>{
-                try{
-                  if(editingId){
-                    const res = await axios.put(`${API_BASE_URL}/billing/customers/${editingId}`, form)
-                    const updated = res.data.data
-                    setCustomers(customers.map(c => c.id === updated.id ? updated : c))
-                  } else {
-                    const res = await axios.post(`${API_BASE_URL}/billing/customers`, form)
-                    const newCust = res.data.data
-                    setCustomers([newCust, ...customers])
-                  }
-                  setShowForm(false)
-                  setForm({name:'',state:'',gstin:'',email:''})
-                  setEditingId(null)
-                }catch(err){
-                  alert('Failed to save customer')
-                }
-              }}>Save</button>
-            )}
-          </div>
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <form className="bg-white rounded shadow p-6 w-full max-w-lg" onSubmit={async (e) => {
+            e.preventDefault();
+            if(readOnly){ setShowForm(false); return }
+            // build payload for backend
+            const payload = {
+              name: form.name,
+              phone: form.phone || undefined,
+              email: form.email || undefined,
+              state: form.state || undefined,
+              gstin: form.gstin || undefined,
+              // combine address lines and pincode into single address string
+              address: [form.address1, form.address2].filter(Boolean).join('\n') + (form.pincode ? `\nPincode: ${form.pincode}` : ''),
+            }
+              try{
+              if(editingId){
+                const res = await axios.put(`${API_BASE_URL}/billing/customers/${editingId}`, payload)
+                const updated = res.data.data
+                setCustomers(customers.map(c => c.id === updated.id ? updated : c))
+              } else {
+                const res = await axios.post(`${API_BASE_URL}/billing/customers`, payload)
+                const newCust = res.data.data
+                setCustomers([newCust, ...customers])
+              }
+              setShowForm(false)
+              setForm({ name: '', phone: '', email: '', address1: '', address2: '', state: 'West Bengal', pincode: '', country: 'India', gstin: '' })
+              setEditingId(null)
+            }catch(err){
+              // surface server error if available
+              let msg = 'Failed to save customer'
+              try{ if(err.response && err.response.data && err.response.data.detail) msg = err.response.data.detail }catch(e){}
+              alert(msg)
+            }
+          }}>
+            <h2 className="text-xl font-bold mb-4">{readOnly ? 'View Customer' : (editingId ? 'Edit Customer' : 'Add Customer')}</h2>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block font-semibold">Name</label>
+                <input required disabled={readOnly} value={form.name} onChange={e=>setForm(f=>({...f,name:e.target.value}))} className="input" />
+              </div>
+              <div>
+                <label className="block font-semibold">Mobile Number</label>
+                <input required disabled={readOnly} value={form.phone} onChange={e=>setForm(f=>({...f,phone:e.target.value}))} className="input" />
+              </div>
+              <div>
+                <label className="block font-semibold">Email</label>
+                <input type="email" disabled={readOnly} value={form.email} onChange={e=>setForm(f=>({...f,email:e.target.value}))} className="input" />
+              </div>
+              <div>
+                <label className="block font-semibold">State</label>
+                <select disabled={readOnly} value={form.state} onChange={e=>setForm(f=>({...f,state:e.target.value}))} className="input">
+                  <option value="">-- Select state --</option>
+                  {['Andhra Pradesh','Arunachal Pradesh','Assam','Bihar','Chhattisgarh','Goa','Gujarat','Haryana','Himachal Pradesh','Jharkhand','Karnataka','Kerala','Madhya Pradesh','Maharashtra','Manipur','Meghalaya','Mizoram','Nagaland','Odisha','Punjab','Rajasthan','Sikkim','Tamil Nadu','Telangana','Tripura','Uttar Pradesh','Uttarakhand','West Bengal','Delhi','Puducherry','Chandigarh','Lakshadweep','Andaman and Nicobar Islands'].map(s => <option key={s} value={s}>{s}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block font-semibold">Pincode</label>
+                <input disabled={readOnly} value={form.pincode} onChange={e=>setForm(f=>({...f,pincode:e.target.value}))} className="input" />
+              </div>
+              <div className="col-span-2">
+                <label className="block font-semibold">Address Line 1</label>
+                <input disabled={readOnly} value={form.address1} onChange={e=>setForm(f=>({...f,address1:e.target.value}))} className="input" />
+              </div>
+              <div className="col-span-2">
+                <label className="block font-semibold">Address Line 2</label>
+                <input disabled={readOnly} value={form.address2} onChange={e=>setForm(f=>({...f,address2:e.target.value}))} className="input" />
+              </div>
+              <div>
+                <label className="block font-semibold">Country</label>
+                <input disabled value={form.country} className="input bg-gray-100" />
+              </div>
+              <div>
+                <label className="block font-semibold">GSTIN (optional)</label>
+                <input disabled={readOnly} value={form.gstin} onChange={e=>setForm(f=>({...f,gstin:e.target.value}))} className="input" />
+              </div>
+            </div>
+            <div className="flex gap-2 justify-end mt-4">
+              <button type="button" className="px-3 py-1 border rounded" onClick={()=>{ setShowForm(false); setReadOnly(false); setEditingId(null); setForm({ name: '', phone: '', email: '', address1: '', address2: '', state: 'West Bengal', pincode: '', country: 'India', gstin: '' }) }}>Cancel</button>
+              {!readOnly && <button type="submit" className="px-3 py-1 bg-blue-600 text-white rounded">Save</button>}
+            </div>
+          </form>
         </div>
       )}
       <div className="bg-white shadow rounded p-4 overflow-x-auto">
@@ -126,12 +176,37 @@ export default function Customers() {
                       <button
                         className="text-green-600 hover:underline mr-2"
                         onClick={() => {
-                          setForm({ name: cust.name || '', state: cust.state || '', gstin: cust.gstin || '', email: cust.email || '' });
+                          // try to split existing address into lines and pincode
+                          let addr1 = ''
+                          let addr2 = ''
+                          let pincode = ''
+                          if(cust.address){
+                            const parts = cust.address.split('\n').map(s=>s.trim()).filter(Boolean)
+                            if(parts.length>0) addr1 = parts[0]
+                            if(parts.length>1) addr2 = parts[1]
+                            const pinMatch = cust.address.match(/Pincode:\s*(\d{3,6})/)
+                            if(pinMatch) pincode = pinMatch[1]
+                          }
+                          setForm({ name: cust.name || '', phone: cust.phone || '', email: cust.email || '', address1: addr1, address2: addr2, state: cust.state || '', pincode: pincode, country: 'India', gstin: cust.gstin || '' });
                           setEditingId(cust.id || null);
                           setReadOnly(false);
                           setShowForm(true);
                         }}
                       >Edit</button>
+                      <button
+                        className="text-red-600 hover:underline"
+                        onClick={async () => {
+                          if(!confirm(`Delete customer ${cust.name || cust.id}? This cannot be undone.`)) return;
+                          try{
+                            await axios.delete(`${API_BASE_URL}/billing/customers/${cust.id}`)
+                            setCustomers(customers.filter(c => c.id !== cust.id))
+                          }catch(err){
+                            let msg = 'Failed to delete customer'
+                            try{ if(err.response && err.response.data && err.response.data.detail) msg = err.response.data.detail }catch(e){}
+                            alert(msg)
+                          }
+                        }}
+                      >Delete</button>
                     </td>
                   </tr>
                 ))
