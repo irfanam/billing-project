@@ -6,3 +6,7 @@ __pycache__/
 # frontend
 frontend/node_modules/
 frontend/dist/
+
+# runtime logs
+uvicorn.log
+backend/uvicorn.log
