@@ -340,20 +340,37 @@ export default function Products() {
                       <td className="px-2 py-1">{prod.tax_percent ? `${prod.tax_percent}%` : '—'}</td>
                       <td className="px-2 py-1">{(() => { const price = Number(prod.price) || 0; const tax = Number(prod.tax_percent) || 0; return formatCurrency(price + (price * (tax/100))) })()}</td>
                     <td className="px-2 py-1 text-center">
-                      <button className="px-2 py-1 bg-green-100 text-green-800 rounded" onClick={async ()=>{
-                        if(!confirm('Restore this product from archive?')) return
-                        try{
-                          await axios.post(`${API_BASE_URL}/billing/products/${prod.id}/undelete`)
-                          fetchArchivedProducts()
-                          fetchProducts()
-                          setTopToast('Product restored')
-                          setTimeout(()=>setTopToast(''), 3000)
-                        }catch(err){
-                          let msg = 'Failed to restore product'
-                          try{ if(err.response && err.response.data && err.response.data.detail) msg = err.response.data.detail }catch(e){}
-                          alert(msg)
-                        }
-                      }}>Undelete</button>
+                      <div className="flex items-center justify-center gap-2">
+                        <button className="px-2 py-1 bg-gray-200 text-gray-800 rounded" onClick={()=>setViewProduct(prod)}>View</button>
+                        <button className="px-2 py-1 bg-green-100 text-green-800 rounded" onClick={async ()=>{
+                          if(!confirm('Restore this product from archive?')) return
+                          try{
+                            await axios.post(`${API_BASE_URL}/billing/products/${prod.id}/undelete`)
+                            fetchArchivedProducts()
+                            fetchProducts()
+                            setTopToast('Product restored')
+                            setTimeout(()=>setTopToast(''), 3000)
+                          }catch(err){
+                            let msg = 'Failed to restore product'
+                            try{ if(err.response && err.response.data && err.response.data.detail) msg = err.response.data.detail }catch(e){}
+                            alert(msg)
+                          }
+                        }}>Undelete</button>
+                        <button className="px-2 py-1 bg-red-100 text-red-800 rounded" onClick={async ()=>{
+                          if(!confirm('Delete this archived product permanently?')) return
+                          try{
+                            await axios.delete(`${API_BASE_URL}/billing/products/${prod.id}`)
+                            fetchArchivedProducts()
+                            fetchProducts()
+                            setTopToast('Archived product deleted')
+                            setTimeout(()=>setTopToast(''), 3000)
+                          }catch(err){
+                            let msg = 'Failed to delete archived product'
+                            try{ if(err.response && err.response.data && err.response.data.detail) msg = err.response.data.detail }catch(e){}
+                            alert(msg)
+                          }
+                        }}>Delete</button>
+                      </div>
                     </td>
                   </tr>
                 ))}
