@@ -14,7 +14,7 @@ export default function Settings() {
           value={currency}
           onChange={e => setCurrency(e.target.value)}
         >
-          <option value="USD">USD ($)</option>
+          <option value="USD">USD</option>
           <option value="EUR">EUR (€)</option>
           <option value="GBP">GBP (£)</option>
           <option value="INR">INR (₹)</option>

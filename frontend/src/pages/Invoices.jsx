@@ -85,7 +85,7 @@ export default function Invoices() {
                     <td className="px-2 py-1">{inv.invoice_number || inv.id}</td>
                     <td className="px-2 py-1">{inv.customer_name || inv.customer_id}</td>
                     <td className="px-2 py-1">{inv.created_at ? new Date(inv.created_at).toLocaleDateString() : ''}</td>
-                    <td className="px-2 py-1 text-right">${inv.total_amount}</td>
+                    <td className="px-2 py-1 text-right">{inv.total_amount != null ? '₹' + Number(inv.total_amount).toFixed(2) : ''}</td>
                     <td className="px-2 py-1">{inv.status || '-'}</td>
                     <td className="px-2 py-1 text-center">
                       <button className="text-blue-600 hover:underline mr-2">View</button>

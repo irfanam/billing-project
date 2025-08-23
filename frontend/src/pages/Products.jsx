@@ -185,14 +185,14 @@ export default function Products() {
                       }
                       return '—'
                     })()}</td>
-                    <td className="px-2 py-1">${prod.price}</td>
+                    <td className="px-2 py-1">{prod.price ? '₹' + Number(prod.price).toFixed(2) : '—'}</td>
                     <td className="px-2 py-1">{prod.tax_percent ? `${prod.tax_percent}%` : '—'}</td>
                     <td className="px-2 py-1">
-                      ${(() => {
+                      {(() => {
                         const price = Number(prod.price) || 0
                         const tax = Number(prod.tax_percent) || 0
                         const total = price + (price * (tax / 100))
-                        return total.toFixed(2)
+                        return '₹' + total.toFixed(2)
                       })()}
                     </td>
                     <td className="px-2 py-1 text-center">

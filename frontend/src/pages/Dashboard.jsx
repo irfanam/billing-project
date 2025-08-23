@@ -26,7 +26,7 @@ export default function Dashboard() {
     <div className={`p-6 min-h-screen ${theme === 'dark' ? 'bg-gray-900 text-gray-100' : 'bg-gray-50'}`}>
       <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        <StatsCard title="Revenue" value={`$${stats.revenue.toLocaleString()}`} icon="💰" />
+  <StatsCard title="Revenue" value={`₹${Number(stats.revenue || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`} icon="💰" />
         <StatsCard title="Invoices" value={stats.invoices} icon="🧾" />
         <StatsCard title="Customers" value={stats.customers} icon="👥" />
         <StatsCard title="Products" value={stats.products} icon="📦" />
@@ -51,7 +51,7 @@ export default function Dashboard() {
                 <tr key={inv.id} className="border-t">
                   <td className="py-2">{inv.id}</td>
                   <td className="py-2">{inv.customer_name || inv.customer_id}</td>
-                  <td className="py-2">${inv.amount}</td>
+                  <td className="py-2">{inv.amount != null ? '₹' + Number(inv.amount).toFixed(2) : ''}</td>
                   <td className="py-2">{new Date(inv.date).toLocaleDateString()}</td>
                 </tr>
               ))}

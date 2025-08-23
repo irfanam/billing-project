@@ -48,18 +48,18 @@ function BillingList({ userId }) {
   const [items, setItems] = useState([])
   useEffect(()=>{
     if(!userId) return
-  axios.get(`${API_BASE_URL}/billing/${userId}`).then(r=>setItems(r.data.data || []))
+    axios.get(`${API_BASE_URL}/billing/${userId}`).then(r=>setItems(r.data.data || []))
   },[userId])
 
   return (
     <div>
       {items.length===0 ? <p className="muted">No records</p> : (
-        <ul className="space-y-2">
-          {items.map((it, idx)=> (
-            <li key={idx} className="card">{it.description} — ${it.amount}</li>
-          ))}
-        </ul>
-      )}
+          <ul className="space-y-2">
+            {items.map((it, idx)=> (
+              <li key={idx} className="card">{it.description} — {it.amount != null ? '₹' + Number(it.amount).toFixed(2) : ''}</li>
+            ))}
+          </ul>
+        )}
     </div>
   )
 }
