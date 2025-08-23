@@ -436,21 +436,7 @@ export default function Products() {
               <div><strong>Stock</strong><div className="mt-1">{viewProduct.stock_qty ?? '—'}</div></div>
               <div className="col-span-2"><strong>Description</strong><div className="mt-1 whitespace-pre-wrap">{viewProduct.description || '—'}</div></div>
             </div>
-            <hr className="my-3" />
-            <h4 className="font-semibold mb-2">Variables / Meta</h4>
-            <div className="text-sm">
-              {(() => {
-                const metaRaw = viewProduct.meta
-                let metaObj = metaRaw
-                if (metaRaw && typeof metaRaw === 'string') {
-                  try { metaObj = JSON.parse(metaRaw) } catch(e){ metaObj = null }
-                }
-                if (!metaObj || Object.keys(metaObj).length === 0) return <div className="text-gray-500">No variables</div>
-                return Object.entries(metaObj).map(([k,v]) => (
-                  <div key={k} className="mb-1"><strong>{k}</strong>: <span className="ml-2">{String(v)}</span></div>
-                ))
-              })()}
-            </div>
+            {/* Clean view: intentionally omit Variables / Meta listing for a simpler product details modal */}
             <div className="flex justify-end mt-4">
               <button className="px-3 py-1 border rounded" onClick={()=>setViewProduct(null)}>Close</button>
             </div>
