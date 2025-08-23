@@ -14,6 +14,8 @@ export default function Customers() {
   const [readOnly, setReadOnly] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ name: '', phone: '', email: '', address1: '', address2: '', state: 'West Bengal', pincode: '', country: 'India', gstin: '' });
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [deleteTarget, setDeleteTarget] = useState(null)
 
   useEffect(() => {
     setLoading(true);
@@ -211,16 +213,10 @@ export default function Customers() {
                       >Edit</button>
                       <button
                         className="px-2 py-1 bg-red-100 text-red-800 rounded"
-                        onClick={async () => {
-                          if(!confirm(`Delete customer ${cust.name || cust.id}? This cannot be undone.`)) return;
-                          try{
-                            await axios.delete(`${API_BASE_URL}/billing/customers/${cust.id}`)
-                            setCustomers(customers.filter(c => c.id !== cust.id))
-                          }catch(err){
-                            let msg = 'Failed to delete customer'
-                            try{ if(err.response && err.response.data && err.response.data.detail) msg = err.response.data.detail }catch(e){}
-                            alert(msg)
-                          }
+                        onClick={() => {
+                          // open in-app confirmation modal
+                          setDeleteTarget(cust)
+                          setShowDeleteConfirm(true)
                         }}
                       >Delete</button>
                     </td>
@@ -245,6 +241,29 @@ export default function Customers() {
           onClick={() => setPage(page + 1)}
         >Next</button>
       </div>
+      {showDeleteConfirm && deleteTarget && (
+        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
+          <div className="bg-white rounded shadow p-6 w-full max-w-sm">
+            <h3 className="text-lg font-semibold mb-3">Confirm delete</h3>
+            <p className="mb-4">Are you sure you want to delete <strong>{deleteTarget.name || deleteTarget.id}</strong>? This action cannot be undone.</p>
+            <div className="flex justify-end gap-2">
+              <button className="px-3 py-1 border rounded" onClick={()=>{ setShowDeleteConfirm(false); setDeleteTarget(null) }}>Cancel</button>
+              <button className="px-3 py-1 bg-red-600 text-white rounded" onClick={async ()=>{
+                try{
+                  await axios.delete(`${API_BASE_URL}/billing/customers/${deleteTarget.id}`)
+                  setCustomers(customers.filter(c => c.id !== deleteTarget.id))
+                }catch(err){
+                  let msg = 'Failed to delete customer'
+                  try{ if(err.response && err.response.data && err.response.data.detail) msg = err.response.data.detail }catch(e){}
+                  alert(msg)
+                } finally {
+                  setShowDeleteConfirm(false); setDeleteTarget(null)
+                }
+              }}>Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
