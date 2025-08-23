@@ -423,26 +423,70 @@ export default function Products() {
 
       {viewProduct && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="bg-white rounded shadow p-6 w-full max-w-lg overflow-auto max-h-[80vh]">
+          <div className="bg-white rounded shadow p-6 w-full max-w-md overflow-auto max-h-[80vh]">
             <h3 className="text-xl font-semibold mb-3">Product details</h3>
-              <div className="grid grid-cols-2 gap-3 text-sm">
-              <div><strong>Product ID</strong><div className="mt-1">{getMetaValue(viewProduct, 'p_code') || getMetaValue(viewProduct, 'product_code') || viewProduct.product_code || viewProduct.id}</div></div>
-              <div><strong>SKU</strong><div className="mt-1">{viewProduct.sku}</div></div>
-              <div><strong>Name</strong><div className="mt-1">{viewProduct.name}</div></div>
-              <div><strong>Price</strong><div className="mt-1">{viewProduct.price ? formatCurrency(viewProduct.price) : '—'}</div></div>
-              <div><strong>Selling Price</strong><div className="mt-1">{getMetaValue(viewProduct, 'selling_price') ? formatCurrency(getMetaValue(viewProduct, 'selling_price')) : (viewProduct.selling_price ? formatCurrency(viewProduct.selling_price) : '—')}</div></div>
-              <div><strong>GST</strong><div className="mt-1">{viewProduct.tax_percent ? `${viewProduct.tax_percent}%` : '—'}</div></div>
-              <div><strong>Total Price</strong><div className="mt-1">{viewProduct.total_price ? formatCurrency(viewProduct.total_price) : '—'}</div></div>
-              <div><strong>Stock</strong><div className="mt-1">{viewProduct.stock_qty ?? '—'}</div></div>
-              <div className="col-span-2"><strong>Description</strong><div className="mt-1 whitespace-pre-wrap">{viewProduct.description || '—'}</div></div>
-            </div>
-            <hr className="my-3" />
-            {/* Render known meta fields as regular detail rows (no 'Variables' heading) */}
-              <div className="grid grid-cols-2 gap-3 text-sm mt-2">
-              <div><strong>Type</strong><div className="mt-1">{getMetaValue(viewProduct, 'type') ?? '—'}</div></div>
-              <div><strong>Company</strong><div className="mt-1">{getMetaValue(viewProduct, 'company') ?? '—'}</div></div>
-              <div><strong>Variant</strong><div className="mt-1">{getMetaValue(viewProduct, 'variant') ?? '—'}</div></div>
-              <div><strong>Selling Price</strong><div className="mt-1">{getMetaValue(viewProduct, 'selling_price') ? formatCurrency(getMetaValue(viewProduct, 'selling_price')) : (viewProduct.selling_price ? formatCurrency(viewProduct.selling_price) : '—')}</div></div>
+            <div className="space-y-3 text-sm">
+              <div>
+                <label className="block text-xs text-gray-500">Product ID</label>
+                <div className="font-semibold">{getMetaValue(viewProduct, 'p_code') || getMetaValue(viewProduct, 'product_code') || viewProduct.product_code || viewProduct.id}</div>
+              </div>
+
+              <div>
+                <label className="block text-xs text-gray-500">SKU</label>
+                <input className="input" value={viewProduct.sku || ''} readOnly disabled />
+              </div>
+
+              <div>
+                <label className="block text-xs text-gray-500">Company</label>
+                <input className="input" value={getMetaValue(viewProduct, 'company') ?? viewProduct.company ?? ''} readOnly disabled />
+              </div>
+
+              <div>
+                <label className="block text-xs text-gray-500">Name</label>
+                <input className="input" value={viewProduct.name || ''} readOnly disabled />
+              </div>
+
+              <div>
+                <label className="block text-xs text-gray-500">Type</label>
+                <input className="input" value={getMetaValue(viewProduct, 'type') ?? viewProduct.type ?? ''} readOnly disabled />
+              </div>
+
+              <div>
+                <label className="block text-xs text-gray-500">Variant</label>
+                <input className="input" value={getMetaValue(viewProduct, 'variant') ?? viewProduct.variant ?? ''} readOnly disabled />
+              </div>
+
+              <div>
+                <label className="block text-xs text-gray-500">GST</label>
+                <input className="input" value={viewProduct.tax_percent !== undefined && viewProduct.tax_percent !== null ? String(viewProduct.tax_percent) : ''} readOnly disabled />
+              </div>
+
+              <div>
+                <label className="block text-xs text-gray-500">Amount (pre-tax)</label>
+                <input className="input" value={viewProduct.price !== undefined && viewProduct.price !== null ? String(viewProduct.price) : ''} readOnly disabled />
+              </div>
+
+              <div>
+                <label className="block text-xs text-gray-500">Selling Price (suggested)</label>
+                <input className="input" value={getMetaValue(viewProduct, 'selling_price') ? String(getMetaValue(viewProduct, 'selling_price')) : (viewProduct.selling_price !== undefined && viewProduct.selling_price !== null ? String(viewProduct.selling_price) : '')} readOnly disabled />
+              </div>
+
+              <div>
+                <label className="block text-xs text-gray-500">Total Price (including GST)</label>
+                <input className="input" value={viewProduct.total_price !== undefined && viewProduct.total_price !== null ? String(viewProduct.total_price) : (viewProduct.price !== undefined && viewProduct.tax_percent !== undefined ? String((Number(viewProduct.price) + (Number(viewProduct.price) * (Number(viewProduct.tax_percent)/100))).toFixed(2)) : '')} readOnly disabled />
+              </div>
+
+              <div>
+                <label className="block text-xs text-gray-500">Stock</label>
+                <input className="input" value={viewProduct.stock_qty !== undefined && viewProduct.stock_qty !== null ? String(viewProduct.stock_qty) : ''} readOnly disabled />
+              </div>
+
+              <div>
+                <label className="block text-xs text-gray-500">Description</label>
+                <div className="mt-1 whitespace-pre-wrap">{viewProduct.description || '—'}</div>
+              </div>
+
+              {/* Extras from meta (if any) shown at the end */}
               {(() => {
                 const metaRaw = viewProduct.meta
                 let metaObj = metaRaw
@@ -454,7 +498,7 @@ export default function Products() {
                 const excluded = new Set(order)
                 const extras = Object.keys(metaObj).filter(k => !excluded.has(k))
                 return extras.map(k => (
-                  <div key={k} className="col-span-2"><strong>{k.replace(/_/g, ' ')}</strong><div className="mt-1">{k === 'selling_price' && typeof metaObj[k] === 'number' ? formatCurrency(metaObj[k]) : String(metaObj[k])}</div></div>
+                  <div key={k}><div className="text-xs text-gray-500">{k.replace(/_/g, ' ')}</div><div className="mt-1">{k === 'selling_price' && typeof metaObj[k] === 'number' ? formatCurrency(metaObj[k]) : String(metaObj[k])}</div></div>
                 ))
               })()}
             </div>
