@@ -11,7 +11,7 @@ export default function ProductDetail() {
       <h1 className="text-2xl font-bold mb-4">Product Detail</h1>
       <div className="bg-white shadow rounded p-4">
         <div className="grid grid-cols-2 gap-2">
-          <div><strong>Product Code</strong><div>{(product.meta && (product.meta.p_code || product.meta.product_code)) ? (product.meta.p_code || product.meta.product_code) : (product.product_code || product.id)}</div></div>
+          <div><strong>ID</strong><div>{product.id}</div></div>
           <div><strong>SKU</strong><div>{product.sku}</div></div>
           <div><strong>Name</strong><div>{product.name}</div></div>
           <div><strong>Price</strong><div>{formatCurrency(product.price)}</div></div>

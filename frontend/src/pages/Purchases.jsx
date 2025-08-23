@@ -113,7 +113,7 @@ export default function Purchases(){
                   <div className="col-span-6">
                     <select value={it.product_id} onChange={e=>{ const p = [...items]; p[idx].product_id = e.target.value; setItems(p)}} className="input w-full">
                       <option value="">-- select product --</option>
-                      {products.map(p=> <option key={p.id} value={p.id}>{p.product_code || p.id} — {p.name}</option>)}
+                      {products.map(p=> <option key={p.id} value={p.id}>{p.id} — {p.name}</option>)}
                     </select>
                   </div>
                   <div className="col-span-2">
