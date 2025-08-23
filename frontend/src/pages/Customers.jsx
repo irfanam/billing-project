@@ -180,10 +180,14 @@ export default function Customers() {
                           let pincode = ''
                           if(cust.address){
                             const parts = cust.address.split('\n').map(s=>s.trim()).filter(Boolean)
-                            if(parts.length>0) addr1 = parts[0]
-                            if(parts.length>1) addr2 = parts[1]
-                            const pinMatch = cust.address.match(/Pincode:\s*(\d{3,6})/)
-                            if(pinMatch) pincode = pinMatch[1]
+                            const nonPinParts = []
+                            for(const p of parts){
+                              const m = p.match(/^Pincode:\s*(\d{3,6})$/i)
+                              if(m){ pincode = m[1]; continue }
+                              nonPinParts.push(p)
+                            }
+                            if(nonPinParts.length>0) addr1 = nonPinParts[0]
+                            if(nonPinParts.length>1) addr2 = nonPinParts[1]
                           }
                           setForm({ name: cust.name || '', phone: cust.phone || '', email: cust.email || '', address1: addr1, address2: addr2, state: cust.state || 'West Bengal', pincode: pincode, country: 'India', gstin: cust.gstin || '' });
                           setEditingId(cust.id || null);
@@ -200,10 +204,14 @@ export default function Customers() {
                           let pincode = ''
                           if(cust.address){
                             const parts = cust.address.split('\n').map(s=>s.trim()).filter(Boolean)
-                            if(parts.length>0) addr1 = parts[0]
-                            if(parts.length>1) addr2 = parts[1]
-                            const pinMatch = cust.address.match(/Pincode:\s*(\d{3,6})/)
-                            if(pinMatch) pincode = pinMatch[1]
+                            const nonPinParts = []
+                            for(const p of parts){
+                              const m = p.match(/^Pincode:\s*(\d{3,6})$/i)
+                              if(m){ pincode = m[1]; continue }
+                              nonPinParts.push(p)
+                            }
+                            if(nonPinParts.length>0) addr1 = nonPinParts[0]
+                            if(nonPinParts.length>1) addr2 = nonPinParts[1]
                           }
                           setForm({ name: cust.name || '', phone: cust.phone || '', email: cust.email || '', address1: addr1, address2: addr2, state: cust.state || '', pincode: pincode, country: 'India', gstin: cust.gstin || '' });
                           setEditingId(cust.id || null);
