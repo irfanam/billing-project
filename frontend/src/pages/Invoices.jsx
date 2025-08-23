@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
+import formatCurrency from '../utils/formatCurrency';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
 
 export default function Invoices() {
@@ -85,7 +86,7 @@ export default function Invoices() {
                     <td className="px-2 py-1">{inv.invoice_number || inv.id}</td>
                     <td className="px-2 py-1">{inv.customer_name || inv.customer_id}</td>
                     <td className="px-2 py-1">{inv.created_at ? new Date(inv.created_at).toLocaleDateString() : ''}</td>
-                    <td className="px-2 py-1 text-right">{inv.total_amount != null ? '₹' + Number(inv.total_amount).toFixed(2) : ''}</td>
+                    <td className="px-2 py-1 text-right">{formatCurrency(inv.total_amount)}</td>
                     <td className="px-2 py-1">{inv.status || '-'}</td>
                     <td className="px-2 py-1 text-center">
                       <button className="text-blue-600 hover:underline mr-2">View</button>

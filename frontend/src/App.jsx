@@ -6,6 +6,7 @@ const API_BASE_URL = 'https://billing-project-s0ql.onrender.com';
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import Dashboard from './pages/Dashboard';
+import formatCurrency from './utils/formatCurrency';
 import Invoices from './pages/Invoices';
 import InvoiceDetail from './pages/InvoiceDetail';
 import InvoiceCreate from './pages/InvoiceCreate';
@@ -53,10 +54,10 @@ function BillingList({ userId }) {
 
   return (
     <div>
-      {items.length===0 ? <p className="muted">No records</p> : (
+          {items.length===0 ? <p className="muted">No records</p> : (
           <ul className="space-y-2">
             {items.map((it, idx)=> (
-              <li key={idx} className="card">{it.description} — {it.amount != null ? '₹' + Number(it.amount).toFixed(2) : ''}</li>
+              <li key={idx} className="card">{it.description} — {formatCurrency(it.amount)}</li>
             ))}
           </ul>
         )}

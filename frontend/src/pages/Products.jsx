@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import formatCurrency from '../utils/formatCurrency';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8000';
@@ -185,14 +186,14 @@ export default function Products() {
                       }
                       return '—'
                     })()}</td>
-                    <td className="px-2 py-1">{prod.price ? '₹' + Number(prod.price).toFixed(2) : '—'}</td>
+                    <td className="px-2 py-1">{prod.price ? formatCurrency(prod.price) : '—'}</td>
                     <td className="px-2 py-1">{prod.tax_percent ? `${prod.tax_percent}%` : '—'}</td>
                     <td className="px-2 py-1">
                       {(() => {
                         const price = Number(prod.price) || 0
                         const tax = Number(prod.tax_percent) || 0
                         const total = price + (price * (tax / 100))
-                        return '₹' + total.toFixed(2)
+                        return formatCurrency(total)
                       })()}
                     </td>
                     <td className="px-2 py-1 text-center">
