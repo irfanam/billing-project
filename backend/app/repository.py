@@ -23,8 +23,6 @@ def _next_sequential_id(table: str, prefix: str, width: int = 6) -> str:
         counter_name = None
         if table == 'customers':
             counter_name = 'customer_code'
-        elif table == 'products':
-            counter_name = 'product_code'
         elif table == 'suppliers':
             counter_name = 'supplier_code'
 
@@ -47,8 +45,6 @@ def _next_sequential_id(table: str, prefix: str, width: int = 6) -> str:
         code_col = 'id'
         if table == 'customers':
             code_col = 'customer_code'
-        elif table == 'products':
-            code_col = 'product_code'
         elif table == 'suppliers':
             code_col = 'supplier_code'
         try:
@@ -623,7 +619,7 @@ def list_product_variable_types_all() -> Dict[str, bool]:
 
     If the `product_variable_types` table is not available, return defaults (all enabled).
     """
-    defaults = { 'company': True, 'variant': True, 'gst': True, 'type': True, 'product_code': True }
+    defaults = { 'company': True, 'variant': True, 'gst': True, 'type': True }
     try:
         supabase = _get_supabase()
         try:
@@ -695,90 +691,56 @@ def create_product(record: Dict) -> Optional[Dict]:
     try:
         supabase = _get_supabase()
         rec = record.copy()
+        # If caller provided a `meta` object, extract well-known product variables
+        # into top-level columns so we don't persist JSONB meta anymore.
+        meta = rec.get('meta')
+        if meta:
+            # meta may be a JSON string in some clients
+            if isinstance(meta, str):
+                try:
+                    import json
+                    meta = json.loads(meta)
+                except Exception:
+                    meta = None
+            if isinstance(meta, dict):
+                for fld in ('company', 'variant', 'type', 'selling_price', 'p_code', 'product_code'):
+                    if fld in meta and meta.get(fld) is not None:
+                        # convert selling_price decimals to float when needed
+                        if fld == 'selling_price':
+                            val = meta.get(fld)
+                            if isinstance(val, Decimal):
+                                rec[fld] = float(val)
+                            else:
+                                rec[fld] = val
+                        else:
+                            rec[fld] = meta.get(fld)
+            # Always drop 'meta' from the payload to avoid writing JSONB into products table
+            rec.pop('meta', None)
         if not rec.get('id'):
             rec['id'] = str(uuid.uuid4())
         # sanitize Decimal fields
         for k, v in list(rec.items()):
             if isinstance(v, Decimal):
                 rec[k] = float(v)
-        max_attempts = 5
-        for attempt in range(max_attempts):
-            code = _next_sequential_id('products', 'UID')
-            rec_with_code = rec.copy()
-            rec_with_code['product_code'] = code
-            # Try inserting with all fields first. If the DB schema is missing optional columns
-            # like product_code or meta, we'll detect the error message and retry without them.
-            try:
-                res = supabase.table('products').insert(rec_with_code).execute()
-            except Exception as exc:
-                msg = str(exc)
-                logging.exception('Supabase create_product exception on insert: %s', exc)
-                # If the DB does not have the product_code column, fall back to inserting without it
-                if 'product_code' in msg or 'column products.product_code does not exist' in msg or 'Could not find the' in msg:
-                    logging.warning('products.product_code column not present; inserting without code and returning computed code in response. Apply migration to persist codes.')
-                    try:
-                        # Try inserting original rec (which may include meta)
-                        res2 = supabase.table('products').insert(rec).execute()
-                    except Exception as exc2:
-                        msg2 = str(exc2)
-                        logging.exception('Fallback insert without product_code failed: %s', exc2)
-                        # If meta column is missing, retry without meta
-                        if 'meta' in msg2 or 'column products.meta does not exist' in msg2:
-                            try:
-                                rec_no_meta = rec.copy()
-                                rec_no_meta.pop('meta', None)
-                                res3 = supabase.table('products').insert(rec_no_meta).execute()
-                            except Exception:
-                                logging.exception('Fallback insert without meta also failed')
-                                return None
-                            if getattr(res3, 'error', None):
-                                logging.error('Fallback create_product insert error (no meta): %s', res3.error)
-                                return None
-                            data = res3.data
-                            out = data[0] if isinstance(data, list) and data else data
-                            if out is not None and isinstance(out, dict):
-                                out['product_code'] = code
-                            return out
-                        return None
-                    if getattr(res2, 'error', None):
-                        logging.error('Fallback create_product insert error: %s', res2.error)
-                        return None
-                    data = res2.data
-                    out = data[0] if isinstance(data, list) and data else data
-                    if out is not None and isinstance(out, dict):
-                        out['product_code'] = code
-                    return out
+        # Single-attempt insert: we no longer write a JSONB `meta` column for products.
+        try:
+            res = supabase.table('products').insert(rec).execute()
+        except Exception as exc:
+            logging.exception('Supabase create_product exception on insert: %s', exc)
+            return None
 
-                # If meta column missing in first attempt, retry without meta
-                if 'meta' in msg or 'column products.meta does not exist' in msg:
-                    logging.warning('products.meta column not present; retrying insert without meta. Apply migration to persist meta if desired.')
-                    try:
-                        rec_no_meta = rec_with_code.copy()
-                        rec_no_meta.pop('meta', None)
-                        res = supabase.table('products').insert(rec_no_meta).execute()
-                    except Exception:
-                        logging.exception('Fallback insert without meta failed')
-                        return None
-                else:
-                    # Unknown error - log and try to interpret PostgREST response if present
-                    logging.error('Supabase create_product error (attempt %s): %s', attempt + 1, msg)
-                    # If res object not available we can't inspect duplicate errors; give up
-                    return None
-
-            # success path
-            if getattr(res, 'error', None):
-                err = res.error
-                logging.error('Supabase create_product returned error (attempt %s): %s', attempt + 1, err)
-                if isinstance(err, dict) and 'message' in err and 'duplicate' in err['message'].lower():
-                    continue
-                return None
-            data = res.data
-            out = data[0] if isinstance(data, list) and data else data
-            if out is not None and isinstance(out, dict):
-                out['product_code'] = code
-            return out
-        logging.error('Failed to create product after %s attempts due to code conflicts', max_attempts)
-        return None
+        if getattr(res, 'error', None):
+            logging.error('Supabase create_product returned error: %s', res.error)
+            return None
+        data = res.data
+        out = data[0] if isinstance(data, list) and data else data
+        # prefer returning UID if it already exists in top-level p_code/product_code
+        if out is not None and isinstance(out, dict):
+            if out.get('p_code'):
+                out['product_code'] = out.get('p_code')
+            elif out.get('product_code'):
+                out['product_code'] = out.get('product_code')
+        return out
     except Exception as exc:
         logging.exception('Supabase create_product exception: %s', exc)
         return None
@@ -891,8 +853,31 @@ def update_product(product_id: str, changes: Dict) -> Optional[Dict]:
     """Perform partial update on product record with graceful fallback for missing columns like meta."""
     try:
         supabase = _get_supabase()
+        # Build the update payload, extracting any known product variables from a provided `meta` key
         rec = {}
+        # If caller sent a meta payload, extract known fields into top-level columns
+        meta = None
+        if 'meta' in changes:
+            meta = changes.get('meta')
+        if meta:
+            if isinstance(meta, str):
+                try:
+                    import json
+                    meta = json.loads(meta)
+                except Exception:
+                    meta = None
+            if isinstance(meta, dict):
+                for fld in ('company', 'variant', 'type', 'selling_price', 'p_code', 'product_code'):
+                    if fld in meta and meta.get(fld) is not None:
+                        if fld == 'selling_price' and isinstance(meta.get(fld), Decimal):
+                            rec[fld] = float(meta.get(fld))
+                        else:
+                            rec[fld] = meta.get(fld)
+
+        # Add other explicit changes (non-meta)
         for k, v in changes.items():
+            if k == 'meta':
+                continue
             if isinstance(v, Decimal):
                 rec[k] = float(v)
             else:
@@ -901,19 +886,8 @@ def update_product(product_id: str, changes: Dict) -> Optional[Dict]:
         try:
             res = supabase.table('products').update(rec).eq('id', product_id).execute()
         except Exception as exc:
-            msg = str(exc)
             logging.exception('Supabase update_product exception: %s', exc)
-            # If meta column is missing, retry without it
-            if 'meta' in msg or 'column products.meta does not exist' in msg:
-                logging.warning('products.meta column not present; retrying update without meta. Apply migration to persist meta if desired.')
-                rec.pop('meta', None)
-                try:
-                    res = supabase.table('products').update(rec).eq('id', product_id).execute()
-                except Exception:
-                    logging.exception('Fallback update without meta failed')
-                    return None
-            else:
-                return None
+            return None
 
         if getattr(res, 'error', None):
             logging.error('Supabase update_product error: %s', res.error)
@@ -965,6 +939,7 @@ def create_stock_movement(product_id: str, change: int, reason: str, reference_t
             'reference_id': reference_id,
             'unit_cost': unit_cost,
             'created_by': created_by,
+            # keep metadata attached to stock_movements table only; do not copy into products
             'meta': meta,
         }
         res = supabase.table('stock_movements').insert(mv).execute()
@@ -972,7 +947,7 @@ def create_stock_movement(product_id: str, change: int, reason: str, reference_t
             logging.error('create_stock_movement error: %s', res.error)
             return None
 
-        # update cached product stock_qty by adding change
+    # update cached product stock_qty by adding change (do not touch product.meta)
         # fetch current
         cur = supabase.table('products').select('stock_qty').eq('id', product_id).single().execute()
         if not getattr(cur, 'error', None) and cur.data:
@@ -1009,6 +984,7 @@ def reserve_stock(product_id: str, qty: int, invoice_id: Optional[str] = None, e
             'invoice_id': invoice_id,
             'expires_at': expires_at,
             'created_by': created_by,
+            # store reservation metadata in reservations table only
             'meta': meta,
         }
         res = supabase.table('stock_reservations').insert(rec).execute()

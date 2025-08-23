@@ -41,7 +41,7 @@ export default function Sales(){
         <div key={idx} className="grid grid-cols-4 gap-2 mb-2">
           <select value={it.product_id} onChange={e=>{ const p = [...items]; p[idx].product_id = e.target.value; setItems(p)}} className="input">
             <option value="">-- select product --</option>
-            {products.map(p=> <option key={p.id} value={p.id}>{p.id} — {p.name}</option>)}
+            {products.map(p=> <option key={p.id} value={p.id}>{(p.meta && (p.meta.p_code || p.meta.product_code) ? (p.meta.p_code || p.meta.product_code) : p.product_code) || p.id} — {p.name}</option>)}
           </select>
           <input type="number" value={it.qty} onChange={e=>{ const p=[...items]; p[idx].qty = parseInt(e.target.value||0); setItems(p)}} className="input" />
           <input type="number" value={it.unit_price} onChange={e=>{ const p=[...items]; p[idx].unit_price = parseFloat(e.target.value||0); setItems(p)}} className="input" />

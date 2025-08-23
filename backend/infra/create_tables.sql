@@ -10,6 +10,12 @@ CREATE TABLE IF NOT EXISTS public.products (
   price numeric(12,2) NOT NULL,
   tax_percent numeric(5,2) DEFAULT 0.00,
   stock_qty integer NOT NULL DEFAULT 0,
+  -- Top-level product variables (migrated from meta JSONB)
+  company text,
+  variant text,
+  type text,
+  selling_price numeric(12,2),
+  p_code text,
   created_at timestamptz DEFAULT now()
 );
 

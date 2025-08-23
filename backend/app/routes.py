@@ -243,8 +243,12 @@ async def create_product(request: Request):
     try:
         body = await request.json()
         logging.info(f"Raw product POST body: {body}")
+        # Validate known fields but preserve original body so 'meta' is forwarded during migration
         product_data = ProductCreate(**body)
         rec = product_data.dict(exclude_unset=True)
+        # If client still sends meta, keep it so repository can extract variables into top-level columns
+        if isinstance(body, dict) and 'meta' in body:
+            rec['meta'] = body.get('meta')
         # delegate creation to repository so it can assign UID... ids
         created = await run_in_threadpool(repository.create_product, rec)
         if not created:
@@ -256,13 +260,23 @@ async def create_product(request: Request):
 
 
 @router.put('/products/{product_id}')
-async def update_product(product_id: str, product: 'ProductUpdate' = Body(...)):
-    # allow partial updates from the frontend
-    rec = product.dict(exclude_unset=True)
-    updated = await run_in_threadpool(repository.update_product, product_id, rec)
-    if not updated:
-        raise HTTPException(status_code=500, detail='Failed to update product')
-    return {"status": "success", "data": updated}
+async def update_product(product_id: str, request: Request):
+    # allow partial updates from the frontend; preserve 'meta' if provided so repository can migrate values
+    try:
+        body = await request.json()
+        product_data = ProductUpdate(**body)
+        rec = product_data.dict(exclude_unset=True)
+        if isinstance(body, dict) and 'meta' in body:
+            rec['meta'] = body.get('meta')
+        updated = await run_in_threadpool(repository.update_product, product_id, rec)
+        if not updated:
+            raise HTTPException(status_code=500, detail='Failed to update product')
+        return {"status": "success", "data": updated}
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logging.exception('update_product route exception: %s', exc)
+        raise HTTPException(status_code=500, detail='Internal error')
 
 
 

@@ -121,14 +121,15 @@ export default function Products() {
     const top = lookup(prod, key)
     if (top !== undefined) return top
 
-    // special handling for product_code: prefer meta.p_code / meta.product_code, and avoid showing UID-like top-level values
+    // Helper: prefer explicit p_code/product_code in meta then top-level product_code, else id
     if (key === 'product_code') {
-      if (prod && prod.meta) {
-        const m = (typeof prod.meta === 'object') ? prod.meta : (() => { try { return JSON.parse(prod.meta) } catch(e){ return null } })()
-        if (m && (m.p_code || m.product_code || m.productCode || m.code)) return m.p_code || m.product_code || m.productCode || m.code
-      }
+      try {
+        if (prod && prod.meta) {
+          const m = (typeof prod.meta === 'object') ? prod.meta : (() => { try { return JSON.parse(prod.meta) } catch(e){ return null } })()
+          if (m && (m.p_code || m.product_code || m.productCode || m.code)) return m.p_code || m.product_code || m.productCode || m.code
+        }
+      } catch (e) { /* ignore parsing errors */ }
       const top2 = prod.product_code || prod.productCode || prod.code
-      if (top2 && String(top2).toUpperCase().startsWith('UID')) return undefined
       return top2 || undefined
     }
 
@@ -146,8 +147,8 @@ export default function Products() {
   const filtered = products.filter(prod =>
     prod.name?.toLowerCase().includes(search.toLowerCase()) ||
     prod.sku?.toLowerCase().includes(search.toLowerCase()) ||
-    // match what's visible in Product ID column (top-level product_code or id)
-    ((prod.product_code || prod.id || '').toString().toLowerCase().includes(search.toLowerCase()))
+    // match what's visible in Product ID column (UID from meta/top-level or id)
+    ((String(getMetaValue(prod, 'p_code') || getMetaValue(prod, 'product_code') || prod.product_code || prod.id) || '').toLowerCase().includes(search.toLowerCase()))
   );
   // apply settings filters
   const filteredWithSettings = filtered.filter(p => {
@@ -248,9 +249,9 @@ export default function Products() {
                   <td colSpan={8} className="text-center py-4 text-gray-500">No products found.</td>
                 </tr>
               ) : (
-                paginated.map(prod => (
+        paginated.map(prod => (
                   <tr key={prod.id} className="border-b">
-                    <td className="px-2 py-1">{prod.id}</td>
+          <td className="px-2 py-1">{getMetaValue(prod, 'p_code') || getMetaValue(prod, 'product_code') || prod.product_code || prod.id}</td>
                     <td className="px-2 py-1">{prod.sku}</td>
                     <td className="px-2 py-1">{(() => {
                       // Display name without any appended variant. If meta.company exists, prefix it
@@ -322,7 +323,7 @@ export default function Products() {
                   <th className="px-2 py-1 text-left">Name</th>
                     <th className="px-2 py-1 text-left">Variant</th>
                     { (vtypeEnabled['type'] ?? true) && <th className="px-2 py-1 text-left">Type</th> }
-                    { (vtypeEnabled['product_code'] ?? true) && <th className="px-2 py-1 text-left">Product CODE</th> }
+                    {/* Product CODE column removed */}
                     <th className="px-2 py-1 text-left">Amount</th>
                     <th className="px-2 py-1 text-left">GST</th>
                     <th className="px-2 py-1 text-left">Total Price</th>
@@ -330,9 +331,9 @@ export default function Products() {
                 </tr>
               </thead>
               <tbody>
-                {archivedProducts.map(prod => (
+        {archivedProducts.map(prod => (
                   <tr key={prod.id} className="border-b">
-                    <td className="px-2 py-1">{prod.id}</td>
+          <td className="px-2 py-1">{getMetaValue(prod, 'p_code') || getMetaValue(prod, 'product_code') || prod.product_code || prod.id}</td>
                     <td className="px-2 py-1">{prod.sku}</td>
                     <td className="px-2 py-1">{(() => {
                       let base = typeof prod.name === 'string' ? prod.name : ''
@@ -424,8 +425,8 @@ export default function Products() {
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
           <div className="bg-white rounded shadow p-6 w-full max-w-lg overflow-auto max-h-[80vh]">
             <h3 className="text-xl font-semibold mb-3">Product details</h3>
-            <div className="grid grid-cols-2 gap-3 text-sm">
-              <div><strong>Product ID</strong><div className="mt-1">{viewProduct.product_code || viewProduct.id}</div></div>
+              <div className="grid grid-cols-2 gap-3 text-sm">
+              <div><strong>Product ID</strong><div className="mt-1">{getMetaValue(viewProduct, 'p_code') || getMetaValue(viewProduct, 'product_code') || viewProduct.product_code || viewProduct.id}</div></div>
               <div><strong>SKU</strong><div className="mt-1">{viewProduct.sku}</div></div>
               <div><strong>Name</strong><div className="mt-1">{viewProduct.name}</div></div>
               <div><strong>Price</strong><div className="mt-1">{viewProduct.price ? formatCurrency(viewProduct.price) : '—'}</div></div>
@@ -437,11 +438,10 @@ export default function Products() {
             </div>
             <hr className="my-3" />
             {/* Render known meta fields as regular detail rows (no 'Variables' heading) */}
-            <div className="grid grid-cols-2 gap-3 text-sm mt-2">
+              <div className="grid grid-cols-2 gap-3 text-sm mt-2">
               <div><strong>Type</strong><div className="mt-1">{getMetaValue(viewProduct, 'type') ?? '—'}</div></div>
               <div><strong>Company</strong><div className="mt-1">{getMetaValue(viewProduct, 'company') ?? '—'}</div></div>
               <div><strong>Variant</strong><div className="mt-1">{getMetaValue(viewProduct, 'variant') ?? '—'}</div></div>
-              <div><strong>Product CODE</strong><div className="mt-1">{getMetaValue(viewProduct, 'product_code') ?? getMetaValue(viewProduct, 'p_code') ?? '—'}</div></div>
               <div><strong>Selling Price</strong><div className="mt-1">{getMetaValue(viewProduct, 'selling_price') ? formatCurrency(getMetaValue(viewProduct, 'selling_price')) : (viewProduct.selling_price ? formatCurrency(viewProduct.selling_price) : '—')}</div></div>
               {(() => {
                 const metaRaw = viewProduct.meta
@@ -450,7 +450,7 @@ export default function Products() {
                   try { metaObj = JSON.parse(metaRaw) } catch(e){ metaObj = null }
                 }
                 if (!metaObj || Object.keys(metaObj).length === 0) return null
-                const order = ['company', 'variant', 'type', 'selling_price', 'p_code', 'product_code', 'productCode', 'code']
+                const order = ['company', 'variant', 'type', 'selling_price', 'productCode', 'code']
                 const excluded = new Set(order)
                 const extras = Object.keys(metaObj).filter(k => !excluded.has(k))
                 return extras.map(k => (
@@ -538,7 +538,7 @@ function ProductForm({ product, onClose, onSaved, companies = [], variants = [],
   company: product?.meta?.company || (companies[0] || ''),
   variant: product?.meta?.variant || (variants[0] || ''),
   type: (typeof getMetaValue === 'function' ? (getMetaValue(product, 'type') ?? (types[0] || '')) : (product?.meta?.type || (types[0] || ''))),
-  product_code: (typeof getMetaValue === 'function' ? (getMetaValue(product, 'p_code') || getMetaValue(product, 'product_code') || '') : (product?.meta?.p_code || product?.meta?.product_code || '')),
+  // product_code removed; keep meta-derived selling_price/type/company/variant
   selling_price: (typeof getMetaValue === 'function' ? (getMetaValue(product, 'selling_price') !== undefined ? String(getMetaValue(product, 'selling_price')) : (product?.selling_price !== undefined ? String(product.selling_price) : '')) : (product?.meta?.selling_price !== undefined ? String(product.meta.selling_price) : (product?.selling_price !== undefined ? String(product.selling_price) : ''))),
     }
   });
@@ -628,10 +628,9 @@ function ProductForm({ product, onClose, onSaved, companies = [], variants = [],
     payload.meta = {
       company: form.company || undefined,
       variant: form.variant || undefined,
-      // Always attach optional fields so they are persisted if the backend supports them.
-      type: form.type || undefined,
-      p_code: form.product_code || undefined,
-      selling_price: form.selling_price !== '' ? parseFloat(form.selling_price) : undefined
+  // Always attach optional fields so they are persisted if the backend supports them.
+  type: form.type || undefined,
+  selling_price: form.selling_price !== '' ? parseFloat(form.selling_price) : undefined
     }
 
     // If backend doesn't support meta, still ensure name/variant formatting
@@ -661,7 +660,7 @@ function ProductForm({ product, onClose, onSaved, companies = [], variants = [],
       if (successTimerRef.current) clearTimeout(successTimerRef.current)
       successTimerRef.current = setTimeout(() => setSuccessMessage(''), 3000)
   // reset form for next use
-  setForm({ sku: '', name: '', description: '', price: '', total_price: '', tax_percent: '', company: companies[0] || '', variant: variants[0] || '', type: types[0] || '', product_code: '', selling_price: '' })
+  setForm({ sku: '', name: '', description: '', price: '', total_price: '', tax_percent: '', company: companies[0] || '', variant: variants[0] || '', type: types[0] || '', selling_price: '' })
   const message = `Product ${verb} successfully`
   onSaved && onSaved({ message });
     } catch (err) {
