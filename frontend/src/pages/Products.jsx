@@ -50,8 +50,11 @@ export default function Products() {
         const data = res.data.data || [];
         setProducts(data);
         // detect if backend supports a `meta` JSON column on products
-        if (data.length > 0 && data[0].meta && typeof data[0].meta === 'object') {
-          setSupportsMeta(true)
+        if (data.length > 0 && data[0].meta) {
+          const m = data[0].meta
+          const metaIsObject = typeof m === 'object'
+          const metaIsJsonString = typeof m === 'string' && m.trim().startsWith('{')
+          setSupportsMeta(metaIsObject || metaIsJsonString)
         } else {
           setSupportsMeta(false)
         }
@@ -251,12 +254,17 @@ export default function Products() {
                     <td className="px-2 py-1">{prod.product_code || prod.id}</td>
                     <td className="px-2 py-1">{prod.sku}</td>
                     <td className="px-2 py-1">{(() => {
-                      // Display name without any appended variant. If meta.company exists, prefix it.
+                      // Display name without any appended variant. If meta.company exists, prefix it
+                      // but avoid adding the prefix twice when the saved name already contains it.
                       let base = typeof prod.name === 'string' ? prod.name : ''
                       if (base.includes(' — ')) {
                         base = base.split(' — ')[0].trim()
                       }
                       if (prod.meta && prod.meta.company) {
+                        const prefix = `${prod.meta.company} - `
+                        if (typeof base === 'string' && base.toLowerCase().startsWith(prefix.toLowerCase())) {
+                          return base
+                        }
                         return `${prod.meta.company} - ${base}`
                       }
                       return base
@@ -330,7 +338,11 @@ export default function Products() {
                     <td className="px-2 py-1">{(() => {
                       let base = typeof prod.name === 'string' ? prod.name : ''
                       if (base.includes(' — ')) base = base.split(' — ')[0].trim()
-                      if (prod.meta && prod.meta.company) return `${prod.meta.company} - ${base}`
+                      if (prod.meta && prod.meta.company) {
+                        const prefix = `${prod.meta.company} - `
+                        if (typeof base === 'string' && base.toLowerCase().startsWith(prefix.toLowerCase())) return base
+                        return `${prod.meta.company} - ${base}`
+                      }
                       return base
                     })()}</td>
                       <td className="px-2 py-1">{prod.meta && prod.meta.variant ? prod.meta.variant : '—'}</td>
@@ -507,7 +519,7 @@ function ProductForm({ product, onClose, onSaved, companies = [], variants = [],
     let initTotal = product?.total_price !== undefined ? Number(product.total_price) : (
       initPrice !== '' && !isNaN(initPrice) ? +(initPrice + (initPrice * (initTax / 100))).toFixed(2) : ''
     )
-    return {
+  return {
       sku: product?.sku || '',
       name: baseName || '',
       description: product?.description || '',
@@ -518,9 +530,9 @@ function ProductForm({ product, onClose, onSaved, companies = [], variants = [],
       tax_percent: product?.tax_percent !== undefined ? String(product.tax_percent) : '',
   company: product?.meta?.company || (companies[0] || ''),
   variant: product?.meta?.variant || (variants[0] || ''),
-  type: product?.meta?.type || (types[0] || ''),
-  product_code: product?.meta?.p_code || product?.meta?.product_code || '',
-  selling_price: product?.meta?.selling_price !== undefined ? String(product.meta.selling_price) : (product?.selling_price !== undefined ? String(product.selling_price) : ''),
+  type: (typeof getMetaValue === 'function' ? (getMetaValue(product, 'type') ?? (types[0] || '')) : (product?.meta?.type || (types[0] || ''))),
+  product_code: (typeof getMetaValue === 'function' ? (getMetaValue(product, 'p_code') || getMetaValue(product, 'product_code') || '') : (product?.meta?.p_code || product?.meta?.product_code || '')),
+  selling_price: (typeof getMetaValue === 'function' ? (getMetaValue(product, 'selling_price') !== undefined ? String(getMetaValue(product, 'selling_price')) : (product?.selling_price !== undefined ? String(product.selling_price) : '')) : (product?.meta?.selling_price !== undefined ? String(product.meta.selling_price) : (product?.selling_price !== undefined ? String(product.selling_price) : ''))),
     }
   });
   const [saving, setSaving] = useState(false);
@@ -605,12 +617,18 @@ function ProductForm({ product, onClose, onSaved, companies = [], variants = [],
       price: form.price !== '' ? parseFloat(form.price) : undefined,
       tax_percent: form.tax_percent !== '' ? parseFloat(form.tax_percent) : undefined,
     };
-    if (supportsMeta) {
-      payload.meta = {
-        company: form.company || undefined,
-        variant: form.variant || undefined
-      }
-    } else {
+    // Always include meta object; backend will gracefully handle missing meta column.
+    payload.meta = {
+      company: form.company || undefined,
+      variant: form.variant || undefined,
+      // Always attach optional fields so they are persisted if the backend supports them.
+      type: form.type || undefined,
+      p_code: form.product_code || undefined,
+      selling_price: form.selling_price !== '' ? parseFloat(form.selling_price) : undefined
+    }
+
+    // If backend doesn't support meta, still ensure name/variant formatting
+    if (!supportsMeta) {
       if (form.company || form.variant) {
         // when meta is not supported, prefix the product name with the company and append variant inline
         let prefix = ''
@@ -619,12 +637,6 @@ function ProductForm({ product, onClose, onSaved, companies = [], variants = [],
         if (form.variant) newName = `${newName} — ${form.variant}`
         payload.name = newName
       }
-    }
-    // include optional meta fields if supported
-    if (supportsMeta) {
-      if (form.type) payload.meta.type = form.type
-  if (form.product_code) payload.meta.p_code = form.product_code
-  if (form.selling_price) payload.meta.selling_price = parseFloat(form.selling_price)
     }
     try {
       if (product && product.id) {
@@ -642,7 +654,7 @@ function ProductForm({ product, onClose, onSaved, companies = [], variants = [],
       if (successTimerRef.current) clearTimeout(successTimerRef.current)
       successTimerRef.current = setTimeout(() => setSuccessMessage(''), 3000)
   // reset form for next use
-  setForm({ sku: '', name: '', description: '', price: '', total_price: '', tax_percent: '', company: companies[0] || '', variant: variants[0] || '', type: types[0] || '', product_code: '' })
+  setForm({ sku: '', name: '', description: '', price: '', total_price: '', tax_percent: '', company: companies[0] || '', variant: variants[0] || '', type: types[0] || '', product_code: '', selling_price: '' })
   const message = `Product ${verb} successfully`
   onSaved && onSaved({ message });
     } catch (err) {
