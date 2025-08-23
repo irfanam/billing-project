@@ -230,13 +230,12 @@ export default function Products() {
         ) : (
           <table className="min-w-full">
             <thead>
-              <tr className="bg-gray-100">
+                  <tr className="bg-gray-100">
                 <th className="px-2 py-1 text-left">Product ID</th>
                 <th className="px-2 py-1 text-left">SKU</th>
                 <th className="px-2 py-1 text-left">Name</th>
                 <th className="px-2 py-1 text-left">Variant</th>
                 { (vtypeEnabled['type'] ?? true) && <th className="px-2 py-1 text-left">Type</th> }
-                
                 <th className="px-2 py-1 text-left">Amount</th>
                 <th className="px-2 py-1 text-left">GST</th>
                 <th className="px-2 py-1 text-left">Total Price</th>
@@ -251,7 +250,7 @@ export default function Products() {
               ) : (
                 paginated.map(prod => (
                   <tr key={prod.id} className="border-b">
-                    <td className="px-2 py-1">{prod.product_code || prod.id}</td>
+                    <td className="px-2 py-1">{prod.id}</td>
                     <td className="px-2 py-1">{prod.sku}</td>
                     <td className="px-2 py-1">{(() => {
                       // Display name without any appended variant. If meta.company exists, prefix it
@@ -333,7 +332,7 @@ export default function Products() {
               <tbody>
                 {archivedProducts.map(prod => (
                   <tr key={prod.id} className="border-b">
-                    <td className="px-2 py-1">{prod.product_code || prod.id}</td>
+                    <td className="px-2 py-1">{prod.id}</td>
                     <td className="px-2 py-1">{prod.sku}</td>
                     <td className="px-2 py-1">{(() => {
                       let base = typeof prod.name === 'string' ? prod.name : ''
@@ -436,7 +435,29 @@ export default function Products() {
               <div><strong>Stock</strong><div className="mt-1">{viewProduct.stock_qty ?? '—'}</div></div>
               <div className="col-span-2"><strong>Description</strong><div className="mt-1 whitespace-pre-wrap">{viewProduct.description || '—'}</div></div>
             </div>
-            {/* Clean view: intentionally omit Variables / Meta listing for a simpler product details modal */}
+            <hr className="my-3" />
+            {/* Render known meta fields as regular detail rows (no 'Variables' heading) */}
+            <div className="grid grid-cols-2 gap-3 text-sm mt-2">
+              <div><strong>Type</strong><div className="mt-1">{getMetaValue(viewProduct, 'type') ?? '—'}</div></div>
+              <div><strong>Company</strong><div className="mt-1">{getMetaValue(viewProduct, 'company') ?? '—'}</div></div>
+              <div><strong>Variant</strong><div className="mt-1">{getMetaValue(viewProduct, 'variant') ?? '—'}</div></div>
+              <div><strong>Product CODE</strong><div className="mt-1">{getMetaValue(viewProduct, 'product_code') ?? getMetaValue(viewProduct, 'p_code') ?? '—'}</div></div>
+              <div><strong>Selling Price</strong><div className="mt-1">{getMetaValue(viewProduct, 'selling_price') ? formatCurrency(getMetaValue(viewProduct, 'selling_price')) : (viewProduct.selling_price ? formatCurrency(viewProduct.selling_price) : '—')}</div></div>
+              {(() => {
+                const metaRaw = viewProduct.meta
+                let metaObj = metaRaw
+                if (metaRaw && typeof metaRaw === 'string') {
+                  try { metaObj = JSON.parse(metaRaw) } catch(e){ metaObj = null }
+                }
+                if (!metaObj || Object.keys(metaObj).length === 0) return null
+                const order = ['company', 'variant', 'type', 'selling_price', 'p_code', 'product_code', 'productCode', 'code']
+                const excluded = new Set(order)
+                const extras = Object.keys(metaObj).filter(k => !excluded.has(k))
+                return extras.map(k => (
+                  <div key={k} className="col-span-2"><strong>{k.replace(/_/g, ' ')}</strong><div className="mt-1">{k === 'selling_price' && typeof metaObj[k] === 'number' ? formatCurrency(metaObj[k]) : String(metaObj[k])}</div></div>
+                ))
+              })()}
+            </div>
             <div className="flex justify-end mt-4">
               <button className="px-3 py-1 border rounded" onClick={()=>setViewProduct(null)}>Close</button>
             </div>
