@@ -171,7 +171,23 @@ export default function Customers() {
                     <td className="px-2 py-1 text-center">
                       <button
                         className="px-2 py-1 bg-gray-200 text-gray-800 rounded mr-2"
-                        onClick={() => navigate(`/customers/${cust.id}`, { state: { customer: cust } })}
+                        onClick={() => {
+                          // Prefill form and open modal in read-only mode
+                          let addr1 = ''
+                          let addr2 = ''
+                          let pincode = ''
+                          if(cust.address){
+                            const parts = cust.address.split('\n').map(s=>s.trim()).filter(Boolean)
+                            if(parts.length>0) addr1 = parts[0]
+                            if(parts.length>1) addr2 = parts[1]
+                            const pinMatch = cust.address.match(/Pincode:\s*(\d{3,6})/)
+                            if(pinMatch) pincode = pinMatch[1]
+                          }
+                          setForm({ name: cust.name || '', phone: cust.phone || '', email: cust.email || '', address1: addr1, address2: addr2, state: cust.state || 'West Bengal', pincode: pincode, country: 'India', gstin: cust.gstin || '' });
+                          setEditingId(cust.id || null);
+                          setReadOnly(true);
+                          setShowForm(true);
+                        }}
                       >View</button>
                       <button
                         className="px-2 py-1 bg-green-100 text-green-800 rounded mr-2"
